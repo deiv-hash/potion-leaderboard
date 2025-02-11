@@ -38,9 +38,9 @@ export const Header = () => {
             <Image
               src="/logo.png"
               alt="Potion Leaderboard"
-              width={100}
-              height={200}
-              className=""
+              width={200}
+              height={300}
+              className="w-20 h-10 md:w-44 md:h-16"
             />
           </Link>
 
