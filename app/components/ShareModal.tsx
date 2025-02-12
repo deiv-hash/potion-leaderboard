@@ -51,8 +51,14 @@ export function ShareModal({ trader, onClose }: ShareModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-[#11121B] rounded-lg max-w-4xl w-full p-6 relative">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#11121B] rounded-lg max-w-4xl w-full p-6 relative"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Close button */}
         <button
           onClick={onClose}
