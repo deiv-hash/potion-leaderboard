@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ShareIcon } from "./icons/ShareIcon";
+import { ChevronDownIcon } from "./icons/ChevronDownIcon";
 
 const formatNumber = (num: number): string => {
   if (num >= 1000000000) return `${(num / 1000000000).toFixed(1)}b`;
@@ -81,26 +82,35 @@ export function Leaderboard({ traders, loading }: LeaderboardProps) {
       <div className="bg-[#25223D] grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 px-3 sm:px-6 py-3">
         <div className="text-gray-400 hidden sm:block">Rank</div>
         <div className="text-gray-400 col-span-2">Trader</div>
-        <div className="text-gray-400 cursor-pointer text-center hidden lg:block">
+        <div className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1">
           Followers
+          <ChevronDownIcon className="h-4 w-4 text-purple-300" />
         </div>
-        <div className="text-gray-400 cursor-pointer text-center hidden md:block">
+        <div className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1">
           Tokens
+          <ChevronDownIcon className="h-4 w-4 text-purple-300" />
         </div>
         <div className="text-gray-400 cursor-pointer text-center">Win Rate</div>
-        <div className="text-gray-400 cursor-pointer text-center hidden sm:block">
+        <div className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1">
           Trades
+          <ChevronDownIcon className="h-4 w-4 text-purple-300" />
         </div>
-        <div className="text-gray-400 cursor-pointer text-center hidden lg:block">
+        <div className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1">
           Avg Buy
+          <ChevronDownIcon className="h-4 w-4 text-purple-300" />
         </div>
-        <div className="text-gray-400 cursor-pointer text-center hidden md:block">
+        <div className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1">
           Avg Entry
+          <ChevronDownIcon className="h-4 w-4 text-purple-300" />
         </div>
-        <div className="text-gray-400 cursor-pointer text-center hidden lg:block">
+        <div className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1">
           Avg Hold
+          <ChevronDownIcon className="h-4 w-4 text-purple-300" />
         </div>
-        <div className="text-gray-400 cursor-pointer text-center">PNL</div>
+        <div className="text-gray-400 cursor-pointer text-center lg:flex items-center justify-center gap-1">
+          PNL
+          <ChevronDownIcon className="h-4 w-4 text-yellow-300" />
+        </div>
         <div className="text-gray-400 cursor-pointer text-center">Share</div>
       </div>
       {/*rows*/}
