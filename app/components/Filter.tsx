@@ -57,13 +57,32 @@ export function Filter({ filters, onFilterChange }: FilterProps) {
     });
   };
 
+  // Count active filters
+  const activeFiltersCount = [
+    filters.xFollowersRange,
+    filters.tokensRange,
+    filters.winRateRange,
+    filters.tradesCountRange,
+    filters.avgBuyRange,
+    filters.avgEntryRange,
+    filters.avgHoldRange,
+    filters.realizedPnlRange,
+  ].filter(
+    (range) => range && (range.min !== undefined || range.max !== undefined)
+  ).length;
+
   return (
     <>
       <button
-        className="btn-tab flex items-center gap-2"
+        className="btn-tab flex items-center gap-2 relative"
         onClick={() => setIsOpen(true)}
       >
         <FilterIcon className="h-5 w-5" />
+        {activeFiltersCount > 0 && (
+          <div className="absolute -bottom-2 -right-[-5px] bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            {activeFiltersCount}
+          </div>
+        )}
       </button>
 
       {/* Overlay */}
