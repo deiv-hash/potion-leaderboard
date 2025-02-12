@@ -46,6 +46,8 @@ const formatHoldTime = (minutes: number): string => {
   return `${(minutes / 60).toFixed(1)} h`;
 };
 
+type ViewType = "traders" | "tokens";
+
 interface LeaderboardProps {
   traders: Trader[];
   loading: boolean;
@@ -53,6 +55,7 @@ interface LeaderboardProps {
   currentPage: number;
   onPageChange: (page: number) => void;
   totalPages: number;
+  viewType: ViewType;
 }
 
 export function Leaderboard({
@@ -62,6 +65,7 @@ export function Leaderboard({
   currentPage,
   onPageChange,
   totalPages,
+  viewType,
 }: LeaderboardProps) {
   const router = useRouter();
   const [copied, setCopied] = useState<string | null>(null);
@@ -76,7 +80,9 @@ export function Leaderboard({
   };
 
   const handleTraderClick = (wallet: string) => {
-    router.push(`/trader/${encodeURIComponent(wallet)}`);
+    if (viewType === "traders") {
+      router.push(`/trader/${encodeURIComponent(wallet)}`);
+    }
   };
 
   const handleShare = (trader: Trader) => {
@@ -95,6 +101,36 @@ export function Leaderboard({
     );
   }
 
+  const headers =
+    viewType === "traders"
+      ? {
+          name: "Trader",
+          stats: [
+            { label: "Followers", key: "xFollowers", icon: "purple" },
+            { label: "Tokens", key: "tokensTraded", icon: "purple" },
+            { label: "Win Rate", key: "winRate", icon: "purple" },
+            { label: "Trades", key: "tradesCount", icon: "purple" },
+            { label: "Avg Buy", key: "avgBuy", icon: "purple" },
+            { label: "Avg Entry", key: "avgEntry", icon: "purple" },
+            { label: "Avg Hold", key: "avgHold", icon: "purple" },
+            { label: "PNL", key: "realizedPnl", icon: "yellow" },
+          ],
+        }
+      : {
+          name: "Token",
+          stats: [
+            { label: "Last Traded", key: "avgEntry", icon: "purple" },
+            { label: "MC", key: "avgEntry", icon: "purple" },
+            { label: "Invested", key: "avgBuy", icon: "purple" },
+            { label: "Realized PNL", key: "realizedPnl", icon: "yellow" },
+            { label: "ROI", key: "winRate", icon: "purple" },
+            { label: "Trades", key: "tradesCount", icon: "purple" },
+            { label: "Holding", key: "avgBuy", icon: "purple" },
+            { label: "Avg Buy/Sell", key: "avgBuy", icon: "purple" },
+            { label: "Held", key: "avgHold", icon: "purple" },
+          ],
+        };
+
   return (
     <div className="w-full mt-12 bg-[#11121B] overflow-hidden">
       {sharingTrader && (
@@ -103,62 +139,17 @@ export function Leaderboard({
       {/*header*/}
       <div className="bg-[#25223D] grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 px-3 sm:px-6 py-3">
         <div className="text-gray-400 hidden sm:block">Rank</div>
-        <div className="text-gray-400 col-span-2">Trader</div>
-        <div
-          className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
-          onClick={() => onSort("xFollowers")}
-        >
-          Followers
-          <ChevronDownIcon className="h-4 w-4 text-purple-300" />
-        </div>
-        <div
-          className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
-          onClick={() => onSort("tokensTraded")}
-        >
-          Tokens
-          <ChevronDownIcon className="h-4 w-4 text-purple-300" />
-        </div>
-        <div
-          className="text-gray-400 cursor-pointer text-center lg:flex items-center justify-center gap-1"
-          onClick={() => onSort("winRate")}
-        >
-          Win Rate <ChevronDownIcon className="h-4 w-4 text-purple-300" />
-        </div>
-        <div
-          className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
-          onClick={() => onSort("tradesCount")}
-        >
-          Trades
-          <ChevronDownIcon className="h-4 w-4 text-purple-300" />
-        </div>
-        <div
-          className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
-          onClick={() => onSort("avgBuy")}
-        >
-          Avg Buy
-          <ChevronDownIcon className="h-4 w-4 text-purple-300" />
-        </div>
-        <div
-          className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
-          onClick={() => onSort("avgEntry")}
-        >
-          Avg Entry
-          <ChevronDownIcon className="h-4 w-4 text-purple-300" />
-        </div>
-        <div
-          className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
-          onClick={() => onSort("avgHold")}
-        >
-          Avg Hold
-          <ChevronDownIcon className="h-4 w-4 text-purple-300" />
-        </div>
-        <div
-          className="text-gray-400 cursor-pointer text-center lg:flex items-center justify-center gap-1"
-          onClick={() => onSort("realizedPnl")}
-        >
-          PNL
-          <ChevronDownIcon className="h-4 w-4 text-yellow-300" />
-        </div>
+        <div className="text-gray-400 col-span-2">{headers.name}</div>
+        {headers.stats.map((stat) => (
+          <div
+            key={stat.label}
+            className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
+            onClick={() => onSort(stat.key as keyof Trader)}
+          >
+            {stat.label}
+            <ChevronDownIcon className={`h-4 w-4 text-${stat.icon}-300`} />
+          </div>
+        ))}
         <div className="text-gray-400 cursor-pointer text-center">Share</div>
       </div>
       {/*rows*/}
@@ -166,8 +157,12 @@ export function Leaderboard({
         {traders.map((trader) => (
           <div
             key={trader.id}
-            className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 px-3 sm:px-6 py-4 hover:bg-[#1C1C28] font-bold cursor-pointer"
-            onClick={() => handleTraderClick(trader.wallet)}
+            className={`grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 px-3 sm:px-6 py-4 hover:bg-[#1C1C28] font-bold ${
+              viewType === "traders" ? "cursor-pointer" : ""
+            }`}
+            onClick={() =>
+              viewType === "traders" && handleTraderClick(trader.wallet)
+            }
           >
             <div className="items-center gap-2 hidden sm:flex">
               <div
@@ -190,82 +185,182 @@ export function Leaderboard({
               />
               <div className="ml-2 min-w-0">
                 <div className="text-white truncate">{trader.name}</div>
-                <div
-                  className="text-gray-400 text-sm cursor-pointer hover:text-purple-300 truncate"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    copyToClipboard(trader.wallet);
-                  }}
-                >
-                  {copied === trader.wallet
-                    ? "Copied"
-                    : shortenWalletAddress(trader.wallet)}
+                {viewType === "traders" ? (
+                  <div
+                    className="text-gray-400 text-sm cursor-pointer hover:text-purple-300 truncate"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      copyToClipboard(trader.wallet);
+                    }}
+                  >
+                    {copied === trader.wallet
+                      ? "Copied"
+                      : shortenWalletAddress(trader.wallet)}
+                  </div>
+                ) : (
+                  <div className="text-gray-400 text-sm truncate">
+                    {trader.xTag}
+                  </div>
+                )}
+              </div>
+            </div>
+            {viewType === "traders" ? (
+              // Trader view columns
+              <>
+                <div className="flex-col items-end hidden lg:flex">
+                  <div>{formatNumber(trader.xFollowers)}</div>
+                  <div className="text-gray-400 text-sm truncate">
+                    {trader.xTag}
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="flex-col items-end hidden lg:flex">
-              <div>{formatNumber(trader.xFollowers)}</div>
-              <div className="text-gray-400 text-sm truncate">
-                {trader.xTag}
-              </div>
-            </div>
-            <div className="text-right hidden md:block">
-              {trader.tokensTraded}
-            </div>
-            <div
-              className={`text-right ${
-                trader.winRate >= 50 ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {Math.round(trader.winRate)}%
-            </div>
-            <div className="text-right tracking-wide hidden sm:block">
-              <span className="text-green-600">{trader.tradesCount.buy}</span>/
-              <span className="text-red-600">{trader.tradesCount.sell}</span>
-            </div>
-            <div className="text-right hidden lg:block">
-              <div className="flex items-center gap-1 justify-end">
-                {formatSol(trader.avgBuy.solAmount)}
-                <Image
-                  src="/solana.png"
-                  alt="solana logo"
-                  width={20}
-                  height={20}
-                />
-              </div>
-              <div className="font-light text-gray-400 text-sm">
-                ${formatUsd(trader.avgBuy.usdAmount)}
-              </div>
-            </div>
-            <div className="text-right uppercase hidden md:block">
-              {formatAvgEntry(trader.avgEntry)}
-            </div>
-            <div className="text-right hidden lg:block">
-              {formatHoldTime(trader.avgHold)}
-            </div>
-            <div className="text-right">
-              <div className="flex items-center gap-1 justify-end">
-                <span
-                  className={
-                    trader.realizedPnl.solAmount > 0
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }
+                <div className="text-right hidden md:block">
+                  {trader.tokensTraded}
+                </div>
+                <div
+                  className={`text-right ${
+                    trader.winRate >= 50 ? "text-green-600" : "text-red-600"
+                  }`}
                 >
-                  {trader.realizedPnl.solAmount > 0 ? "+" : ""}
-                  {formatSol(trader.realizedPnl.solAmount)}
-                </span>
-                <Image
-                  src="/solana.png"
-                  alt="solana logo"
-                  width={20}
-                  height={20}
-                />
-              </div>
-              <div className="font-light text-gray-400 text-sm">
-                ${formatUsd(trader.realizedPnl.usdAmount)}
-              </div>
-            </div>
+                  {Math.round(trader.winRate)}%
+                </div>
+                <div className="text-right tracking-wide hidden sm:block">
+                  <span className="text-green-600">
+                    {trader.tradesCount.buy}
+                  </span>
+                  /
+                  <span className="text-red-600">
+                    {trader.tradesCount.sell}
+                  </span>
+                </div>
+                <div className="text-right hidden lg:block">
+                  <div className="flex items-center gap-1 justify-end">
+                    {formatSol(trader.avgBuy.solAmount)}
+                    <Image
+                      src="/solana.png"
+                      alt="solana logo"
+                      width={20}
+                      height={20}
+                    />
+                  </div>
+                  <div className="font-light text-gray-400 text-sm">
+                    ${formatUsd(trader.avgBuy.usdAmount)}
+                  </div>
+                </div>
+                <div className="text-right uppercase hidden md:block">
+                  {formatAvgEntry(trader.avgEntry)}
+                </div>
+                <div className="text-right hidden lg:block">
+                  {formatHoldTime(trader.avgHold)}
+                </div>
+                <div className="text-right">
+                  <div className="flex items-center gap-1 justify-end">
+                    <span
+                      className={
+                        trader.realizedPnl.solAmount > 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }
+                    >
+                      {trader.realizedPnl.solAmount > 0 ? "+" : ""}
+                      {formatSol(trader.realizedPnl.solAmount)}
+                    </span>
+                    <Image
+                      src="/solana.png"
+                      alt="solana logo"
+                      width={20}
+                      height={20}
+                    />
+                  </div>
+                  <div className="font-light text-gray-400 text-sm">
+                    ${formatUsd(trader.realizedPnl.usdAmount)}
+                  </div>
+                </div>
+              </>
+            ) : (
+              // Token view columns
+              <>
+                <div className="text-right hidden lg:block">
+                  {formatAvgEntry(trader.avgEntry)}
+                </div>
+                <div className="text-right hidden lg:block">
+                  {formatAvgEntry(trader.avgEntry)}
+                </div>
+                <div className="flex-col items-end lg:flex">
+                  <div className="flex items-center gap-1 justify-end">
+                    {formatSol(trader.avgBuy.solAmount)}
+                    <Image
+                      src="/solana.png"
+                      alt="solana logo"
+                      width={20}
+                      height={20}
+                    />
+                  </div>
+                  <div className="font-light text-gray-400 text-sm">
+                    ${formatUsd(trader.avgBuy.usdAmount)}
+                  </div>
+                </div>
+                <div className="text-right hidden lg:block">
+                  <div className="flex items-center gap-1 justify-end">
+                    <span
+                      className={
+                        trader.realizedPnl.solAmount > 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }
+                    >
+                      {trader.realizedPnl.solAmount > 0 ? "+" : ""}
+                      {formatSol(trader.realizedPnl.solAmount)}
+                    </span>
+                    <Image
+                      src="/solana.png"
+                      alt="solana logo"
+                      width={20}
+                      height={20}
+                    />
+                  </div>
+                  <div className="font-light text-gray-400 text-sm">
+                    ${formatUsd(trader.realizedPnl.usdAmount)}
+                  </div>
+                </div>
+                <div
+                  className={`text-right hidden lg:block ${
+                    trader.winRate >= 50 ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {Math.round(trader.winRate)}%
+                </div>
+                <div className="text-right tracking-wide hidden lg:block">
+                  <span className="text-green-600">
+                    {trader.tradesCount.buy}
+                  </span>
+                  /
+                  <span className="text-red-600">
+                    {trader.tradesCount.sell}
+                  </span>
+                </div>
+                <div className="text-right hidden lg:block">
+                  <div className="flex items-center gap-1 justify-end">
+                    {formatSol(trader.avgBuy.solAmount)}
+                    <Image
+                      src="/solana.png"
+                      alt="solana logo"
+                      width={20}
+                      height={20}
+                    />
+                  </div>
+                  <div className="font-light text-gray-400 text-sm">
+                    ${formatUsd(trader.avgBuy.usdAmount)}
+                  </div>
+                </div>
+                <div className="text-right hidden lg:block">
+                  {formatAvgEntry(trader.avgEntry)} /{" "}
+                  {formatAvgEntry(trader.avgEntry)}
+                </div>
+                <div className="text-right hidden lg:block">
+                  {formatHoldTime(trader.avgHold)}
+                </div>
+              </>
+            )}
             <div
               className="flex items-center justify-end sm:justify-center"
               onClick={(e) => {
