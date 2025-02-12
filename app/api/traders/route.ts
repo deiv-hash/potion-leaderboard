@@ -666,8 +666,10 @@ export async function GET(request: Request) {
   //apply search filter
   const search = searchParams.get("search")?.toLocaleLowerCase();
   if (search) {
-    traders = traders.filter((trader) =>
-      trader.name.toLocaleLowerCase().includes(search)
+    traders = traders.filter(
+      (trader) =>
+        trader.name.toLocaleLowerCase().includes(search) ||
+        trader.wallet.toLocaleLowerCase().includes(search)
     );
   }
 
