@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Filters, Trader } from "../types/trader";
 
-/* interface UseTradersProps {
+interface UseTradersProps {
   traders: Trader[];
   loading: boolean;
   error: Error | null;
-} */
+}
 
-export function useTraders(filters: Filters) {
+export function useTraders(filters: Filters): UseTradersProps {
   const [traders, setTraders] = useState<Trader[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
