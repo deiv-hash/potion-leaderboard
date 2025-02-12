@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ShareIcon } from "./icons/ShareIcon";
 import { ChevronDownIcon } from "./icons/ChevronDownIcon";
+import { ChevronLeftIcon } from "./icons/ChevronLeftIcon";
+import { ChevronRightIcon } from "./icons/ChevronRightIcon";
 import { shortenWalletAddress } from "@/app/utils/format";
 
 const formatNumber = (num: number): string => {
@@ -274,9 +276,9 @@ export function Leaderboard({
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-3 py-1 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-600 hover:text-white transition-colors"
+          className="w-8 h-8 rounded-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-600 hover:text-white transition-colors"
         >
-          Previous
+          <ChevronLeftIcon className="h-5 w-5" />
         </button>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <button
@@ -294,9 +296,9 @@ export function Leaderboard({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-3 py-1 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-600 hover:text-white transition-colors"
+          className="w-8 h-8 rounded-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-600 hover:text-white transition-colors"
         >
-          Next
+          <ChevronRightIcon className="h-5 w-5" />
         </button>
       </div>
     </div>
