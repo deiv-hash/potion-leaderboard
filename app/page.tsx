@@ -3,15 +3,20 @@
 import { useState } from "react";
 import { Header } from "./components/Header";
 import { TimeFrameSelector } from "./components/TimeFrameSelector";
-import { TimeFrame } from "@/types/trader";
+import { TimeFrame } from "@/app/types/trader";
 import { Searchbar } from "./components/Searchbar";
 import { Filter } from "./components/Filter";
+import { Leaderboard } from "./components/Leaderboard";
 
 export default function Home() {
-  const [filter, setFilter] = useState<TimeFrame>("daily");
+  const [filter, setFilter] = useState({
+    timeFrame: "daily" as TimeFrame,
+    sortBy: "rank",
+    sortDirection: "asc" as "asc" | "desc",
+  });
 
   const setSelectedTimeFrame = (timeFrame: TimeFrame) => {
-    setFilter(timeFrame);
+    setFilter((prev) => ({ ...prev, timeFrame }));
   };
 
   return (
@@ -26,7 +31,7 @@ export default function Home() {
             </div>
             <div className="w-full flex justify-between">
               <TimeFrameSelector
-                selectedTimeFrame={filter}
+                selectedTimeFrame={filter.timeFrame}
                 onTimeFrameChange={setSelectedTimeFrame}
               />
               <div className="flex gap-4">
@@ -35,7 +40,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div>LIST OF TRADERS</div>
+          <Leaderboard traders={traders} />
         </main>
       </div>
     </div>
