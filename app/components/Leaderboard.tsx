@@ -154,7 +154,7 @@ export function Leaderboard({ traders, loading, onSort }: LeaderboardProps) {
                 className={`flex items-center justify-center font-bold ${
                   trader.rank <= 3
                     ? "bg-yellow-500 text-black w-8 h-8 rounded-full"
-                    : "bg-gray-400"
+                    : "bg-gray-400 w-8 h-8 rounded-full text-white"
                 }`}
               >
                 {trader.rank}
