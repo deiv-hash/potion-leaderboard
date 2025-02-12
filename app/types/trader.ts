@@ -16,3 +16,9 @@ export interface Trader {
   avgHold: number;
   realizedPnl: { solAmount: number; usdAmount: number };
 }
+
+export interface Filters {
+  timeFrame: TimeFrame;
+  sortBy: keyof Trader;
+  sortDirection: "asc" | "desc";
+}
