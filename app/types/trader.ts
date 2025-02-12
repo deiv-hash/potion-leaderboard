@@ -21,4 +21,5 @@ export interface Filters {
   timeFrame: TimeFrame;
   sortBy: keyof Trader;
   sortDirection: "asc" | "desc";
+  search?: string;
 }
