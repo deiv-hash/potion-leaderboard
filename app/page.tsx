@@ -19,11 +19,16 @@ export default function Home() {
     sortDirection: "asc",
     search: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { traders, loading, error } = useTraders(filter);
+  const { traders, loading, error, pagination } = useTraders(
+    filter,
+    currentPage
+  );
 
   const setSelectedTimeFrame = (timeFrame: TimeFrame) => {
     setFilter((prev) => ({ ...prev, timeFrame }));
+    setCurrentPage(1); // Reset to first page when changing timeframe
   };
 
   const handleSort = (sortBy: keyof Trader) => {
@@ -32,14 +37,21 @@ export default function Home() {
       sortBy,
       sortDirection: prev.sortDirection === "asc" ? "desc" : "asc",
     }));
+    setCurrentPage(1); // Reset to first page when sorting
   };
 
   const handleSearch = (search: string) => {
     setFilter((prev) => ({ ...prev, search }));
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   const handleFilterChange = (newFilters: Filters) => {
     setFilter(newFilters);
+    setCurrentPage(1); // Reset to first page when filtering
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   if (error) {
@@ -98,6 +110,9 @@ export default function Home() {
               traders={traders}
               loading={loading}
               onSort={handleSort}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              totalPages={pagination?.totalPages || 1}
             />
           ) : (
             <div className="flex items-center justify-center h-96">
