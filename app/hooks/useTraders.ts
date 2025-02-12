@@ -17,6 +17,7 @@ export function useTraders(filters: Filters): UseTradersProps {
       try {
         setLoading(true);
         const queryParams = new URLSearchParams({
+          timeFrame: filters.timeFrame,
           sortBy: filters.sortBy,
           sortDirection: filters.sortDirection,
         });
