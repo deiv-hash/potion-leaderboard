@@ -1,4 +1,4 @@
-import { TimeFrame } from "@/types/trader";
+import { TimeFrame } from "@/app/types/trader";
 
 interface TimeFrameSelectorProps {
   selectedTimeFrame: TimeFrame;
