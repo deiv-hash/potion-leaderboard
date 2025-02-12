@@ -1,5 +1,30 @@
 export type TimeFrame = "daily" | "weekly" | "monthly" | "all-time";
 
+export interface TokenTrade {
+  tokenName: string;
+  marketCap: number;
+  invested: {
+    solAmount: number;
+    usdAmount: number;
+  };
+  realizedPnl: {
+    solAmount: number;
+    usdAmount: number;
+  };
+  roi: number;
+  tradesCount: {
+    buy: number;
+    sell: number;
+  };
+  holding: {
+    solAmount: number;
+    usdAmount: number;
+  };
+  avgBuyMarketCap: number;
+  avgSellMarketCap: number;
+  timeHeld: number; // in minutes
+}
+
 export interface Trader {
   id: string;
   name: string;
@@ -15,6 +40,7 @@ export interface Trader {
   avgEntry: number;
   avgHold: number;
   realizedPnl: { solAmount: number; usdAmount: number };
+  tokenHistory: TokenTrade[];
 }
 
 export interface Filters {

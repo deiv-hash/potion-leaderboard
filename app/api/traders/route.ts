@@ -1,5 +1,54 @@
 import { NextResponse } from "next/server";
-import { Trader } from "@/app/types/trader";
+import { Trader, TokenTrade } from "@/app/types/trader";
+
+// Sample token history data
+const generateTokenHistory = (traderSkill: number): TokenTrade[] => {
+  const tokens = [
+    { name: "BONK", baseMarketCap: 500000000 },
+    { name: "SAMO", baseMarketCap: 120000000 },
+    { name: "MEME", baseMarketCap: 300000000 },
+    { name: "PYTH", baseMarketCap: 800000000 },
+    { name: "ORCA", baseMarketCap: 450000000 },
+  ];
+
+  return tokens.map((token) => {
+    const invested = {
+      solAmount: 10 + Math.random() * 40 * traderSkill,
+      get usdAmount() {
+        return this.solAmount * 100;
+      },
+    };
+
+    const roi = (Math.random() * 2 - 0.5) * traderSkill; // -50% to +150% based on skill
+
+    return {
+      tokenName: token.name,
+      marketCap: token.baseMarketCap * (1 + Math.random() * 0.5), // +0-50% variation
+      invested: {
+        solAmount: invested.solAmount,
+        usdAmount: invested.usdAmount,
+      },
+      realizedPnl: {
+        solAmount: invested.solAmount * roi,
+        usdAmount: invested.usdAmount * roi,
+      },
+      roi: roi * 100, // Convert to percentage
+      tradesCount: {
+        buy: Math.floor(5 + Math.random() * 15 * traderSkill),
+        sell: Math.floor(3 + Math.random() * 12 * traderSkill),
+      },
+      holding: {
+        solAmount: invested.solAmount * (Math.random() * 0.5), // Holding 0-50% of invested
+        get usdAmount() {
+          return this.solAmount * 100;
+        },
+      },
+      avgBuyMarketCap: token.baseMarketCap * (0.8 + Math.random() * 0.4), // ±20% of current
+      avgSellMarketCap: token.baseMarketCap * (0.9 + Math.random() * 0.6), // -10% to +50% of current
+      timeHeld: Math.floor(60 + Math.random() * 1440 * traderSkill), // 1h to 24h * skill
+    };
+  });
+};
 
 // Mock data for different time frames
 const tradersData = {
@@ -19,6 +68,7 @@ const tradersData = {
       avgEntry: 92000,
       avgHold: 330,
       realizedPnl: { solAmount: 28.5, usdAmount: 2850 },
+      tokenHistory: generateTokenHistory(1.5),
     },
     {
       id: "1",
@@ -35,6 +85,7 @@ const tradersData = {
       avgEntry: 95000,
       avgHold: 150,
       realizedPnl: { solAmount: 24.8, usdAmount: 2480 },
+      tokenHistory: generateTokenHistory(1.3),
     },
     {
       id: "2",
@@ -51,6 +102,7 @@ const tradersData = {
       avgEntry: 88000,
       avgHold: 72,
       realizedPnl: { solAmount: 19.6, usdAmount: 1960 },
+      tokenHistory: generateTokenHistory(1.2),
     },
     {
       id: "4",
@@ -67,6 +119,7 @@ const tradersData = {
       avgEntry: 89000,
       avgHold: 180,
       realizedPnl: { solAmount: 18.2, usdAmount: 1820 },
+      tokenHistory: generateTokenHistory(1.1),
     },
     {
       id: "5",
@@ -83,6 +136,7 @@ const tradersData = {
       avgEntry: 91000,
       avgHold: 120,
       realizedPnl: { solAmount: 16.5, usdAmount: 1650 },
+      tokenHistory: generateTokenHistory(1.4),
     },
     {
       id: "6",
@@ -99,6 +153,7 @@ const tradersData = {
       avgEntry: 87000,
       avgHold: 90,
       realizedPnl: { solAmount: 14.8, usdAmount: 1480 },
+      tokenHistory: generateTokenHistory(1.0),
     },
     {
       id: "7",
@@ -115,6 +170,7 @@ const tradersData = {
       avgEntry: 86000,
       avgHold: 60,
       realizedPnl: { solAmount: 13.2, usdAmount: 1320 },
+      tokenHistory: generateTokenHistory(1.2),
     },
     {
       id: "8",
@@ -131,6 +187,7 @@ const tradersData = {
       avgEntry: 85000,
       avgHold: 45,
       realizedPnl: { solAmount: 11.5, usdAmount: 1150 },
+      tokenHistory: generateTokenHistory(0.9),
     },
     {
       id: "9",
@@ -147,6 +204,7 @@ const tradersData = {
       avgEntry: 84000,
       avgHold: 30,
       realizedPnl: { solAmount: 10.2, usdAmount: 1020 },
+      tokenHistory: generateTokenHistory(1.1),
     },
     {
       id: "10",
@@ -163,6 +221,7 @@ const tradersData = {
       avgEntry: 83000,
       avgHold: 25,
       realizedPnl: { solAmount: 9.5, usdAmount: 950 },
+      tokenHistory: generateTokenHistory(0.8),
     },
   ],
   weekly: [
@@ -181,6 +240,7 @@ const tradersData = {
       avgEntry: 91000,
       avgHold: 360,
       realizedPnl: { solAmount: 186.5, usdAmount: 18650 },
+      tokenHistory: generateTokenHistory(1.4),
     },
     {
       id: "1",
@@ -197,6 +257,7 @@ const tradersData = {
       avgEntry: 94000,
       avgHold: 180,
       realizedPnl: { solAmount: 156.8, usdAmount: 15680 },
+      tokenHistory: generateTokenHistory(1.2),
     },
     {
       id: "2",
@@ -213,6 +274,7 @@ const tradersData = {
       avgEntry: 87000,
       avgHold: 90,
       realizedPnl: { solAmount: 142.6, usdAmount: 14260 },
+      tokenHistory: generateTokenHistory(1.3),
     },
     {
       id: "4",
@@ -229,6 +291,7 @@ const tradersData = {
       avgEntry: 89000,
       avgHold: 200,
       realizedPnl: { solAmount: 128.4, usdAmount: 12840 },
+      tokenHistory: generateTokenHistory(0.9),
     },
     {
       id: "5",
@@ -245,6 +308,7 @@ const tradersData = {
       avgEntry: 91000,
       avgHold: 150,
       realizedPnl: { solAmount: 115.2, usdAmount: 11520 },
+      tokenHistory: generateTokenHistory(1.3),
     },
     {
       id: "6",
@@ -261,6 +325,7 @@ const tradersData = {
       avgEntry: 87000,
       avgHold: 120,
       realizedPnl: { solAmount: 98.5, usdAmount: 9850 },
+      tokenHistory: generateTokenHistory(0.8),
     },
     {
       id: "7",
@@ -277,6 +342,7 @@ const tradersData = {
       avgEntry: 86000,
       avgHold: 100,
       realizedPnl: { solAmount: 85.6, usdAmount: 8560 },
+      tokenHistory: generateTokenHistory(1.1),
     },
     {
       id: "8",
@@ -293,6 +359,7 @@ const tradersData = {
       avgEntry: 85000,
       avgHold: 80,
       realizedPnl: { solAmount: 72.4, usdAmount: 7240 },
+      tokenHistory: generateTokenHistory(0.7),
     },
     {
       id: "9",
@@ -309,6 +376,7 @@ const tradersData = {
       avgEntry: 84000,
       avgHold: 60,
       realizedPnl: { solAmount: 65.8, usdAmount: 6580 },
+      tokenHistory: generateTokenHistory(1.0),
     },
     {
       id: "10",
@@ -325,6 +393,7 @@ const tradersData = {
       avgEntry: 83000,
       avgHold: 45,
       realizedPnl: { solAmount: 58.2, usdAmount: 5820 },
+      tokenHistory: generateTokenHistory(0.7),
     },
   ],
   monthly: [
@@ -343,6 +412,7 @@ const tradersData = {
       avgEntry: 90000,
       avgHold: 380,
       realizedPnl: { solAmount: 786.5, usdAmount: 78650 },
+      tokenHistory: generateTokenHistory(1.5),
     },
     {
       id: "1",
@@ -359,6 +429,7 @@ const tradersData = {
       avgEntry: 93000,
       avgHold: 200,
       realizedPnl: { solAmount: 685.8, usdAmount: 68580 },
+      tokenHistory: generateTokenHistory(1.3),
     },
     {
       id: "2",
@@ -375,6 +446,7 @@ const tradersData = {
       avgEntry: 86000,
       avgHold: 110,
       realizedPnl: { solAmount: 598.6, usdAmount: 59860 },
+      tokenHistory: generateTokenHistory(1.2),
     },
     {
       id: "4",
@@ -391,6 +463,7 @@ const tradersData = {
       avgEntry: 89000,
       avgHold: 220,
       realizedPnl: { solAmount: 524.2, usdAmount: 52420 },
+      tokenHistory: generateTokenHistory(0.9),
     },
     {
       id: "5",
@@ -407,6 +480,7 @@ const tradersData = {
       avgEntry: 91000,
       avgHold: 180,
       realizedPnl: { solAmount: 468.5, usdAmount: 46850 },
+      tokenHistory: generateTokenHistory(1.3),
     },
     {
       id: "6",
@@ -423,6 +497,7 @@ const tradersData = {
       avgEntry: 87000,
       avgHold: 150,
       realizedPnl: { solAmount: 385.6, usdAmount: 38560 },
+      tokenHistory: generateTokenHistory(0.8),
     },
     {
       id: "7",
@@ -439,6 +514,7 @@ const tradersData = {
       avgEntry: 86000,
       avgHold: 130,
       realizedPnl: { solAmount: 342.8, usdAmount: 34280 },
+      tokenHistory: generateTokenHistory(1.1),
     },
     {
       id: "8",
@@ -455,6 +531,7 @@ const tradersData = {
       avgEntry: 85000,
       avgHold: 100,
       realizedPnl: { solAmount: 285.4, usdAmount: 28540 },
+      tokenHistory: generateTokenHistory(0.7),
     },
     {
       id: "9",
@@ -471,6 +548,7 @@ const tradersData = {
       avgEntry: 84000,
       avgHold: 80,
       realizedPnl: { solAmount: 245.2, usdAmount: 24520 },
+      tokenHistory: generateTokenHistory(1.0),
     },
     {
       id: "10",
@@ -487,6 +565,7 @@ const tradersData = {
       avgEntry: 83000,
       avgHold: 60,
       realizedPnl: { solAmount: 198.6, usdAmount: 19860 },
+      tokenHistory: generateTokenHistory(0.7),
     },
   ],
   "all-time": [
@@ -505,6 +584,7 @@ const tradersData = {
       avgEntry: 89000,
       avgHold: 400,
       realizedPnl: { solAmount: 2865.0, usdAmount: 286500 },
+      tokenHistory: generateTokenHistory(1.5),
     },
     {
       id: "1",
@@ -521,6 +601,7 @@ const tradersData = {
       avgEntry: 92000,
       avgHold: 220,
       realizedPnl: { solAmount: 2458.0, usdAmount: 245800 },
+      tokenHistory: generateTokenHistory(1.3),
     },
     {
       id: "2",
@@ -537,6 +618,7 @@ const tradersData = {
       avgEntry: 85000,
       avgHold: 130,
       realizedPnl: { solAmount: 1986.0, usdAmount: 198600 },
+      tokenHistory: generateTokenHistory(1.2),
     },
     {
       id: "4",
@@ -553,6 +635,7 @@ const tradersData = {
       avgEntry: 89000,
       avgHold: 250,
       realizedPnl: { solAmount: 1685.0, usdAmount: 168500 },
+      tokenHistory: generateTokenHistory(0.9),
     },
     {
       id: "5",
@@ -569,6 +652,7 @@ const tradersData = {
       avgEntry: 91000,
       avgHold: 200,
       realizedPnl: { solAmount: 1425.0, usdAmount: 142500 },
+      tokenHistory: generateTokenHistory(1.3),
     },
     {
       id: "6",
@@ -585,6 +669,7 @@ const tradersData = {
       avgEntry: 87000,
       avgHold: 180,
       realizedPnl: { solAmount: 1250.0, usdAmount: 125000 },
+      tokenHistory: generateTokenHistory(0.8),
     },
     {
       id: "7",
@@ -601,6 +686,7 @@ const tradersData = {
       avgEntry: 86000,
       avgHold: 150,
       realizedPnl: { solAmount: 985.0, usdAmount: 98500 },
+      tokenHistory: generateTokenHistory(1.1),
     },
     {
       id: "8",
@@ -617,6 +703,7 @@ const tradersData = {
       avgEntry: 85000,
       avgHold: 120,
       realizedPnl: { solAmount: 865.0, usdAmount: 86500 },
+      tokenHistory: generateTokenHistory(0.7),
     },
     {
       id: "9",
@@ -633,6 +720,7 @@ const tradersData = {
       avgEntry: 84000,
       avgHold: 100,
       realizedPnl: { solAmount: 725.0, usdAmount: 72500 },
+      tokenHistory: generateTokenHistory(1.0),
     },
     {
       id: "10",
@@ -649,6 +737,7 @@ const tradersData = {
       avgEntry: 83000,
       avgHold: 80,
       realizedPnl: { solAmount: 585.0, usdAmount: 58500 },
+      tokenHistory: generateTokenHistory(0.7),
     },
   ],
 };
