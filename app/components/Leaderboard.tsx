@@ -78,23 +78,29 @@ export function Leaderboard({ traders, loading }: LeaderboardProps) {
   return (
     <div className="w-full mt-12 bg-[#11121B] overflow-hidden">
       {/*header*/}
-      <div className="bg-[#25223D] grid grid-cols-12 gap-2 px-6 py-3">
-        <div className="text-gray-400">Rank</div>
+      <div className="bg-[#25223D] grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 px-3 sm:px-6 py-3">
+        <div className="text-gray-400 hidden sm:block">Rank</div>
         <div className="text-gray-400 col-span-2">Trader</div>
-        <div className="text-gray-400 cursor-pointer text-center">
+        <div className="text-gray-400 cursor-pointer text-center hidden lg:block">
           Followers
         </div>
-        <div className="text-gray-400 cursor-pointer text-center">Tokens</div>
+        <div className="text-gray-400 cursor-pointer text-center hidden md:block">
+          Tokens
+        </div>
         <div className="text-gray-400 cursor-pointer text-center">Win Rate</div>
-        <div className="text-gray-400 cursor-pointer text-center">Trades</div>
-        <div className="text-gray-400 cursor-pointer text-center">Avg Buy</div>
-        <div className="text-gray-400 cursor-pointer text-center">
+        <div className="text-gray-400 cursor-pointer text-center hidden sm:block">
+          Trades
+        </div>
+        <div className="text-gray-400 cursor-pointer text-center hidden lg:block">
+          Avg Buy
+        </div>
+        <div className="text-gray-400 cursor-pointer text-center hidden md:block">
           Avg Entry
         </div>
-        <div className="text-gray-400 cursor-pointer text-center">Avg Hold</div>
-        <div className="text-gray-400 cursor-pointer text-center">
-          Realized PNL
+        <div className="text-gray-400 cursor-pointer text-center hidden lg:block">
+          Avg Hold
         </div>
+        <div className="text-gray-400 cursor-pointer text-center">PNL</div>
         <div className="text-gray-400 cursor-pointer text-center">Share</div>
       </div>
       {/*rows*/}
@@ -102,10 +108,10 @@ export function Leaderboard({ traders, loading }: LeaderboardProps) {
         {traders.map((trader) => (
           <div
             key={trader.id}
-            className="grid grid-cols-12 gap-2 px-6 py-4 hover:bg-[#1C1C28] font-bold cursor-pointer"
+            className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 px-3 sm:px-6 py-4 hover:bg-[#1C1C28] font-bold cursor-pointer"
             onClick={() => handleTraderClick(trader.id)}
           >
-            <div className="flex items-center gap-2">
+            <div className="items-center gap-2 hidden sm:flex">
               <div
                 className={`flex items-center justify-center font-bold ${
                   trader.rank <= 3
@@ -124,10 +130,10 @@ export function Leaderboard({ traders, loading }: LeaderboardProps) {
                 height={40}
                 className="rounded-full"
               />
-              <div className="ml-2">
-                <div className="text-white">{trader.name}</div>
+              <div className="ml-2 min-w-0">
+                <div className="text-white truncate">{trader.name}</div>
                 <div
-                  className="text-gray-400 text-sm cursor-pointer hover:text-purple-300"
+                  className="text-gray-400 text-sm cursor-pointer hover:text-purple-300 truncate"
                   onClick={(e) => {
                     e.stopPropagation();
                     copyToClipboard(trader.wallet);
@@ -137,11 +143,15 @@ export function Leaderboard({ traders, loading }: LeaderboardProps) {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col items-end">
+            <div className="flex-col items-end hidden lg:flex">
               <div>{formatNumber(trader.xFollowers)}</div>
-              <div className="text-gray-400 text-sm">{trader.xTag}</div>
+              <div className="text-gray-400 text-sm truncate">
+                {trader.xTag}
+              </div>
             </div>
-            <div className="text-right">{trader.tokensTraded}</div>
+            <div className="text-right hidden md:block">
+              {trader.tokensTraded}
+            </div>
             <div
               className={`text-right ${
                 trader.winRate >= 50 ? "text-green-600" : "text-red-600"
@@ -149,19 +159,21 @@ export function Leaderboard({ traders, loading }: LeaderboardProps) {
             >
               {Math.round(trader.winRate)}%
             </div>
-            <div className="text-right tracking-wide">
+            <div className="text-right tracking-wide hidden sm:block">
               {trader.tradesCount.buy + trader.tradesCount.sell}
             </div>
-            <div className="text-right">
+            <div className="text-right hidden lg:block">
               <div>{formatSol(trader.avgBuy.solAmount)}</div>
               <div className="font-light text-gray-400 text-sm">
                 ${formatUsd(trader.avgBuy.usdAmount)}
               </div>
             </div>
-            <div className="text-right uppercase">
+            <div className="text-right uppercase hidden md:block">
               {formatAvgEntry(trader.avgEntry)}
             </div>
-            <div className="text-right">{formatHoldTime(trader.avgHold)}</div>
+            <div className="text-right hidden lg:block">
+              {formatHoldTime(trader.avgHold)}
+            </div>
             <div className="text-right">
               <div className="flex items-center gap-1 justify-end">
                 <span
@@ -186,13 +198,13 @@ export function Leaderboard({ traders, loading }: LeaderboardProps) {
               </div>
             </div>
             <div
-              className=" hover:text-purple-300 flex items-center justify-center gap-1"
+              className="flex items-center justify-end sm:justify-center"
               onClick={(e) => {
                 e.stopPropagation();
                 handleShare(trader);
               }}
             >
-              <ShareIcon className="h-5 w-5 text-purple-600" />
+              <ShareIcon className="h-5 w-5 text-purple-600 hover:text-purple-300" />
             </div>
           </div>
         ))}
