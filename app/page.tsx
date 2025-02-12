@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "./components/Header";
 import { TimeFrameSelector } from "./components/TimeFrameSelector";
 import { TimeFrame, Trader, Filters } from "@/app/types/trader";
 import { Searchbar } from "./components/Searchbar";
@@ -67,67 +66,61 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto">
-        <Header />
-        <main>
-          <div className="flex gap-24">
-            <div className="text-gray-400 flex gap-4">
-              <button
-                className={
-                  activeTab === "traders" ? "btn-tab" : "hover:text-white"
-                }
-                onClick={() => setActiveTab("traders")}
-              >
-                Traders
-              </button>
-              <button
-                className={
-                  activeTab === "groups" ? "btn-tab" : "hover:text-white"
-                }
-                onClick={() => setActiveTab("groups")}
-              >
-                Groups
-              </button>
-            </div>
-            {activeTab === "traders" && (
-              <div className="w-full flex justify-between">
-                <TimeFrameSelector
-                  selectedTimeFrame={filter.timeFrame}
-                  onTimeFrameChange={setSelectedTimeFrame}
-                />
-                <div className="flex gap-4">
-                  <Searchbar onSearch={handleSearch} />
-                  <Filter
-                    filters={filter}
-                    onFilterChange={handleFilterChange}
-                  />
-                </div>
-              </div>
-            )}
+      <main>
+        <div className="flex gap-24">
+          <div className="text-gray-400 flex gap-4">
+            <button
+              className={
+                activeTab === "traders" ? "btn-tab" : "hover:text-white"
+              }
+              onClick={() => setActiveTab("traders")}
+            >
+              Traders
+            </button>
+            <button
+              className={
+                activeTab === "groups" ? "btn-tab" : "hover:text-white"
+              }
+              onClick={() => setActiveTab("groups")}
+            >
+              Groups
+            </button>
           </div>
-          {activeTab === "traders" ? (
-            <Leaderboard
-              traders={traders}
-              loading={loading}
-              onSort={handleSort}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-              totalPages={pagination?.totalPages || 1}
-            />
-          ) : (
-            <div className="flex items-center justify-center h-96">
-              <div className="text-center">
-                <h2 className="text-2xl text-purple-500 font-bold mb-2">
-                  Coming Soon
-                </h2>
-                <p className="text-gray-400">
-                  Group leaderboards are under development
-                </p>
+          {activeTab === "traders" && (
+            <div className="w-full flex justify-between">
+              <TimeFrameSelector
+                selectedTimeFrame={filter.timeFrame}
+                onTimeFrameChange={setSelectedTimeFrame}
+              />
+              <div className="flex gap-4">
+                <Searchbar onSearch={handleSearch} />
+                <Filter filters={filter} onFilterChange={handleFilterChange} />
               </div>
             </div>
           )}
-        </main>
-      </div>
+        </div>
+        {activeTab === "traders" ? (
+          <Leaderboard
+            traders={traders}
+            loading={loading}
+            onSort={handleSort}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+            totalPages={pagination?.totalPages || 1}
+          />
+        ) : (
+          <div className="flex items-center justify-center h-96">
+            <div className="text-center">
+              <h2 className="text-2xl text-purple-500 font-bold mb-2">
+                Coming Soon
+              </h2>
+              <p className="text-gray-400">
+                Group leaderboards are under development
+              </p>
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
