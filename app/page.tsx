@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Header } from "./components/Header";
 import { TimeFrameSelector } from "./components/TimeFrameSelector";
 import { TimeFrame } from "@/types/trader";
+import { Searchbar } from "./components/Searchbar";
 
 export default function Home() {
   const [filter, setFilter] = useState<TimeFrame>("daily");
@@ -22,13 +23,15 @@ export default function Home() {
               <button className="btn-tab">Traders</button>
               <button>Groups</button>
             </div>
-            <div className="flex justify-between">
+            <div className="w-full flex justify-between">
               <TimeFrameSelector
                 selectedTimeFrame={filter}
                 onTimeFrameChange={setSelectedTimeFrame}
               />
+              <Searchbar />
             </div>
           </div>
+          <div>LIST OF TRADERS</div>
         </main>
       </div>
     </div>
