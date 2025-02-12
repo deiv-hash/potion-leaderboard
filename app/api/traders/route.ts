@@ -661,6 +661,8 @@ export async function GET(request: Request) {
     "daily") as keyof typeof tradersData;
   const sortBy = searchParams.get("sortBy") || "rank";
   const sortDirection = searchParams.get("sortDirection") || "asc";
+  const page = Number(searchParams.get("page")) || 1;
+  const pageSize = 5;
 
   let traders = [...tradersData[timeFrame]];
 
@@ -791,5 +793,20 @@ export async function GET(request: Request) {
     return (aValue - bValue) * multiplier;
   });
 
-  return NextResponse.json(traders);
+  // Calculate pagination
+  const totalItems = traders.length;
+  const totalPages = Math.ceil(totalItems / pageSize);
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
+  const paginatedTraders = traders.slice(start, end);
+
+  return NextResponse.json({
+    traders: paginatedTraders,
+    pagination: {
+      currentPage: page,
+      totalPages,
+      totalItems,
+      pageSize,
+    },
+  });
 }
