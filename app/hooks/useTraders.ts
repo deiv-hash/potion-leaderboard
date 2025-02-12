@@ -5,12 +5,20 @@ interface UseTradersProps {
   traders: Trader[];
   loading: boolean;
   error: Error | null;
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+    pageSize: number;
+  } | null;
 }
 
-export function useTraders(filters: Filters): UseTradersProps {
+export function useTraders(filters: Filters, page: number): UseTradersProps {
   const [traders, setTraders] = useState<Trader[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [pagination, setPagination] =
+    useState<UseTradersProps["pagination"]>(null);
 
   useEffect(() => {
     const fetchTraders = async () => {
@@ -20,6 +28,7 @@ export function useTraders(filters: Filters): UseTradersProps {
           timeFrame: filters.timeFrame,
           sortBy: filters.sortBy,
           sortDirection: filters.sortDirection,
+          page: page.toString(),
         });
 
         if (filters.search) {
@@ -93,7 +102,8 @@ export function useTraders(filters: Filters): UseTradersProps {
 
         const response = await fetch(`/api/traders?${queryParams}`);
         const data = await response.json();
-        setTraders(data);
+        setTraders(data.traders);
+        setPagination(data.pagination);
       } catch (error) {
         setError(error as Error);
       } finally {
@@ -101,7 +111,7 @@ export function useTraders(filters: Filters): UseTradersProps {
       }
     };
     fetchTraders();
-  }, [filters]);
+  }, [filters, page]);
 
-  return { traders, loading, error };
+  return { traders, loading, error, pagination };
 }
