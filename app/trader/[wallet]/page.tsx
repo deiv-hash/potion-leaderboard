@@ -12,6 +12,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { RefreshIcon } from "@/app/components/icons/RefreshIcon";
 import { ShareIcon } from "@/app/components/icons/ShareIcon";
+import { ShareModal } from "@/app/components/ShareModal";
 
 const getTrader = async (wallet: string): Promise<Trader> => {
   const response = await fetch(
@@ -26,6 +27,7 @@ export default function TraderPage() {
   const { wallet } = useParams();
   const [trader, setTrader] = useState<Trader | null>(null);
   const [loading, setLoading] = useState(true);
+  const [sharingTrader, setSharingTrader] = useState<Trader | null>(null);
 
   useEffect(() => {
     const fetchTrader = async () => {
@@ -35,6 +37,14 @@ export default function TraderPage() {
     };
     fetchTrader();
   }, [wallet]);
+
+  const handleShare = (trader: Trader) => {
+    setSharingTrader(trader);
+  };
+
+  const handleCloseShare = () => {
+    setSharingTrader(null);
+  };
 
   const [selectedTimeFrame, setSelectedTimeFrame] =
     useState<TimeFrame>("daily");
@@ -51,8 +61,11 @@ export default function TraderPage() {
   }
 
   return (
-    <div className="flex items-center justify-between">
-      <div>
+    <div className="flex gap-12">
+      {sharingTrader && (
+        <ShareModal trader={sharingTrader} onClose={handleCloseShare} />
+      )}
+      <div className="w-4/12">
         <div className="flex items-center gap-6">
           <Image
             src={trader.image}
@@ -86,17 +99,25 @@ export default function TraderPage() {
           </div>
         </div>
       </div>
-      <div>
+      <div className="w-8/12">
         <div className="flex justify-between items-center w-full">
           <TimeFrameSelector
             selectedTimeFrame={selectedTimeFrame}
             onTimeFrameChange={handleTimeFrameChange}
           />
-          <div className="flex gap-2">
-            <button className="">
-              <RefreshIcon className="h-5 w-5 text-purple-600 hover:text-purple-300" />
+          <div className="flex gap-6">
+            <button className="flex items-center gap-2">
+              <span className="text-gray-400">
+                last refreshed few seconds ago
+              </span>
+              <RefreshIcon className="h-5 w-5 text-gray-400 hover:text-purple-300" />
             </button>
-            <button className="btn-tab">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleShare(trader);
+              }}
+            >
               <ShareIcon className="h-5 w-5 text-purple-600 hover:text-purple-300" />
             </button>
           </div>
