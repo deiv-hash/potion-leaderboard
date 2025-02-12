@@ -1,5 +1,6 @@
 import { Trader } from "@/app/types/trader";
 import Image from "next/image";
+import { useState } from "react";
 
 interface LeaderboardProps {
   traders: Trader[];
@@ -7,6 +8,15 @@ interface LeaderboardProps {
 }
 
 export function Leaderboard({ traders, loading }: LeaderboardProps) {
+  const [copied, setCopied] = useState<string | null>(null);
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(text);
+    setTimeout(() => {
+      setCopied(null);
+    }, 2000);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96 w-full">
@@ -52,13 +62,18 @@ export function Leaderboard({ traders, loading }: LeaderboardProps) {
               <Image
                 alt={`${trader.name}'s profile`}
                 src={trader.image}
-                width={32}
-                height={32}
+                width={40}
+                height={40}
                 className="rounded-full"
               />
-              <div className=" ">
+              <div className="ml-2">
                 <div className="text-white">{trader.name}</div>
-                <div className="text-gray-400 text-sm">{trader.wallet}</div>
+                <div
+                  className="text-gray-400 text-sm cursor-pointer hover:text-purple-300"
+                  onClick={() => copyToClipboard(trader.wallet)}
+                >
+                  {copied == trader.wallet ? "Copied" : trader.wallet}
+                </div>
               </div>
             </div>
           </div>
