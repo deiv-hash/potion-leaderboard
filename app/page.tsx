@@ -5,6 +5,7 @@ import { Header } from "./components/Header";
 import { TimeFrameSelector } from "./components/TimeFrameSelector";
 import { TimeFrame } from "@/types/trader";
 import { Searchbar } from "./components/Searchbar";
+import { Filter } from "./components/Filter";
 
 export default function Home() {
   const [filter, setFilter] = useState<TimeFrame>("daily");
@@ -28,7 +29,10 @@ export default function Home() {
                 selectedTimeFrame={filter}
                 onTimeFrameChange={setSelectedTimeFrame}
               />
-              <Searchbar />
+              <div className="flex gap-4">
+                <Searchbar />
+                <Filter />
+              </div>
             </div>
           </div>
           <div>LIST OF TRADERS</div>
