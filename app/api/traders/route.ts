@@ -214,8 +214,14 @@ export async function GET(request: Request) {
   const sortBy = searchParams.get("sortBy") || "rank";
   const sortDirection = searchParams.get("sortDirection") || "asc";
 
-  // Get traders for the selected time frame
-  const traders = [...tradersData[timeFrame]];
+  let traders = [...tradersData[timeFrame]];
+  //apply search filter
+  const search = searchParams.get("search")?.toLocaleLowerCase();
+  if (search) {
+    traders = traders.filter((trader) =>
+      trader.name.toLocaleLowerCase().includes(search)
+    );
+  }
 
   // Apply sort
   traders.sort((a: Trader, b: Trader) => {
