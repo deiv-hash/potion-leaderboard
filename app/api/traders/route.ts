@@ -62,6 +62,14 @@ export async function GET(request: Request) {
 
   traders.sort((a: Trader, b: Trader) => {
     const multiplier = sortDirection === "asc" ? 1 : -1;
+
+    // Special handling for tradesCount
+    if (sortBy === "tradesCount") {
+      const aTotal = a.tradesCount.buy + a.tradesCount.sell;
+      const bTotal = b.tradesCount.buy + b.tradesCount.sell;
+      return (aTotal - bTotal) * multiplier;
+    }
+
     const aValue = a[sortBy as keyof Trader] as number;
     const bValue = b[sortBy as keyof Trader] as number;
     return (aValue - bValue) * multiplier;
