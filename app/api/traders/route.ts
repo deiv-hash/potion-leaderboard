@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Trader } from "@/app/types/trader";
 
+//Mock data (avgHold is in minutes)
 const traders: Trader[] = [
   {
     id: "1",
@@ -14,8 +15,8 @@ const traders: Trader[] = [
     winRate: 78.5,
     tradesCount: { buy: 450, sell: 380 },
     avgBuy: { solAmount: 15.8, usdAmount: 1580 },
-    avgEntry: 95.5,
-    avgHold: 48, // hours
+    avgEntry: 95000,
+    avgHold: 150,
     realizedPnl: { solAmount: 245.8, usdAmount: 24580 },
   },
   {
@@ -30,8 +31,8 @@ const traders: Trader[] = [
     winRate: 82.3,
     tradesCount: { buy: 320, sell: 290 },
     avgBuy: { solAmount: 12.4, usdAmount: 1240 },
-    avgEntry: 88.2,
-    avgHold: 36,
+    avgEntry: 88000,
+    avgHold: 72,
     realizedPnl: { solAmount: 198.6, usdAmount: 19860 },
   },
   {
@@ -46,8 +47,8 @@ const traders: Trader[] = [
     winRate: 75.8,
     tradesCount: { buy: 580, sell: 520 },
     avgBuy: { solAmount: 18.2, usdAmount: 1820 },
-    avgEntry: 92.8,
-    avgHold: 24,
+    avgEntry: 92000,
+    avgHold: 330,
     realizedPnl: { solAmount: 286.5, usdAmount: 28650 },
   },
 ];
