@@ -6,6 +6,7 @@ import { ShareIcon } from "./icons/ShareIcon";
 import { ChevronDownIcon } from "./icons/ChevronDownIcon";
 import { ChevronLeftIcon } from "./icons/ChevronLeftIcon";
 import { ChevronRightIcon } from "./icons/ChevronRightIcon";
+import { ShareModal } from "./ShareModal";
 import { shortenWalletAddress } from "@/app/utils/format";
 
 const formatNumber = (num: number): string => {
@@ -64,6 +65,7 @@ export function Leaderboard({
 }: LeaderboardProps) {
   const router = useRouter();
   const [copied, setCopied] = useState<string | null>(null);
+  const [sharingTrader, setSharingTrader] = useState<Trader | null>(null);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -77,9 +79,12 @@ export function Leaderboard({
     router.push(`/trader/${traderId}`);
   };
 
-  const handleShare = async (trader: Trader) => {
-    // TODO: Implement share functionality to create branded image
-    console.log("Share trader:", trader);
+  const handleShare = (trader: Trader) => {
+    setSharingTrader(trader);
+  };
+
+  const handleCloseShare = () => {
+    setSharingTrader(null);
   };
 
   if (loading) {
@@ -92,6 +97,9 @@ export function Leaderboard({
 
   return (
     <div className="w-full mt-12 bg-[#11121B] overflow-hidden">
+      {sharingTrader && (
+        <ShareModal trader={sharingTrader} onClose={handleCloseShare} />
+      )}
       {/*header*/}
       <div className="bg-[#25223D] grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 px-3 sm:px-6 py-3">
         <div className="text-gray-400 hidden sm:block">Rank</div>
