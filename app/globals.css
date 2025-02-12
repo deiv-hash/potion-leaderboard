@@ -6,6 +6,10 @@
   .btn-tab {
     @apply text-white border border-purple-200 rounded-full px-5 py-2 bg-[#25223D];
   }
+
+  .stats-container {
+    @apply flex items-center justify-between bg-[#11121B] px-4 py-2;
+  }
 }
 
 body {
