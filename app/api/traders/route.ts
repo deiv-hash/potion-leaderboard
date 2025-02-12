@@ -70,6 +70,19 @@ export async function GET(request: Request) {
       return (aTotal - bTotal) * multiplier;
     }
 
+    // Special handling for avgBuy
+    if (sortBy === "avgBuy") {
+      const aValue = a.avgBuy.solAmount;
+      const bValue = b.avgBuy.solAmount;
+      return (aValue - bValue) * multiplier;
+    }
+    // special handling for realizedPnl
+    if (sortBy === "realizedPnl") {
+      const aValue = a.realizedPnl.solAmount;
+      const bValue = b.realizedPnl.solAmount;
+      return (aValue - bValue) * multiplier;
+    }
+
     const aValue = a[sortBy as keyof Trader] as number;
     const bValue = b[sortBy as keyof Trader] as number;
     return (aValue - bValue) * multiplier;

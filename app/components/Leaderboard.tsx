@@ -201,7 +201,15 @@ export function Leaderboard({ traders, loading, onSort }: LeaderboardProps) {
               <span className="text-red-600">{trader.tradesCount.sell}</span>
             </div>
             <div className="text-right hidden lg:block">
-              <div>{formatSol(trader.avgBuy.solAmount)}</div>
+              <div className="flex items-center gap-1 justify-end">
+                {formatSol(trader.avgBuy.solAmount)}
+                <Image
+                  src="/solana.png"
+                  alt="solana logo"
+                  width={20}
+                  height={20}
+                />
+              </div>
               <div className="font-light text-gray-400 text-sm">
                 ${formatUsd(trader.avgBuy.usdAmount)}
               </div>
