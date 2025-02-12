@@ -107,6 +107,7 @@ export default function Home() {
             currentPage={currentPage}
             onPageChange={handlePageChange}
             totalPages={pagination?.totalPages || 1}
+            viewType="traders"
           />
         ) : (
           <div className="flex items-center justify-center h-96">
