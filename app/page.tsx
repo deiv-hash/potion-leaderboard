@@ -33,6 +33,10 @@ export default function Home() {
     }));
   };
 
+  const handleSearch = (search: string) => {
+    setFilter((prev) => ({ ...prev, search }));
+  };
+
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -75,7 +79,7 @@ export default function Home() {
                   onTimeFrameChange={setSelectedTimeFrame}
                 />
                 <div className="flex gap-4">
-                  <Searchbar />
+                  <Searchbar onSearch={handleSearch} />
                   <Filter />
                 </div>
               </div>
