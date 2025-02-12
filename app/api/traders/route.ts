@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Trader } from "@/types/trader";
+import { Trader } from "@/app/types/trader";
 
 const traders: Trader[] = [
   {
