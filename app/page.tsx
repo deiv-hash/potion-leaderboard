@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Header } from "./components/Header";
 import { TimeFrameSelector } from "./components/TimeFrameSelector";
-import { TimeFrame, Trader } from "@/app/types/trader";
+import { TimeFrame, Trader, Filters } from "@/app/types/trader";
 import { Searchbar } from "./components/Searchbar";
 import { Filter } from "./components/Filter";
 import { Leaderboard } from "./components/Leaderboard";
@@ -13,10 +13,11 @@ type Tab = "traders" | "groups";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>("traders");
-  const [filter, setFilter] = useState({
-    timeFrame: "daily" as TimeFrame,
-    sortBy: "rank" as keyof Trader,
-    sortDirection: "asc" as "asc" | "desc",
+  const [filter, setFilter] = useState<Filters>({
+    timeFrame: "daily",
+    sortBy: "rank",
+    sortDirection: "asc",
+    search: "",
   });
 
   const { traders, loading, error } = useTraders(filter);
@@ -35,6 +36,10 @@ export default function Home() {
 
   const handleSearch = (search: string) => {
     setFilter((prev) => ({ ...prev, search }));
+  };
+
+  const handleFilterChange = (newFilters: Filters) => {
+    setFilter(newFilters);
   };
 
   if (error) {
@@ -80,7 +85,10 @@ export default function Home() {
                 />
                 <div className="flex gap-4">
                   <Searchbar onSearch={handleSearch} />
-                  <Filter />
+                  <Filter
+                    filters={filter}
+                    onFilterChange={handleFilterChange}
+                  />
                 </div>
               </div>
             )}
