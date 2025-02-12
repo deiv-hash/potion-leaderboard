@@ -12,7 +12,7 @@ export function TimeFrameSelector({
   onTimeFrameChange,
 }: TimeFrameSelectorProps) {
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center gap-4">
       {timeFrames.map((timeFrame) => (
         <button
           key={timeFrame}
@@ -21,7 +21,7 @@ export function TimeFrameSelector({
             selectedTimeFrame === timeFrame
               ? "btn-tab"
               : "text-gray-400 hover:text-white"
-          }`}
+          } capitalize`}
         >
           {timeFrame}
         </button>
