@@ -75,8 +75,8 @@ export function Leaderboard({
     }, 2000);
   };
 
-  const handleTraderClick = (traderId: string) => {
-    router.push(`/trader/${traderId}`);
+  const handleTraderClick = (wallet: string) => {
+    router.push(`/trader/${encodeURIComponent(wallet)}`);
   };
 
   const handleShare = (trader: Trader) => {
@@ -167,7 +167,7 @@ export function Leaderboard({
           <div
             key={trader.id}
             className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 px-3 sm:px-6 py-4 hover:bg-[#1C1C28] font-bold cursor-pointer"
-            onClick={() => handleTraderClick(trader.id)}
+            onClick={() => handleTraderClick(trader.wallet)}
           >
             <div className="items-center gap-2 hidden sm:flex">
               <div
