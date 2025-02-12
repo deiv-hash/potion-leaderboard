@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ShareIcon } from "./icons/ShareIcon";
 import { ChevronDownIcon } from "./icons/ChevronDownIcon";
+import { shortenWalletAddress } from "@/app/utils/format";
 
 const formatNumber = (num: number): string => {
   if (num >= 1000000000) return `${(num / 1000000000).toFixed(1)}b`;
@@ -176,7 +177,9 @@ export function Leaderboard({ traders, loading, onSort }: LeaderboardProps) {
                     copyToClipboard(trader.wallet);
                   }}
                 >
-                  {copied === trader.wallet ? "Copied" : trader.wallet}
+                  {copied === trader.wallet
+                    ? "Copied"
+                    : shortenWalletAddress(trader.wallet)}
                 </div>
               </div>
             </div>
