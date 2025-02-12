@@ -22,4 +22,18 @@ export interface Filters {
   sortBy: keyof Trader;
   sortDirection: "asc" | "desc";
   search?: string;
+  // Numeric range filters
+  xFollowersRange?: FilterRange;
+  tokensRange?: FilterRange;
+  winRateRange?: FilterRange;
+  tradesCountRange?: FilterRange;
+  avgBuyRange?: FilterRange;
+  avgEntryRange?: FilterRange;
+  avgHoldRange?: FilterRange;
+  realizedPnlRange?: FilterRange;
+}
+
+export interface FilterRange {
+  min?: number;
+  max?: number;
 }
