@@ -21,6 +21,9 @@ export function useTraders(filters: Filters): UseTradersProps {
           sortBy: filters.sortBy,
           sortDirection: filters.sortDirection,
         });
+        if (filters.search) {
+          queryParams.append("search", filters.search);
+        }
         const response = await fetch(`/api/traders?${queryParams}`);
         const data = await response.json();
         setTraders(data);
