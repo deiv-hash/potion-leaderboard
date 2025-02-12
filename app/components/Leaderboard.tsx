@@ -45,9 +45,10 @@ const formatHoldTime = (minutes: number): string => {
 interface LeaderboardProps {
   traders: Trader[];
   loading: boolean;
+  onSort: (sortBy: keyof Trader) => void;
 }
 
-export function Leaderboard({ traders, loading }: LeaderboardProps) {
+export function Leaderboard({ traders, loading, onSort }: LeaderboardProps) {
   const router = useRouter();
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -82,32 +83,58 @@ export function Leaderboard({ traders, loading }: LeaderboardProps) {
       <div className="bg-[#25223D] grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 px-3 sm:px-6 py-3">
         <div className="text-gray-400 hidden sm:block">Rank</div>
         <div className="text-gray-400 col-span-2">Trader</div>
-        <div className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1">
+        <div
+          className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
+          onClick={() => onSort("xFollowers")}
+        >
           Followers
           <ChevronDownIcon className="h-4 w-4 text-purple-300" />
         </div>
-        <div className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1">
+        <div
+          className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
+          onClick={() => onSort("tokensTraded")}
+        >
           Tokens
           <ChevronDownIcon className="h-4 w-4 text-purple-300" />
         </div>
-        <div className="text-gray-400 cursor-pointer text-center">Win Rate</div>
-        <div className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1">
+        <div
+          className="text-gray-400 cursor-pointer text-center lg:flex items-center justify-center gap-1"
+          onClick={() => onSort("winRate")}
+        >
+          Win Rate <ChevronDownIcon className="h-4 w-4 text-purple-300" />
+        </div>
+        <div
+          className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
+          onClick={() => onSort("tradesCount")}
+        >
           Trades
           <ChevronDownIcon className="h-4 w-4 text-purple-300" />
         </div>
-        <div className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1">
+        <div
+          className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
+          onClick={() => onSort("avgBuy")}
+        >
           Avg Buy
           <ChevronDownIcon className="h-4 w-4 text-purple-300" />
         </div>
-        <div className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1">
+        <div
+          className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
+          onClick={() => onSort("avgEntry")}
+        >
           Avg Entry
           <ChevronDownIcon className="h-4 w-4 text-purple-300" />
         </div>
-        <div className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1">
+        <div
+          className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
+          onClick={() => onSort("avgHold")}
+        >
           Avg Hold
           <ChevronDownIcon className="h-4 w-4 text-purple-300" />
         </div>
-        <div className="text-gray-400 cursor-pointer text-center lg:flex items-center justify-center gap-1">
+        <div
+          className="text-gray-400 cursor-pointer text-center lg:flex items-center justify-center gap-1"
+          onClick={() => onSort("realizedPnl")}
+        >
           PNL
           <ChevronDownIcon className="h-4 w-4 text-yellow-300" />
         </div>
@@ -170,7 +197,8 @@ export function Leaderboard({ traders, loading }: LeaderboardProps) {
               {Math.round(trader.winRate)}%
             </div>
             <div className="text-right tracking-wide hidden sm:block">
-              {trader.tradesCount.buy + trader.tradesCount.sell}
+              <span className="text-green-600">{trader.tradesCount.buy}</span>/
+              <span className="text-red-600">{trader.tradesCount.sell}</span>
             </div>
             <div className="text-right hidden lg:block">
               <div>{formatSol(trader.avgBuy.solAmount)}</div>

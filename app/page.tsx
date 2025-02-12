@@ -22,6 +22,14 @@ export default function Home() {
     setFilter((prev) => ({ ...prev, timeFrame }));
   };
 
+  const handleSort = (sortBy: keyof Trader) => {
+    setFilter((prev) => ({
+      ...prev,
+      sortBy,
+      sortDirection: prev.sortDirection === "asc" ? "desc" : "asc",
+    }));
+  };
+
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -54,7 +62,11 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <Leaderboard traders={traders} loading={loading} />
+          <Leaderboard
+            traders={traders}
+            loading={loading}
+            onSort={handleSort}
+          />
         </main>
       </div>
     </div>

@@ -53,6 +53,19 @@ const traders: Trader[] = [
   },
 ];
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+
+  // apply sort
+  const sortBy = searchParams.get("sortBy") || "rank";
+  const sortDirection = searchParams.get("sortDirection") || "asc";
+
+  traders.sort((a: Trader, b: Trader) => {
+    const multiplier = sortDirection === "asc" ? 1 : -1;
+    const aValue = a[sortBy as keyof Trader] as number;
+    const bValue = b[sortBy as keyof Trader] as number;
+    return (aValue - bValue) * multiplier;
+  });
+
   return NextResponse.json(traders);
 }
