@@ -41,7 +41,7 @@ export interface Trader {
   avgHold: number;
   realizedPnl: { solAmount: number; usdAmount: number };
   tokenHistory: TokenTrade[];
-  lastTrade: number; // minutes since last trade
+  lastTrade: number;
 }
 
 export interface Filters {
