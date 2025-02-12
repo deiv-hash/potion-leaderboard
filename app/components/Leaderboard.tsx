@@ -47,9 +47,19 @@ interface LeaderboardProps {
   traders: Trader[];
   loading: boolean;
   onSort: (sortBy: keyof Trader) => void;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+  totalPages: number;
 }
 
-export function Leaderboard({ traders, loading, onSort }: LeaderboardProps) {
+export function Leaderboard({
+  traders,
+  loading,
+  onSort,
+  currentPage,
+  onPageChange,
+  totalPages,
+}: LeaderboardProps) {
   const router = useRouter();
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -257,6 +267,37 @@ export function Leaderboard({ traders, loading, onSort }: LeaderboardProps) {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center items-center gap-2 py-4 bg-[#25223D]">
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-3 py-1 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-600 hover:text-white transition-colors"
+        >
+          Previous
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => onPageChange(page)}
+            className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              currentPage === page
+                ? "bg-purple-600 text-white"
+                : "hover:bg-purple-600 hover:text-white transition-colors"
+            }`}
+          >
+            {page}
+          </button>
+        ))}
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="px-3 py-1 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-600 hover:text-white transition-colors"
+        >
+          Next
+        </button>
       </div>
     </div>
   );
