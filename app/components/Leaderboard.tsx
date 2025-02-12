@@ -8,6 +8,7 @@ import { ChevronLeftIcon } from "./icons/ChevronLeftIcon";
 import { ChevronRightIcon } from "./icons/ChevronRightIcon";
 import { ShareModal } from "./ShareModal";
 import { shortenWalletAddress } from "@/app/utils/format";
+import Loading from "./Loading";
 
 const formatNumber = (num: number): string => {
   if (num >= 1000000000) return `${(num / 1000000000).toFixed(1)}b`;
@@ -94,11 +95,7 @@ export function Leaderboard({
   };
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-96 w-full">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   const headers =
