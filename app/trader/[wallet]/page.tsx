@@ -1,7 +1,7 @@
 "use client";
 import Loading from "@/app/components/Loading";
 import { TimeFrameSelector } from "@/app/components/TimeFrameSelector";
-import { TimeFrame, Trader, Tab, Filters } from "@/app/types/trader";
+import { TimeFrame, Trader, TraderTab, Filters } from "@/app/types/trader";
 import {
   formatNumber,
   formatHoldTime,
@@ -37,7 +37,7 @@ export default function TraderPage() {
   const [sharingTrader, setSharingTrader] = useState<Trader | null>(null);
   const [selectedTimeFrame, setSelectedTimeFrame] =
     useState<TimeFrame>("daily");
-  const [activeTab, setActiveTab] = useState<Tab>("traders");
+  const [activeTab, setActiveTab] = useState<TraderTab>("trades");
 
   const [filter, setFilter] = useState<Filters>({
     timeFrame: "daily",
@@ -45,7 +45,6 @@ export default function TraderPage() {
     sortDirection: "asc",
     search: "",
   });
-  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchTrader = async () => {
@@ -76,12 +75,10 @@ export default function TraderPage() {
 
   const handleSearch = (search: string) => {
     setFilter((prev) => ({ ...prev, search }));
-    setCurrentPage(1); // Reset to first page when searching
   };
 
   const handleFilterChange = (newFilters: Filters) => {
     setFilter(newFilters);
-    setCurrentPage(1); // Reset to first page when filtering
   };
 
   if (loading) {
@@ -163,24 +160,24 @@ export default function TraderPage() {
         <div className="flex justify-between items-center">
           <TabSelector
             activeTab={activeTab}
-            onTabChange={setActiveTab}
-            showTokens
+            onTabChange={(tab) => setActiveTab(tab as TraderTab)}
+            variant="trader"
           />
           <div className="flex gap-4">
             <Searchbar onSearch={handleSearch} />
             <Filter filters={filter} onFilterChange={handleFilterChange} />
           </div>
         </div>
-        {activeTab !== "traders" && (
+        {activeTab !== "trades" && (
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <h2 className="text-2xl text-purple-500 font-bold mb-2">
                 Coming Soon
               </h2>
               <p className="text-gray-400">
-                {activeTab === "groups"
-                  ? "Group leaderboards are under development"
-                  : "Token are under development"}
+                {activeTab === "group"
+                  ? "Group details are under development"
+                  : "Token details are under development"}
               </p>
             </div>
           </div>
