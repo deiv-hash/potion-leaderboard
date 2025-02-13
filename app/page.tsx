@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { TimeFrameSelector } from "./components/TimeFrameSelector";
-import { TimeFrame, Trader, Filters, Tab } from "@/app/types/trader";
+import { TimeFrame, Trader, Filters, MainTab } from "@/app/types/trader";
 import { Searchbar } from "./components/Searchbar";
 import { Filter } from "./components/Filter";
 import { Leaderboard } from "./components/Leaderboard";
@@ -10,7 +10,7 @@ import { useTraders } from "./hooks/useTraders";
 import { TabSelector } from "./components/TabSelector";
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<Tab>("traders");
+  const [activeTab, setActiveTab] = useState<MainTab>("traders");
   const [filter, setFilter] = useState<Filters>({
     timeFrame: "daily",
     sortBy: "rank",
@@ -67,7 +67,11 @@ export default function Home() {
     <div className="min-h-screen">
       <main>
         <div className="flex gap-24">
-          <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+          <TabSelector
+            activeTab={activeTab}
+            onTabChange={(tab) => setActiveTab(tab as MainTab)}
+            variant="main"
+          />
           {activeTab === "traders" && (
             <div className="w-full flex justify-between">
               <TimeFrameSelector
