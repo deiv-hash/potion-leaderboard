@@ -186,7 +186,7 @@ export function Leaderboard({
                   {viewType === "tokens" && (
                     <div>
                       <a
-                        href={`https://x.com/search?q=($${trader.name}%20OR%${trader.wallet})&src=typed_query&f=live`}
+                        href={`https://x.com/search?q=($${trader.name}%20OR%20${trader.wallet})&src=typed_query&f=live`}
                         target="_blank"
                         className="h-4 w-4 cursor-pointer hover:text-purple-300 truncate"
                       >
