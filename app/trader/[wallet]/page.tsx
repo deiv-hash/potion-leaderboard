@@ -47,12 +47,17 @@ export default function TraderPage() {
     search: "",
   });
 
+  const [sortedTokens, setSortedTokens] = useState(trader?.tokenHistory || []);
+
   useEffect(() => {
     const fetchTrader = async () => {
       setLoading(true);
       try {
         const trader = await getTrader(wallet as string, selectedTimeFrame);
         setTrader(trader);
+        if (trader.tokenHistory) {
+          setSortedTokens(trader.tokenHistory);
+        }
       } catch (error) {
         console.error("Error fetching trader:", error);
       } finally {
@@ -83,6 +88,61 @@ export default function TraderPage() {
   };
 
   const handleSort = (sortBy: keyof Trader) => {
+    setSortedTokens((currentTokens) => {
+      const newTokens = [...currentTokens];
+      newTokens.sort((a, b) => {
+        const multiplier = filter.sortDirection === "asc" ? 1 : -1;
+
+        // Handle special cases
+        if (sortBy === "tradesCount") {
+          const aTotal = a.tradesCount.buy + a.tradesCount.sell;
+          const bTotal = b.tradesCount.buy + b.tradesCount.sell;
+          return (aTotal - bTotal) * multiplier;
+        }
+
+        if (sortBy === "avgBuy") {
+          return (a.invested.solAmount - b.invested.solAmount) * multiplier;
+        }
+
+        if (sortBy === "realizedPnl") {
+          return (
+            (a.realizedPnl.solAmount - b.realizedPnl.solAmount) * multiplier
+          );
+        }
+
+        if (sortBy === "winRate") {
+          return (a.roi - b.roi) * multiplier;
+        }
+
+        if (sortBy === "avgEntry") {
+          return (a.marketCap - b.marketCap) * multiplier;
+        }
+
+        if (sortBy === "avgBuyMarketCap") {
+          return (
+            ((a.avgBuyMarketCap || 0) - (b.avgBuyMarketCap || 0)) * multiplier
+          );
+        }
+
+        if (sortBy === "avgSellMarketCap") {
+          return (
+            ((a.avgSellMarketCap || 0) - (b.avgSellMarketCap || 0)) * multiplier
+          );
+        }
+
+        if (sortBy === "avgHold") {
+          return (a.timeHeld - b.timeHeld) * multiplier;
+        }
+
+        if (sortBy === "lastTrade") {
+          return (a.lastTrade - b.lastTrade) * multiplier;
+        }
+
+        return 0;
+      });
+      return newTokens;
+    });
+
     setFilter((prev) => ({
       ...prev,
       sortBy,
@@ -195,7 +255,7 @@ export default function TraderPage() {
         {activeTab === "trades" && (
           <div className="mt-8">
             <Leaderboard
-              traders={trader.tokenHistory.map((token, index) => ({
+              traders={sortedTokens.map((token, index) => ({
                 id: token.tokenName,
                 name: token.tokenName,
                 wallet: token.tokenAddress,
