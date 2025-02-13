@@ -47,6 +47,8 @@ export interface Trader {
   realizedPnl: { solAmount: number; usdAmount: number };
   tokenHistory: TokenTrade[];
   lastTrade: number;
+  avgBuyMarketCap?: number; // Optional for trader view
+  avgSellMarketCap?: number; // Optional for trader view
 }
 
 export interface Filters {
