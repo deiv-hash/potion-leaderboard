@@ -13,7 +13,7 @@ export function TabSelector({
 }: TabSelectorProps) {
   if (variant === "main") {
     return (
-      <div className="text-gray-400 flex gap-4">
+      <div className="text-gray-400 flex gap-6">
         <button
           className={activeTab === "traders" ? "btn-tab" : "hover:text-white"}
           onClick={() => onTabChange("traders")}
@@ -31,7 +31,7 @@ export function TabSelector({
   }
 
   return (
-    <div className="text-gray-400 flex gap-4">
+    <div className="text-gray-400 flex gap-6">
       <button
         className={activeTab === "trades" ? "btn-tab" : "hover:text-white"}
         onClick={() => onTabChange("trades")}

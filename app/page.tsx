@@ -64,7 +64,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen mt-12">
       <main>
         <div className="flex gap-24">
           <TabSelector
