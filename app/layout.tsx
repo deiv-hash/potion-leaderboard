@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "./components/Header";
 import { Sponsor } from "./components/Sponsor";
+import { HeaderAlert } from "./components/HeaderAlert";
 
 // Example sponsor data - in a real app, this would come from an API or CMS
 const currentSponsor = {
@@ -37,6 +38,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <HeaderAlert />
         <Sponsor {...currentSponsor} />
         <div className="max-w-[1440px] mx-auto">
           <Header />
