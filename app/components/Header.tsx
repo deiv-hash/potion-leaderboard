@@ -5,12 +5,15 @@ import Link from "next/link";
 import { TwitterIcon } from "./icons/TwitterIcon";
 import { DiscordIcon } from "./icons/DiscordIcon";
 import { useState, useEffect, useRef } from "react";
+import { useWallet } from "../contexts/WalletContext";
+import { shortenWalletAddress } from "../utils/format";
 
 export const Header = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const { wallet, connectWallet, disconnectWallet } = useWallet();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -84,9 +87,26 @@ export const Header = () => {
           >
             <DiscordIcon />
           </a>
-          <button className="bg-[#AA00FF] px-4 py-2 rounded-lg hover:bg-purple-600">
-            Connect Wallet
-          </button>
+          {wallet ? (
+            <div className="flex items-center space-x-2">
+              <span className="text-gray-400">
+                {shortenWalletAddress(wallet)}
+              </span>
+              <button
+                onClick={disconnectWallet}
+                className="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600"
+              >
+                Disconnect
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={connectWallet}
+              className="bg-[#AA00FF] px-4 py-2 rounded-lg hover:bg-purple-600"
+            >
+              Connect Wallet
+            </button>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -161,9 +181,26 @@ export const Header = () => {
                 <DiscordIcon />
               </a>
             </div>
-            <button className="bg-[#AA00FF] px-4 py-2 rounded-lg hover:bg-purple-600 text-white mt-4">
-              Connect Wallet
-            </button>
+            {wallet ? (
+              <div className="flex flex-col space-y-2">
+                <span className="text-gray-400">
+                  {shortenWalletAddress(wallet)}
+                </span>
+                <button
+                  onClick={disconnectWallet}
+                  className="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 text-white"
+                >
+                  Disconnect
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={connectWallet}
+                className="bg-[#AA00FF] px-4 py-2 rounded-lg hover:bg-purple-600 text-white mt-4"
+              >
+                Connect Wallet
+              </button>
+            )}
           </nav>
         </div>
       )}
