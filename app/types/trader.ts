@@ -1,5 +1,7 @@
 export type TimeFrame = "daily" | "weekly" | "monthly" | "all-time";
-export type Tab = "traders" | "groups" | "tokens";
+export type MainTab = "traders" | "groups";
+export type TraderTab = "trades" | "tokens" | "group";
+export type Tab = MainTab | TraderTab;
 
 export interface TokenTrade {
   tokenName: string;
