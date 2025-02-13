@@ -86,7 +86,7 @@ export function Leaderboard({
       : {
           name: "Token",
           stats: [
-            { label: "Last Traded", key: "avgEntry", icon: "purple" },
+            { label: "Last Trade", key: "lastTrade", icon: "purple" },
             { label: "MC", key: "avgEntry", icon: "purple" },
             { label: "Invested", key: "avgBuy", icon: "purple" },
             { label: "Realized PNL", key: "realizedPnl", icon: "yellow" },
@@ -179,8 +179,16 @@ export function Leaderboard({
                       : shortenWalletAddress(trader.wallet)}
                   </div>
                 ) : (
-                  <div className="text-gray-400 text-sm truncate">
-                    {trader.xTag}
+                  <div
+                    className="text-gray-400 text-sm cursor-pointer hover:text-purple-300 truncate"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      copyToClipboard(trader.wallet);
+                    }}
+                  >
+                    {copied === trader.wallet
+                      ? "Copied"
+                      : shortenWalletAddress(trader.wallet)}
                   </div>
                 )}
               </div>
@@ -261,7 +269,7 @@ export function Leaderboard({
               // Token view columns
               <>
                 <div className="text-right hidden lg:block">
-                  {formatAvgEntry(trader.avgEntry)}
+                  {formatHoldTime(trader.lastTrade)}
                 </div>
                 <div className="text-right hidden lg:block">
                   {formatAvgEntry(trader.avgEntry)}
