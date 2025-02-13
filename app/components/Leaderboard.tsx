@@ -93,8 +93,8 @@ export function Leaderboard({
             { label: "ROI", key: "winRate", icon: "purple" },
             { label: "Trades", key: "tradesCount", icon: "purple" },
             { label: "Holding", key: "avgBuy", icon: "purple" },
-            { label: "Avg Buy/Sell", key: "avgBuy", icon: "purple" },
-            { label: "Held", key: "avgHold", icon: "purple" },
+            { label: "Avg Buy", key: "avgBuyMarketCap", icon: "purple" },
+            { label: "Avg Sell", key: "avgSellMarketCap", icon: "purple" },
           ],
         };
 
@@ -342,11 +342,10 @@ export function Leaderboard({
                   </div>
                 </div>
                 <div className="text-right hidden lg:block">
-                  {formatAvgEntry(trader.avgEntry)} /{" "}
-                  {formatAvgEntry(trader.avgEntry)}
+                  {formatAvgEntry(trader.avgBuyMarketCap || 0)}
                 </div>
                 <div className="text-right hidden lg:block">
-                  {formatHoldTime(trader.avgHold)}
+                  {formatAvgEntry(trader.avgSellMarketCap || 0)}
                 </div>
               </>
             )}
