@@ -1,7 +1,7 @@
 "use client";
 import Loading from "@/app/components/Loading";
 import { TimeFrameSelector } from "@/app/components/TimeFrameSelector";
-import { TimeFrame, Trader } from "@/app/types/trader";
+import { TimeFrame, Trader, Tab, Filters } from "@/app/types/trader";
 import {
   formatNumber,
   formatHoldTime,
@@ -14,8 +14,9 @@ import { RefreshIcon } from "@/app/components/icons/RefreshIcon";
 import { ShareIcon } from "@/app/components/icons/ShareIcon";
 import { ShareModal } from "@/app/components/ShareModal";
 import { TraderStats } from "@/app/components/TraderStats";
-
-type Tab = "traders" | "groups" | "tokens";
+import { TabSelector } from "@/app/components/TabSelector";
+import { Searchbar } from "@/app/components/Searchbar";
+import { Filter } from "@/app/components/Filter";
 
 const getTrader = async (
   wallet: string,
@@ -37,6 +38,14 @@ export default function TraderPage() {
   const [selectedTimeFrame, setSelectedTimeFrame] =
     useState<TimeFrame>("daily");
   const [activeTab, setActiveTab] = useState<Tab>("traders");
+
+  const [filter, setFilter] = useState<Filters>({
+    timeFrame: "daily",
+    sortBy: "rank",
+    sortDirection: "asc",
+    search: "",
+  });
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchTrader = async () => {
@@ -63,6 +72,16 @@ export default function TraderPage() {
 
   const handleTimeFrameChange = (timeFrame: TimeFrame) => {
     setSelectedTimeFrame(timeFrame);
+  };
+
+  const handleSearch = (search: string) => {
+    setFilter((prev) => ({ ...prev, search }));
+    setCurrentPage(1); // Reset to first page when searching
+  };
+
+  const handleFilterChange = (newFilters: Filters) => {
+    setFilter(newFilters);
+    setCurrentPage(1); // Reset to first page when filtering
   };
 
   if (loading) {
@@ -142,25 +161,30 @@ export default function TraderPage() {
 
       <div className="mt-8">
         <div className="flex justify-between items-center">
-          <div className="text-gray-400 flex gap-4">
-            <button
-              className={
-                activeTab === "traders" ? "btn-tab" : "hover:text-white"
-              }
-              onClick={() => setActiveTab("traders")}
-            >
-              Traders
-            </button>
-            <button
-              className={
-                activeTab === "groups" ? "btn-tab" : "hover:text-white"
-              }
-              onClick={() => setActiveTab("groups")}
-            >
-              Groups
-            </button>
+          <TabSelector
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            showTokens
+          />
+          <div className="flex gap-4">
+            <Searchbar onSearch={handleSearch} />
+            <Filter filters={filter} onFilterChange={handleFilterChange} />
           </div>
         </div>
+        {activeTab !== "traders" && (
+          <div className="flex items-center justify-center h-96">
+            <div className="text-center">
+              <h2 className="text-2xl text-purple-500 font-bold mb-2">
+                Coming Soon
+              </h2>
+              <p className="text-gray-400">
+                {activeTab === "groups"
+                  ? "Group leaderboards are under development"
+                  : "Token are under development"}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
