@@ -4,11 +4,31 @@ import { Trader, TokenTrade } from "@/app/types/trader";
 // Sample token history data
 const generateTokenHistory = (traderSkill: number): TokenTrade[] => {
   const tokens = [
-    { name: "BONK", baseMarketCap: 500000000 },
-    { name: "SAMO", baseMarketCap: 120000000 },
-    { name: "MEME", baseMarketCap: 300000000 },
-    { name: "PYTH", baseMarketCap: 800000000 },
-    { name: "ORCA", baseMarketCap: 450000000 },
+    {
+      name: "BONK",
+      baseMarketCap: 500000000,
+      address: "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+    },
+    {
+      name: "SAMO",
+      baseMarketCap: 120000000,
+      address: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
+    },
+    {
+      name: "MEME",
+      baseMarketCap: 300000000,
+      address: "MEMEXRxygDCxRtNRn5ZGGxqHkaBK89VHxwPWNgWdBT9",
+    },
+    {
+      name: "PYTH",
+      baseMarketCap: 800000000,
+      address: "HZ1JovNiVvGrGNiiYvEozEVgZ58xaU3RKwX8eACQBCt3",
+    },
+    {
+      name: "ORCA",
+      baseMarketCap: 450000000,
+      address: "orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE",
+    },
   ];
 
   return tokens.map((token) => {
@@ -23,6 +43,7 @@ const generateTokenHistory = (traderSkill: number): TokenTrade[] => {
 
     return {
       tokenName: token.name,
+      tokenAddress: token.address,
       marketCap: token.baseMarketCap * (1 + Math.random() * 0.5), // +0-50% variation
       invested: {
         solAmount: invested.solAmount,
@@ -46,7 +67,7 @@ const generateTokenHistory = (traderSkill: number): TokenTrade[] => {
       avgBuyMarketCap: token.baseMarketCap * (0.8 + Math.random() * 0.4), // ±20% of current
       avgSellMarketCap: token.baseMarketCap * (0.9 + Math.random() * 0.6), // -10% to +50% of current
       timeHeld: Math.floor(60 + Math.random() * 1440 * traderSkill), // 1h to 24h * skill
-      lastTrade: Math.floor(Math.random() * 1440), // 0 to 23 hours * 60 minutes
+      lastTrade: Math.floor(Math.random() * 180), // 0 to 180 minutes ago
     };
   });
 };
