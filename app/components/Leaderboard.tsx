@@ -17,6 +17,7 @@ import {
 } from "@/app/utils/format";
 import Loading from "./Loading";
 import { TwitterIcon } from "./icons/TwitterIcon";
+import { SolscanIcon } from "./icons/SolscanIcon";
 
 type ViewType = "traders" | "tokens";
 
@@ -184,13 +185,20 @@ export function Leaderboard({
                   </div>
 
                   {viewType === "tokens" && (
-                    <div>
+                    <div className="flex items-center gap-2">
                       <a
                         href={`https://x.com/search?q=($${trader.name}%20OR%20${trader.wallet})&src=typed_query&f=live`}
                         target="_blank"
-                        className="h-4 w-4 cursor-pointer hover:text-purple-300 truncate"
+                        className="h-4 w-4 cursor-pointer hover:text-purple-300 "
                       >
                         <TwitterIcon />
+                      </a>
+                      <a
+                        href={`https://solscan.com/token/${trader.wallet}`}
+                        target="_blank"
+                        className="h-4 w-4 cursor-pointer hover:text-purple-300 "
+                      >
+                        <SolscanIcon />
                       </a>
                     </div>
                   )}
