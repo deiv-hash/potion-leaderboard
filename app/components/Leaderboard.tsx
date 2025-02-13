@@ -105,8 +105,16 @@ export function Leaderboard({
       )}
       {/*header*/}
       <div className="bg-[#25223D] grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 px-3 sm:px-6 py-3">
-        <div className="text-gray-400 hidden sm:block">Rank</div>
-        <div className="text-gray-400 col-span-2">{headers.name}</div>
+        {viewType === "traders" && (
+          <div className="text-gray-400 hidden sm:block">Rank</div>
+        )}
+        <div
+          className={`text-gray-400 col-span-2 ${
+            viewType === "tokens" ? "col-start-1" : ""
+          }`}
+        >
+          {headers.name}
+        </div>
         {headers.stats.map((stat) => (
           <div
             key={stat.label}
@@ -131,18 +139,24 @@ export function Leaderboard({
               viewType === "traders" && handleTraderClick(trader.wallet)
             }
           >
-            <div className="items-center gap-2 hidden sm:flex">
-              <div
-                className={`flex items-center justify-center font-bold ${
-                  trader.rank <= 3
-                    ? "bg-yellow-500 text-black w-8 h-8 rounded-full"
-                    : "bg-gray-400 w-8 h-8 rounded-full text-white"
-                }`}
-              >
-                {trader.rank}
+            {viewType === "traders" && (
+              <div className="items-center gap-2 hidden sm:flex">
+                <div
+                  className={`flex items-center justify-center font-bold ${
+                    trader.rank <= 3
+                      ? "bg-yellow-500 text-black w-8 h-8 rounded-full"
+                      : "bg-gray-400 w-8 h-8 rounded-full text-white"
+                  }`}
+                >
+                  {trader.rank}
+                </div>
               </div>
-            </div>
-            <div className="col-span-2 flex items-center gap-2">
+            )}
+            <div
+              className={`col-span-2 flex items-center gap-2 ${
+                viewType === "tokens" ? "col-start-1" : ""
+              }`}
+            >
               <Image
                 alt={`${trader.name}'s profile`}
                 src={trader.image}
