@@ -48,6 +48,7 @@ export default function TraderPage() {
   });
 
   const [sortedTokens, setSortedTokens] = useState(trader?.tokenHistory || []);
+  const [filteredTokens, setFilteredTokens] = useState(sortedTokens);
 
   useEffect(() => {
     const fetchTrader = async () => {
@@ -57,6 +58,7 @@ export default function TraderPage() {
         setTrader(trader);
         if (trader.tokenHistory) {
           setSortedTokens(trader.tokenHistory);
+          setFilteredTokens(trader.tokenHistory);
         }
       } catch (error) {
         console.error("Error fetching trader:", error);
@@ -66,6 +68,17 @@ export default function TraderPage() {
     };
     fetchTrader();
   }, [wallet, selectedTimeFrame]);
+
+  useEffect(() => {
+    // Apply search filter
+    const searchTerm = (filter.search || "").toLowerCase();
+    const filtered = sortedTokens.filter(
+      (token) =>
+        token.tokenName.toLowerCase().includes(searchTerm) ||
+        token.tokenAddress.toLowerCase().includes(searchTerm)
+    );
+    setFilteredTokens(filtered);
+  }, [filter.search, sortedTokens]);
 
   const handleShare = (trader: Trader) => {
     setSharingTrader(trader);
@@ -255,7 +268,7 @@ export default function TraderPage() {
         {activeTab === "trades" && (
           <div className="mt-8">
             <Leaderboard
-              traders={sortedTokens.map((token, index) => ({
+              traders={filteredTokens.map((token, index) => ({
                 id: token.tokenName,
                 name: token.tokenName,
                 wallet: token.tokenAddress,
