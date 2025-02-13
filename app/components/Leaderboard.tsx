@@ -145,10 +145,14 @@ export function Leaderboard({
             {viewType === "traders" && (
               <div className="items-center gap-2 hidden sm:flex">
                 <div
-                  className={`flex items-center justify-center font-bold ${
-                    trader.rank <= 3
-                      ? "bg-yellow-500 text-black w-8 h-8 rounded-full"
-                      : "bg-gray-400 w-8 h-8 rounded-full text-white"
+                  className={`flex items-center text-black justify-center font-bold w-8 h-8 rounded-full ${
+                    trader.rank === 1
+                      ? "bg-yellow-500 "
+                      : trader.rank === 2
+                      ? "bg-gray-500 "
+                      : trader.rank === 3
+                      ? "bg-[#CD7F32] "
+                      : "rounded-none text-white"
                   }`}
                 >
                   {trader.rank}
