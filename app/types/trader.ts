@@ -5,6 +5,7 @@ export type Tab = MainTab | TraderTab;
 
 export interface TokenTrade {
   tokenName: string;
+  tokenAddress: string;
   marketCap: number;
   invested: {
     solAmount: number;
@@ -26,6 +27,7 @@ export interface TokenTrade {
   avgBuyMarketCap: number;
   avgSellMarketCap: number;
   timeHeld: number; // in minutes
+  lastTrade: number; // in minutes
 }
 
 export interface Trader {
