@@ -105,7 +105,7 @@ export function Leaderboard({
         <ShareModal trader={sharingTrader} onClose={handleCloseShare} />
       )}
       {/*header*/}
-      <div className="bg-[#25223D] grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 px-3 sm:px-6 py-3">
+      <div className="bg-[#25223D] grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-3 sm:px-6 py-3">
         {viewType === "traders" && (
           <div className="text-gray-400 hidden sm:block">Rank</div>
         )}
@@ -119,21 +119,23 @@ export function Leaderboard({
         {headers.stats.map((stat) => (
           <div
             key={stat.label}
-            className="text-gray-400 cursor-pointer text-center hidden lg:flex items-center justify-center gap-1"
+            className="text-gray-400 cursor-pointer text-center hidden md:flex items-center justify-center gap-1"
             onClick={() => onSort(stat.key as keyof Trader)}
           >
             {stat.label}
             <ChevronDownIcon className={`h-4 w-4 text-${stat.icon}-300`} />
           </div>
         ))}
-        <div className="text-gray-400 cursor-pointer text-center">Share</div>
+        <div className="text-gray-400 cursor-pointer text-center col-start-4 sm:col-start-6 md:col-start-8 lg:col-start-10 xl:col-start-12">
+          Share
+        </div>
       </div>
       {/*rows*/}
       <div className="divide-y divide-gray-800">
         {traders.map((trader) => (
           <div
             key={trader.id}
-            className={`grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 px-3 sm:px-6 py-4 hover:bg-[#1C1C28] font-bold ${
+            className={`grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-3 sm:px-6 py-4 hover:bg-[#1C1C28] font-bold ${
               viewType === "traders" ? "cursor-pointer" : ""
             }`}
             onClick={() =>
@@ -167,37 +169,23 @@ export function Leaderboard({
               />
               <div className="ml-2 min-w-0">
                 <div className="text-white truncate">{trader.name}</div>
-                {viewType === "traders" ? (
-                  <div
-                    className="text-gray-400 text-sm cursor-pointer hover:text-purple-300 truncate"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      copyToClipboard(trader.wallet);
-                    }}
-                  >
-                    {copied === trader.wallet
-                      ? "Copied"
-                      : shortenWalletAddress(trader.wallet)}
-                  </div>
-                ) : (
-                  <div
-                    className="text-gray-400 text-sm cursor-pointer hover:text-purple-300 truncate"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      copyToClipboard(trader.wallet);
-                    }}
-                  >
-                    {copied === trader.wallet
-                      ? "Copied"
-                      : shortenWalletAddress(trader.wallet)}
-                  </div>
-                )}
+                <div
+                  className="text-gray-400 text-sm cursor-pointer hover:text-purple-300 truncate"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    copyToClipboard(trader.wallet);
+                  }}
+                >
+                  {copied === trader.wallet
+                    ? "Copied"
+                    : shortenWalletAddress(trader.wallet)}
+                </div>
               </div>
             </div>
             {viewType === "traders" ? (
               // Trader view columns
               <>
-                <div className="flex-col items-end hidden lg:flex">
+                <div className="flex-col items-end hidden md:flex">
                   <div>{formatNumber(trader.xFollowers)}</div>
                   <div className="text-gray-400 text-sm truncate">
                     {trader.xTag}
@@ -236,10 +224,10 @@ export function Leaderboard({
                     ${formatUsd(trader.avgBuy.usdAmount)}
                   </div>
                 </div>
-                <div className="text-right uppercase hidden md:block">
+                <div className="text-right uppercase hidden lg:block">
                   {formatAvgEntry(trader.avgEntry)}
                 </div>
-                <div className="text-right hidden lg:block">
+                <div className="text-right hidden xl:block">
                   {formatHoldTime(trader.avgHold)}
                 </div>
                 <div className="text-right">
@@ -269,13 +257,13 @@ export function Leaderboard({
             ) : (
               // Token view columns
               <>
-                <div className="text-right hidden lg:block">
+                <div className="text-right hidden md:block">
                   {formatHoldTime(trader.lastTrade)}
                 </div>
-                <div className="text-right hidden lg:block">
+                <div className="text-right hidden md:block">
                   {formatAvgEntry(trader.avgEntry)}
                 </div>
-                <div className="flex-col items-end lg:flex">
+                <div className="flex-col items-end md:flex">
                   <div className="flex items-center gap-1 justify-end">
                     {formatSol(trader.avgBuy.solAmount)}
                     <Image
@@ -289,7 +277,7 @@ export function Leaderboard({
                     ${formatUsd(trader.avgBuy.usdAmount)}
                   </div>
                 </div>
-                <div className="text-right hidden lg:block">
+                <div className="text-right hidden md:block">
                   <div className="flex items-center gap-1 justify-end">
                     <span
                       className={
@@ -342,13 +330,13 @@ export function Leaderboard({
                     ${formatUsd(trader.avgBuy.usdAmount)}
                   </div>
                 </div>
-                <div className="text-right hidden lg:block">
+                <div className="text-right hidden xl:block">
                   {formatAvgEntry(trader.avgBuyMarketCap || 0)}
                 </div>
-                <div className="text-right hidden lg:block">
+                <div className="text-right hidden xl:block">
                   {formatAvgEntry(trader.avgSellMarketCap || 0)}
                 </div>
-                <div className="text-right hidden lg:block">
+                <div className="text-right hidden xl:block">
                   {formatHoldTime(trader.avgHold)}
                 </div>
               </>
