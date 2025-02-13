@@ -95,6 +95,7 @@ export function Leaderboard({
             { label: "Holding", key: "avgBuy", icon: "purple" },
             { label: "Avg Buy", key: "avgBuyMarketCap", icon: "purple" },
             { label: "Avg Sell", key: "avgSellMarketCap", icon: "purple" },
+            { label: "Time Held", key: "avgHold", icon: "purple" },
           ],
         };
 
@@ -346,6 +347,9 @@ export function Leaderboard({
                 </div>
                 <div className="text-right hidden lg:block">
                   {formatAvgEntry(trader.avgSellMarketCap || 0)}
+                </div>
+                <div className="text-right hidden lg:block">
+                  {formatHoldTime(trader.avgHold)}
                 </div>
               </>
             )}

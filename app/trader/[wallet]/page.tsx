@@ -17,6 +17,7 @@ import { TraderStats } from "@/app/components/TraderStats";
 import { TabSelector } from "@/app/components/TabSelector";
 import { Searchbar } from "@/app/components/Searchbar";
 import { Filter } from "@/app/components/Filter";
+import { Leaderboard } from "@/app/components/Leaderboard";
 
 const getTrader = async (
   wallet: string,
@@ -79,6 +80,14 @@ export default function TraderPage() {
 
   const handleFilterChange = (newFilters: Filters) => {
     setFilter(newFilters);
+  };
+
+  const handleSort = (sortBy: keyof Trader) => {
+    setFilter((prev) => ({
+      ...prev,
+      sortBy,
+      sortDirection: prev.sortDirection === "asc" ? "desc" : "asc",
+    }));
   };
 
   if (loading) {
@@ -180,6 +189,39 @@ export default function TraderPage() {
                   : "Token details are under development"}
               </p>
             </div>
+          </div>
+        )}
+
+        {activeTab === "trades" && (
+          <div className="mt-8">
+            <Leaderboard
+              traders={trader.tokenHistory.map((token, index) => ({
+                id: token.tokenName,
+                name: token.tokenName,
+                wallet: token.tokenAddress,
+                image: `/tokens/${token.tokenName.toLowerCase()}.png`,
+                rank: index + 1,
+                xFollowers: 0,
+                xTag: "",
+                tokensTraded: token.tradesCount.buy + token.tradesCount.sell,
+                winRate: token.roi,
+                tradesCount: token.tradesCount,
+                avgBuy: token.invested,
+                avgEntry: token.marketCap,
+                avgHold: token.timeHeld,
+                realizedPnl: token.realizedPnl,
+                tokenHistory: [],
+                lastTrade: token.lastTrade,
+                avgBuyMarketCap: token.avgBuyMarketCap,
+                avgSellMarketCap: token.avgSellMarketCap,
+              }))}
+              loading={loading}
+              onSort={handleSort}
+              currentPage={1}
+              onPageChange={() => {}}
+              totalPages={1}
+              viewType="tokens"
+            />
           </div>
         )}
       </div>
