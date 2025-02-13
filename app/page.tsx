@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import { TimeFrameSelector } from "./components/TimeFrameSelector";
-import { TimeFrame, Trader, Filters } from "@/app/types/trader";
+import { TimeFrame, Trader, Filters, Tab } from "@/app/types/trader";
 import { Searchbar } from "./components/Searchbar";
 import { Filter } from "./components/Filter";
 import { Leaderboard } from "./components/Leaderboard";
 import { useTraders } from "./hooks/useTraders";
-
-type Tab = "traders" | "groups" | "tokens";
+import { TabSelector } from "./components/TabSelector";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>("traders");
@@ -68,24 +67,7 @@ export default function Home() {
     <div className="min-h-screen">
       <main>
         <div className="flex gap-24">
-          <div className="text-gray-400 flex gap-4">
-            <button
-              className={
-                activeTab === "traders" ? "btn-tab" : "hover:text-white"
-              }
-              onClick={() => setActiveTab("traders")}
-            >
-              Traders
-            </button>
-            <button
-              className={
-                activeTab === "groups" ? "btn-tab" : "hover:text-white"
-              }
-              onClick={() => setActiveTab("groups")}
-            >
-              Groups
-            </button>
-          </div>
+          <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
           {activeTab === "traders" && (
             <div className="w-full flex justify-between">
               <TimeFrameSelector
@@ -116,7 +98,9 @@ export default function Home() {
                 Coming Soon
               </h2>
               <p className="text-gray-400">
-                Group leaderboards are under development
+                {activeTab === "groups"
+                  ? "Group leaderboards are under development"
+                  : "Token leaderboards are under development"}
               </p>
             </div>
           </div>
