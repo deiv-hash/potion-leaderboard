@@ -220,15 +220,17 @@ export function Leaderboard({
                           </div>
                         )}
                       </div>
-                      <button className="flex items-center justify-center gap-1 border border-purple-200 rounded-full px-2 py-1 hover:text-white hover:bg-purple-200 transition-colors mt-2">
-                        <Image
-                          src="/nova.png"
-                          width={20}
-                          height={20}
-                          alt="trade on nova"
-                        />
-                        <span className="text-gray-400 text-sm">Buy</span>
-                      </button>
+                      {viewType === "tokens" && (
+                        <button className="flex items-center justify-center gap-1 border border-purple-200 rounded-full px-2 py-1 hover:text-white hover:bg-purple-200 transition-colors mt-2">
+                          <Image
+                            src="/nova.png"
+                            width={20}
+                            height={20}
+                            alt="trade on nova"
+                          />
+                          <span className="text-gray-400 text-sm">Buy</span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 </td>
