@@ -1,6 +1,8 @@
+"use client";
 import { useState } from "react";
 import { FilterIcon } from "./icons/FilterIcon";
 import { FilterRange, Filters } from "../types/trader";
+import { RequireWallet } from "./RequireWallet";
 
 interface FilterProps {
   filters: Filters;
@@ -73,17 +75,16 @@ export function Filter({ filters, onFilterChange }: FilterProps) {
 
   return (
     <>
-      <button
-        className="btn-tab flex items-center gap-2 relative"
-        onClick={() => setIsOpen(true)}
-      >
-        <FilterIcon className="h-5 w-5" />
-        {activeFiltersCount > 0 && (
-          <div className="absolute -bottom-2 -right-[-5px] bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-            {activeFiltersCount}
-          </div>
-        )}
-      </button>
+      <RequireWallet onAction={() => setIsOpen(true)}>
+        <button className="btn-tab flex items-center gap-2 relative">
+          <FilterIcon className="h-5 w-5" />
+          {activeFiltersCount > 0 && (
+            <div className="absolute -bottom-2 -right-[-5px] bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {activeFiltersCount}
+            </div>
+          )}
+        </button>
+      </RequireWallet>
 
       {/* Overlay */}
       {isOpen && (
@@ -153,8 +154,8 @@ export function Filter({ filters, onFilterChange }: FilterProps) {
             />
 
             <div className="mt-6 flex gap-4">
-              <button
-                onClick={() => {
+              <RequireWallet
+                onAction={() => {
                   onFilterChange({
                     ...filters,
                     xFollowersRange: undefined,
@@ -167,16 +168,16 @@ export function Filter({ filters, onFilterChange }: FilterProps) {
                     realizedPnlRange: undefined,
                   });
                 }}
-                className="w-full py-2 px-4 border border-purple-200 text-purple-200 rounded-lg hover:bg-purple-200 hover:text-black transition-colors"
               >
-                Reset
-              </button>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="w-full py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-              >
-                Apply
-              </button>
+                <button className="w-full py-2 px-4 border border-purple-200 text-purple-200 rounded-lg hover:bg-purple-200 hover:text-black transition-colors">
+                  Reset
+                </button>
+              </RequireWallet>
+              <RequireWallet onAction={() => setIsOpen(false)}>
+                <button className="w-full py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                  Apply
+                </button>
+              </RequireWallet>
             </div>
           </div>
         </div>
