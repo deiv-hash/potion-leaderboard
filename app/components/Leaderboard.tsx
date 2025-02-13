@@ -112,280 +112,292 @@ export function Leaderboard({
       {sharingTrader && (
         <ShareModal trader={sharingTrader} onClose={handleCloseShare} />
       )}
-      {/*header*/}
-      <div className="bg-[#25223D] font-bold text-white grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-3 sm:px-6 py-3">
-        {viewType === "traders" && <div className=" hidden sm:block">Rank</div>}
-        <div
-          className={` col-span-2 ${
-            viewType === "tokens" ? "col-start-1" : ""
-          }`}
-        >
-          {headers.name}
-        </div>
-        {headers.stats.map((stat) => (
-          <div
-            key={stat.label}
-            className=" cursor-pointer text-center hidden md:flex items-center justify-center gap-1"
-            onClick={() => handleSort(stat.key as keyof Trader)}
-          >
-            {stat.label}
-            <ChevronDownIcon
-              className="h-4 w-4"
-              isSelected={selectedSort === stat.key}
-            />
-          </div>
-        ))}
-        <div className="cursor-pointer text-center col-start-4 sm:col-start-6 md:col-start-8 lg:col-start-10 xl:col-start-12">
-          Share
-        </div>
-      </div>
-      {/*rows*/}
-      <div className="divide-y divide-gray-800">
-        {traders.map((trader) => (
-          <div
-            key={trader.id}
-            className={`grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-3 sm:px-6 py-4 hover:bg-[#1C1C28] font-bold ${
-              viewType === "traders" ? "cursor-pointer" : ""
-            }`}
-            onClick={() =>
-              viewType === "traders" && handleTraderClick(trader.wallet)
-            }
-          >
-            {viewType === "traders" && (
-              <div className="items-center gap-2 hidden sm:flex">
-                <div
-                  className={`flex items-center text-black justify-center font-bold w-8 h-8 rounded-full ${
-                    trader.rank === 1
-                      ? "bg-yellow-500 "
-                      : trader.rank === 2
-                      ? "bg-gray-500 "
-                      : trader.rank === 3
-                      ? "bg-[#CD7F32] "
-                      : "rounded-none text-white"
-                  }`}
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="bg-[#25223D] text-white">
+            <tr>
+              {viewType === "traders" && (
+                <th className="hidden sm:table-cell px-3 py-3 font-bold text-left">
+                  Rank
+                </th>
+              )}
+              <th
+                className={`px-3 py-3 font-bold text-left ${
+                  viewType === "tokens" ? "pl-6" : ""
+                }`}
+              >
+                {headers.name}
+              </th>
+              {headers.stats.map((stat) => (
+                <th
+                  key={stat.label}
+                  className="px-3 py-3 font-bold hidden md:table-cell cursor-pointer"
+                  onClick={() => handleSort(stat.key as keyof Trader)}
                 >
-                  {trader.rank}
-                </div>
-              </div>
-            )}
-            <div
-              className={`col-span-2 flex items-center gap-2 ${
-                viewType === "tokens" ? "col-start-1" : ""
-              }`}
-            >
-              <Image
-                alt={`${trader.name}'s profile`}
-                src={trader.image}
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-              <div className="ml-2 min-w-0">
-                <div className="text-white truncate">{trader.name}</div>
-                <div className="text-gray-400 text-sm  flex items-center gap-1">
-                  <div
-                    className="cursor-pointer font-light hover:text-purple-300 truncate"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      copyToClipboard(trader.wallet);
-                    }}
-                  >
-                    {copied === trader.wallet
-                      ? "Copied"
-                      : shortenWalletAddress(trader.wallet)}
+                  <div className="flex items-center justify-end gap-1">
+                    {stat.label}
+                    <ChevronDownIcon
+                      className="h-4 w-4"
+                      isSelected={selectedSort === stat.key}
+                    />
                   </div>
-
-                  {viewType === "tokens" && (
+                </th>
+              ))}
+              <th className="px-6 py-3 font-bold text-right">Share</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-800">
+            {traders.map((trader) => (
+              <tr
+                key={trader.id}
+                className={`hover:bg-[#1C1C28] font-bold ${
+                  viewType === "traders" ? "cursor-pointer" : ""
+                }`}
+                onClick={() =>
+                  viewType === "traders" && handleTraderClick(trader.wallet)
+                }
+              >
+                {viewType === "traders" && (
+                  <td className="hidden sm:table-cell px-3 py-4">
                     <div className="flex items-center gap-2">
-                      <a
-                        href={`https://x.com/search?q=($${trader.name}%20OR%20${trader.wallet})&src=typed_query&f=live`}
-                        target="_blank"
-                        className="h-4 w-4 cursor-pointer hover:text-purple-300 "
+                      <div
+                        className={`flex items-center text-black justify-center font-bold w-8 h-8 rounded-full ${
+                          trader.rank === 1
+                            ? "bg-yellow-500"
+                            : trader.rank === 2
+                            ? "bg-gray-500"
+                            : trader.rank === 3
+                            ? "bg-[#CD7F32]"
+                            : "rounded-none text-white"
+                        }`}
                       >
-                        <TwitterIcon />
-                      </a>
-                      <a
-                        href={`https://solscan.com/token/${trader.wallet}`}
-                        target="_blank"
-                        className="h-4 w-4 cursor-pointer hover:text-purple-300 "
-                      >
-                        <SolscanIcon />
-                      </a>
+                        {trader.rank}
+                      </div>
                     </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            {viewType === "traders" ? (
-              // Trader view columns
-              <>
-                <div className="flex-col items-end hidden md:flex">
-                  <div>{formatNumber(trader.xFollowers)}</div>
-                  <div className="text-gray-400 text-sm font-light truncate">
-                    {trader.xTag}
-                  </div>
-                </div>
-                <div className="text-right hidden md:block">
-                  {trader.tokensTraded}
-                </div>
-                <div
-                  className={`text-right ${
-                    trader.winRate >= 50 ? "text-green-600" : "text-red-600"
-                  }`}
+                  </td>
+                )}
+                <td
+                  className={`px-3 py-4 ${viewType === "tokens" ? "pl-6" : ""}`}
                 >
-                  {Math.round(trader.winRate)}%
-                </div>
-                <div className="text-right tracking-wide hidden sm:block">
-                  <span className="text-green-600">
-                    {trader.tradesCount.buy}
-                  </span>
-                  /
-                  <span className="text-red-600">
-                    {trader.tradesCount.sell}
-                  </span>
-                </div>
-                <div className="text-right hidden lg:block">
-                  <div className="flex items-center gap-1 justify-end">
-                    {formatSol(trader.avgBuy.solAmount)}
+                  <div className="flex items-center gap-2">
                     <Image
-                      src="/solana.png"
-                      alt="solana logo"
-                      width={20}
-                      height={20}
+                      alt={`${trader.name}'s profile`}
+                      src={trader.image}
+                      width={40}
+                      height={40}
+                      className="rounded-full"
                     />
+                    <div className="ml-2 min-w-0">
+                      <div className="text-white truncate">{trader.name}</div>
+                      <div className="text-gray-400 text-sm flex items-center gap-1">
+                        <div
+                          className="cursor-pointer font-light hover:text-purple-300 truncate"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            copyToClipboard(trader.wallet);
+                          }}
+                        >
+                          {copied === trader.wallet
+                            ? "Copied"
+                            : shortenWalletAddress(trader.wallet)}
+                        </div>
+                        {viewType === "tokens" && (
+                          <div className="flex items-center gap-2">
+                            <a
+                              href={`https://x.com/search?q=($${trader.name}%20OR%20${trader.wallet})&src=typed_query&f=live`}
+                              target="_blank"
+                              className="h-4 w-4 cursor-pointer hover:text-purple-300"
+                            >
+                              <TwitterIcon />
+                            </a>
+                            <a
+                              href={`https://solscan.com/token/${trader.wallet}`}
+                              target="_blank"
+                              className="h-4 w-4 cursor-pointer hover:text-purple-300"
+                            >
+                              <SolscanIcon />
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <div className="font-light text-gray-400 text-sm">
-                    ${formatUsd(trader.avgBuy.usdAmount)}
-                  </div>
-                </div>
-                <div className="text-right uppercase hidden lg:block">
-                  {formatAvgEntry(trader.avgEntry)}
-                </div>
-                <div className="text-right hidden xl:block">
-                  {formatHoldTime(trader.avgHold)}
-                </div>
-                <div className="text-right">
-                  <div className="flex items-center gap-1 justify-end">
-                    <span
-                      className={
-                        trader.realizedPnl.solAmount > 0
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }
+                </td>
+                {viewType === "traders" ? (
+                  <>
+                    <td className="px-3 py-4 hidden md:table-cell text-right">
+                      <div>
+                        {formatNumber(trader.xFollowers)}
+                        <div className="text-gray-400 text-sm font-light truncate">
+                          {trader.xTag}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-3 py-4 hidden md:table-cell text-right">
+                      {trader.tokensTraded}
+                    </td>
+                    <td
+                      className={`px-3 py-4 text-right ${
+                        trader.winRate >= 50 ? "text-green-600" : "text-red-600"
+                      }`}
                     >
-                      {trader.realizedPnl.solAmount > 0 ? "+" : ""}
-                      {formatSol(trader.realizedPnl.solAmount)}
-                    </span>
-                    <Image
-                      src="/solana.png"
-                      alt="solana logo"
-                      width={20}
-                      height={20}
-                    />
-                  </div>
-                  <div className="font-light text-gray-400 text-sm">
-                    ${formatUsd(trader.realizedPnl.usdAmount)}
-                  </div>
-                </div>
-              </>
-            ) : (
-              // Token view columns
-              <>
-                <div className="text-right hidden md:block">
-                  {formatHoldTime(trader.lastTrade)}
-                </div>
-                <div className="text-right hidden md:block">
-                  {formatAvgEntry(trader.avgEntry)}
-                </div>
-                <div className="flex-col items-end md:flex">
-                  <div className="flex items-center gap-1 justify-end">
-                    {formatSol(trader.avgBuy.solAmount)}
-                    <Image
-                      src="/solana.png"
-                      alt="solana logo"
-                      width={20}
-                      height={20}
-                    />
-                  </div>
-                  <div className="font-light text-gray-400 text-sm">
-                    ${formatUsd(trader.avgBuy.usdAmount)}
-                  </div>
-                </div>
-                <div className="text-right hidden md:block">
-                  <div className="flex items-center gap-1 justify-end">
-                    <span
-                      className={
-                        trader.realizedPnl.solAmount > 0
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }
+                      {Math.round(trader.winRate)}%
+                    </td>
+                    <td className="px-3 py-4 hidden sm:table-cell text-right">
+                      <span className="text-green-600">
+                        {trader.tradesCount.buy}
+                      </span>
+                      /
+                      <span className="text-red-600">
+                        {trader.tradesCount.sell}
+                      </span>
+                    </td>
+                    <td className="px-3 py-4 hidden lg:table-cell text-right">
+                      <div className="flex items-center gap-1 justify-end">
+                        {formatSol(trader.avgBuy.solAmount)}
+                        <Image
+                          src="/solana.png"
+                          alt="solana logo"
+                          width={20}
+                          height={20}
+                        />
+                      </div>
+                      <div className="font-light text-gray-400 text-sm">
+                        ${formatUsd(trader.avgBuy.usdAmount)}
+                      </div>
+                    </td>
+                    <td className="px-3 py-4 hidden lg:table-cell text-right uppercase">
+                      {formatAvgEntry(trader.avgEntry)}
+                    </td>
+                    <td className="px-3 py-4 hidden xl:table-cell text-right">
+                      {formatHoldTime(trader.avgHold)}
+                    </td>
+                    <td className="px-3 py-4 text-right">
+                      <div className="flex items-center gap-1 justify-end">
+                        <span
+                          className={
+                            trader.realizedPnl.solAmount > 0
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }
+                        >
+                          {trader.realizedPnl.solAmount > 0 ? "+" : ""}
+                          {formatSol(trader.realizedPnl.solAmount)}
+                        </span>
+                        <Image
+                          src="/solana.png"
+                          alt="solana logo"
+                          width={20}
+                          height={20}
+                        />
+                      </div>
+                      <div className="font-light text-gray-400 text-sm">
+                        ${formatUsd(trader.realizedPnl.usdAmount)}
+                      </div>
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td className="px-3 py-4 hidden md:table-cell text-right">
+                      {formatHoldTime(trader.lastTrade)}
+                    </td>
+                    <td className="px-3 py-4 hidden md:table-cell text-right">
+                      {formatAvgEntry(trader.avgEntry)}
+                    </td>
+                    <td className="px-3 py-4 text-right">
+                      <div className="flex items-center gap-1 justify-end">
+                        {formatSol(trader.avgBuy.solAmount)}
+                        <Image
+                          src="/solana.png"
+                          alt="solana logo"
+                          width={20}
+                          height={20}
+                        />
+                      </div>
+                      <div className="font-light text-gray-400 text-sm">
+                        ${formatUsd(trader.avgBuy.usdAmount)}
+                      </div>
+                    </td>
+                    <td className="px-3 py-4 text-right">
+                      <div className="flex items-center gap-1 justify-end">
+                        <span
+                          className={
+                            trader.realizedPnl.solAmount > 0
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }
+                        >
+                          {trader.realizedPnl.solAmount > 0 ? "+" : ""}
+                          {formatSol(trader.realizedPnl.solAmount)}
+                        </span>
+                        <Image
+                          src="/solana.png"
+                          alt="solana logo"
+                          width={20}
+                          height={20}
+                        />
+                      </div>
+                      <div className="font-light text-gray-400 text-sm">
+                        ${formatUsd(trader.realizedPnl.usdAmount)}
+                      </div>
+                    </td>
+                    <td
+                      className={`px-3 py-4 hidden lg:table-cell text-right ${
+                        trader.winRate >= 50 ? "text-green-600" : "text-red-600"
+                      }`}
                     >
-                      {trader.realizedPnl.solAmount > 0 ? "+" : ""}
-                      {formatSol(trader.realizedPnl.solAmount)}
-                    </span>
-                    <Image
-                      src="/solana.png"
-                      alt="solana logo"
-                      width={20}
-                      height={20}
-                    />
+                      {Math.round(trader.winRate)}%
+                    </td>
+                    <td className="px-3 py-4 hidden lg:table-cell text-right">
+                      <span className="text-green-600">
+                        {trader.tradesCount.buy}
+                      </span>
+                      /
+                      <span className="text-red-600">
+                        {trader.tradesCount.sell}
+                      </span>
+                    </td>
+                    <td className="px-3 py-4 hidden lg:table-cell text-right">
+                      <div className="flex items-center gap-1 justify-end">
+                        {formatSol(trader.avgBuy.solAmount)}
+                        <Image
+                          src="/solana.png"
+                          alt="solana logo"
+                          width={20}
+                          height={20}
+                        />
+                      </div>
+                      <div className="font-light text-gray-400 text-sm">
+                        ${formatUsd(trader.avgBuy.usdAmount)}
+                      </div>
+                    </td>
+                    <td className="px-3 py-4 hidden xl:table-cell text-right">
+                      {formatAvgEntry(trader.avgBuyMarketCap || 0)}
+                    </td>
+                    <td className="px-3 py-4 hidden xl:table-cell text-right">
+                      {formatAvgEntry(trader.avgSellMarketCap || 0)}
+                    </td>
+                    <td className="px-3 py-4 hidden xl:table-cell text-right">
+                      {formatHoldTime(trader.avgHold)}
+                    </td>
+                  </>
+                )}
+                <td className="px-6 py-4">
+                  <div className="flex justify-end">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleShare(trader);
+                      }}
+                    >
+                      <ShareIcon className="h-5 w-5 text-purple-600 hover:text-purple-300" />
+                    </button>
                   </div>
-                  <div className="font-light text-gray-400 text-sm">
-                    ${formatUsd(trader.realizedPnl.usdAmount)}
-                  </div>
-                </div>
-                <div
-                  className={`text-right hidden lg:block ${
-                    trader.winRate >= 50 ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {Math.round(trader.winRate)}%
-                </div>
-                <div className="text-right tracking-wide hidden lg:block">
-                  <span className="text-green-600">
-                    {trader.tradesCount.buy}
-                  </span>
-                  /
-                  <span className="text-red-600">
-                    {trader.tradesCount.sell}
-                  </span>
-                </div>
-                <div className="text-right hidden lg:block">
-                  <div className="flex items-center gap-1 justify-end">
-                    {formatSol(trader.avgBuy.solAmount)}
-                    <Image
-                      src="/solana.png"
-                      alt="solana logo"
-                      width={20}
-                      height={20}
-                    />
-                  </div>
-                  <div className="font-light text-gray-400 text-sm">
-                    ${formatUsd(trader.avgBuy.usdAmount)}
-                  </div>
-                </div>
-                <div className="text-right hidden xl:block">
-                  {formatAvgEntry(trader.avgBuyMarketCap || 0)}
-                </div>
-                <div className="text-right hidden xl:block">
-                  {formatAvgEntry(trader.avgSellMarketCap || 0)}
-                </div>
-                <div className="text-right hidden xl:block">
-                  {formatHoldTime(trader.avgHold)}
-                </div>
-              </>
-            )}
-            <div
-              className="flex items-center justify-end sm:justify-center"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleShare(trader);
-              }}
-            >
-              <ShareIcon className="h-5 w-5 text-purple-600 hover:text-purple-300" />
-            </div>
-          </div>
-        ))}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Pagination */}
