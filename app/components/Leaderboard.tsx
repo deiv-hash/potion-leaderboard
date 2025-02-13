@@ -107,12 +107,10 @@ export function Leaderboard({
         <ShareModal trader={sharingTrader} onClose={handleCloseShare} />
       )}
       {/*header*/}
-      <div className="bg-[#25223D] grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-3 sm:px-6 py-3">
-        {viewType === "traders" && (
-          <div className="text-gray-400 hidden sm:block">Rank</div>
-        )}
+      <div className="bg-[#25223D] font-bold text-white grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-3 sm:px-6 py-3">
+        {viewType === "traders" && <div className=" hidden sm:block">Rank</div>}
         <div
-          className={`text-gray-400 col-span-2 ${
+          className={` col-span-2 ${
             viewType === "tokens" ? "col-start-1" : ""
           }`}
         >
@@ -121,14 +119,14 @@ export function Leaderboard({
         {headers.stats.map((stat) => (
           <div
             key={stat.label}
-            className="text-gray-400 cursor-pointer text-center hidden md:flex items-center justify-center gap-1"
+            className=" cursor-pointer text-center hidden md:flex items-center justify-center gap-1"
             onClick={() => onSort(stat.key as keyof Trader)}
           >
             {stat.label}
             <ChevronDownIcon className={`h-4 w-4 text-${stat.icon}-300`} />
           </div>
         ))}
-        <div className="text-gray-400 cursor-pointer text-center col-start-4 sm:col-start-6 md:col-start-8 lg:col-start-10 xl:col-start-12">
+        <div className="cursor-pointer text-center col-start-4 sm:col-start-6 md:col-start-8 lg:col-start-10 xl:col-start-12">
           Share
         </div>
       </div>
@@ -173,7 +171,7 @@ export function Leaderboard({
                 <div className="text-white truncate">{trader.name}</div>
                 <div className="text-gray-400 text-sm  flex items-center gap-1">
                   <div
-                    className="cursor-pointer hover:text-purple-300 truncate"
+                    className="cursor-pointer font-light hover:text-purple-300 truncate"
                     onClick={(e) => {
                       e.stopPropagation();
                       copyToClipboard(trader.wallet);
@@ -210,7 +208,7 @@ export function Leaderboard({
               <>
                 <div className="flex-col items-end hidden md:flex">
                   <div>{formatNumber(trader.xFollowers)}</div>
-                  <div className="text-gray-400 text-sm truncate">
+                  <div className="text-gray-400 text-sm font-light truncate">
                     {trader.xTag}
                   </div>
                 </div>
