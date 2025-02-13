@@ -37,7 +37,7 @@ export const formatAvgEntry = (num: number): string => {
 
 export const formatHoldTime = (minutes: number | undefined): string => {
   if (!minutes || isNaN(minutes)) return "N/A";
-  if (minutes < 60) return `${Math.round(minutes)}m ago`;
-  if (minutes < 1440) return `${(minutes / 60).toFixed(1)}h ago`;
-  return `${Math.round(minutes / 1440)}d ago`;
+  if (minutes < 60) return `${Math.round(minutes)} m`;
+  if (minutes < 1440) return `${(minutes / 60).toFixed(1)} h`;
+  return `${Math.round(minutes / 1440)} d`;
 };
