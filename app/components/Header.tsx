@@ -33,19 +33,19 @@ export const Header = () => {
   return (
     <header className="relative">
       <div className="px-4 py-4 flex justify-between items-center">
-        <div className="flex items-center space-x-8">
+        <div className="flex items-center space-x-16">
           <Link href="/">
             <Image
               src="/logo.png"
               alt="Potion Leaderboard"
-              width={200}
+              width={300}
               height={300}
-              className="w-20 h-10 md:w-44 md:h-16"
+              className="w-20 h-10 md:w-56 md:h-16"
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-4">
+          <nav className="hidden md:flex space-x-12">
             <Link
               href="/"
               className={`${
