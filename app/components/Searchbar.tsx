@@ -15,7 +15,7 @@ export function Searchbar({ onSearch }: SearchBarProps) {
           type="text"
           placeholder="Search by name or wallet"
           onChange={(e) => onSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 bg-transparent border border-purple-200 rounded-full"
+          className="w-full pl-10 pr-40 py-2 bg-transparent border border-purple-200 rounded-full"
         />
       </div>
     </div>
