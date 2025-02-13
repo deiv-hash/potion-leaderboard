@@ -8,7 +8,7 @@ import { Filter } from "./components/Filter";
 import { Leaderboard } from "./components/Leaderboard";
 import { useTraders } from "./hooks/useTraders";
 
-type Tab = "traders" | "groups";
+type Tab = "traders" | "groups" | "tokens";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>("traders");
