@@ -17,9 +17,12 @@ import { RefreshIcon } from "@/app/components/icons/RefreshIcon";
 import { ShareIcon } from "@/app/components/icons/ShareIcon";
 import { ShareModal } from "@/app/components/ShareModal";
 
-const getTrader = async (wallet: string): Promise<Trader> => {
+const getTrader = async (
+  wallet: string,
+  timeFrame: TimeFrame
+): Promise<Trader> => {
   const response = await fetch(
-    `/api/traders?search=${encodeURIComponent(wallet)}`
+    `/api/traders?search=${encodeURIComponent(wallet)}&timeFrame=${timeFrame}`
   );
   const data = await response.json();
   if (data.traders.length === 0) throw new Error("Trader not found");
@@ -31,15 +34,23 @@ export default function TraderPage() {
   const [trader, setTrader] = useState<Trader | null>(null);
   const [loading, setLoading] = useState(true);
   const [sharingTrader, setSharingTrader] = useState<Trader | null>(null);
+  const [selectedTimeFrame, setSelectedTimeFrame] =
+    useState<TimeFrame>("daily");
 
   useEffect(() => {
     const fetchTrader = async () => {
-      const trader = await getTrader(wallet as string);
-      setTrader(trader);
-      setLoading(false);
+      setLoading(true);
+      try {
+        const trader = await getTrader(wallet as string, selectedTimeFrame);
+        setTrader(trader);
+      } catch (error) {
+        console.error("Error fetching trader:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchTrader();
-  }, [wallet]);
+  }, [wallet, selectedTimeFrame]);
 
   const handleShare = (trader: Trader) => {
     setSharingTrader(trader);
@@ -49,8 +60,6 @@ export default function TraderPage() {
     setSharingTrader(null);
   };
 
-  const [selectedTimeFrame, setSelectedTimeFrame] =
-    useState<TimeFrame>("daily");
   const handleTimeFrameChange = (timeFrame: TimeFrame) => {
     setSelectedTimeFrame(timeFrame);
   };
@@ -212,7 +221,13 @@ export default function TraderPage() {
           <div className="stats-container">
             <h3>Trades</h3>
             <div className="text-right">
-              <p>
+              <p
+                className={
+                  trader.tradesCount.buy > trader.tradesCount.sell
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
+              >
                 <span className="text-green-600">{trader.tradesCount.buy}</span>
                 /<span className="text-red-600">{trader.tradesCount.sell}</span>
               </p>
