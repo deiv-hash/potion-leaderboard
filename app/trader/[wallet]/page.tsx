@@ -70,15 +70,72 @@ export default function TraderPage() {
   }, [wallet, selectedTimeFrame]);
 
   useEffect(() => {
-    // Apply search filter
+    // Apply search filter and range filters
     const searchTerm = (filter.search || "").toLowerCase();
-    const filtered = sortedTokens.filter(
+    let filtered = sortedTokens.filter(
       (token) =>
         token.tokenName.toLowerCase().includes(searchTerm) ||
         token.tokenAddress.toLowerCase().includes(searchTerm)
     );
+
+    // Apply range filters
+    const applyRangeFilter = (
+      value: number,
+      range?: { min?: number; max?: number }
+    ) => {
+      if (!range) return true;
+      if (range.min !== undefined && value < range.min) return false;
+      if (range.max !== undefined && value > range.max) return false;
+      return true;
+    };
+
+    // Filter by win rate (ROI)
+    if (filter.winRateRange) {
+      filtered = filtered.filter((token) =>
+        applyRangeFilter(token.roi, filter.winRateRange)
+      );
+    }
+
+    // Filter by trades count
+    if (filter.tradesCountRange) {
+      filtered = filtered.filter((token) =>
+        applyRangeFilter(
+          token.tradesCount.buy + token.tradesCount.sell,
+          filter.tradesCountRange
+        )
+      );
+    }
+
+    // Filter by average buy
+    if (filter.avgBuyRange) {
+      filtered = filtered.filter((token) =>
+        applyRangeFilter(token.invested.solAmount, filter.avgBuyRange)
+      );
+    }
+
+    // Filter by market cap (avgEntry)
+    if (filter.avgEntryRange) {
+      filtered = filtered.filter((token) =>
+        applyRangeFilter(token.marketCap, filter.avgEntryRange)
+      );
+    }
+
+    // Filter by hold time
+    if (filter.avgHoldRange) {
+      filtered = filtered.filter((token) =>
+        applyRangeFilter(token.timeHeld, filter.avgHoldRange)
+      );
+    }
+
+    // Filter by realized PnL
+    if (filter.realizedPnlRange) {
+      filtered = filtered.filter((token) =>
+        applyRangeFilter(token.realizedPnl.solAmount, filter.realizedPnlRange)
+      );
+    }
+
     setFilteredTokens(filtered);
-  }, [filter.search, sortedTokens]);
+  }, [filter, sortedTokens]);
 
   const handleShare = (trader: Trader) => {
     setSharingTrader(trader);
