@@ -230,7 +230,7 @@ export default function TraderPage() {
 
   return (
     <>
-      <div className="flex gap-12">
+      <div className="flex gap-12 mt-12">
         {sharingTrader && (
           <ShareModal trader={sharingTrader} onClose={handleCloseShare} />
         )}
@@ -295,7 +295,7 @@ export default function TraderPage() {
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-12">
         <div className="flex justify-between items-center">
           <TabSelector
             activeTab={activeTab}
