@@ -16,6 +16,7 @@ import {
   shortenWalletAddress,
 } from "@/app/utils/format";
 import Loading from "./Loading";
+import { TwitterIcon } from "./icons/TwitterIcon";
 
 type ViewType = "traders" | "tokens";
 
@@ -169,16 +170,30 @@ export function Leaderboard({
               />
               <div className="ml-2 min-w-0">
                 <div className="text-white truncate">{trader.name}</div>
-                <div
-                  className="text-gray-400 text-sm cursor-pointer hover:text-purple-300 truncate"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    copyToClipboard(trader.wallet);
-                  }}
-                >
-                  {copied === trader.wallet
-                    ? "Copied"
-                    : shortenWalletAddress(trader.wallet)}
+                <div className="text-gray-400 text-sm  flex items-center gap-1">
+                  <div
+                    className="cursor-pointer hover:text-purple-300 truncate"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      copyToClipboard(trader.wallet);
+                    }}
+                  >
+                    {copied === trader.wallet
+                      ? "Copied"
+                      : shortenWalletAddress(trader.wallet)}
+                  </div>
+
+                  {viewType === "tokens" && (
+                    <div>
+                      <a
+                        href={`https://x.com/search?q=($${trader.name}%20OR%${trader.wallet})&src=typed_query&f=live`}
+                        target="_blank"
+                        className="h-4 w-4 cursor-pointer hover:text-purple-300 truncate"
+                      >
+                        <TwitterIcon />
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
