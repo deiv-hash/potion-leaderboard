@@ -43,6 +43,7 @@ export function Leaderboard({
   const router = useRouter();
   const [copied, setCopied] = useState<string | null>(null);
   const [sharingTrader, setSharingTrader] = useState<Trader | null>(null);
+  const [selectedSort, setSelectedSort] = useState<keyof Trader | null>(null);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -64,6 +65,11 @@ export function Leaderboard({
 
   const handleCloseShare = () => {
     setSharingTrader(null);
+  };
+
+  const handleSort = (key: keyof Trader) => {
+    setSelectedSort(key);
+    onSort(key);
   };
 
   if (loading) {
@@ -120,10 +126,13 @@ export function Leaderboard({
           <div
             key={stat.label}
             className=" cursor-pointer text-center hidden md:flex items-center justify-center gap-1"
-            onClick={() => onSort(stat.key as keyof Trader)}
+            onClick={() => handleSort(stat.key as keyof Trader)}
           >
             {stat.label}
-            <ChevronDownIcon className={`h-4 w-4 text-${stat.icon}-300`} />
+            <ChevronDownIcon
+              className="h-4 w-4"
+              isSelected={selectedSort === stat.key}
+            />
           </div>
         ))}
         <div className="cursor-pointer text-center col-start-4 sm:col-start-6 md:col-start-8 lg:col-start-10 xl:col-start-12">

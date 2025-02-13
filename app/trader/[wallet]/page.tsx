@@ -264,7 +264,7 @@ export default function TraderPage() {
           <div className="stats-container">
             <h3>Last Trade</h3>
             <div className="text-right">
-              <p>{formatHoldTime(trader.lastTrade)}</p>
+              <p>{formatHoldTime(trader.lastTrade)} ago</p>
             </div>
           </div>
         </div>
