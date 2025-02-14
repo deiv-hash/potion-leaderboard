@@ -263,8 +263,8 @@ export function Leaderboard({
                       <td className="px-3 py-4 hidden sm:table-cell text-right">
                         <span className="text-green-600">
                           {trader.tradesCount.buy}
-                        </span>
-                        /
+                        </span>{" "}
+                        /{" "}
                         <span className="text-red-600">
                           {trader.tradesCount.sell}
                         </span>
@@ -370,8 +370,8 @@ export function Leaderboard({
                       <td className="px-3 py-4 hidden lg:table-cell text-right">
                         <span className="text-green-600">
                           {trader.tradesCount.buy}
-                        </span>
-                        /
+                        </span>{" "}
+                        /{" "}
                         <span className="text-red-600">
                           {trader.tradesCount.sell}
                         </span>
