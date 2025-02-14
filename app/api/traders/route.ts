@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Trader, TokenTrade } from "@/app/types/trader";
+import { sortItems } from "@/app/utils/sort";
 
 // Sample token history data
 const generateTokenHistory = (traderSkill: number): TokenTrade[] => {
@@ -915,34 +916,11 @@ export async function GET(request: Request) {
   }
 
   // Apply sort
-  traders.sort((a: Trader, b: Trader) => {
-    const multiplier = sortDirection === "asc" ? 1 : -1;
-
-    // Special handling for tradesCount
-    if (sortBy === "tradesCount") {
-      const aTotal = a.tradesCount.buy + a.tradesCount.sell;
-      const bTotal = b.tradesCount.buy + b.tradesCount.sell;
-      return (aTotal - bTotal) * multiplier;
-    }
-
-    // Special handling for avgBuy
-    if (sortBy === "avgBuy") {
-      const aValue = a.avgBuy.solAmount;
-      const bValue = b.avgBuy.solAmount;
-      return (aValue - bValue) * multiplier;
-    }
-
-    // Special handling for realizedPnl
-    if (sortBy === "realizedPnl") {
-      const aValue = a.realizedPnl.solAmount;
-      const bValue = b.realizedPnl.solAmount;
-      return (aValue - bValue) * multiplier;
-    }
-
-    const aValue = a[sortBy as keyof Trader] as number;
-    const bValue = b[sortBy as keyof Trader] as number;
-    return (aValue - bValue) * multiplier;
-  });
+  traders = sortItems(
+    traders,
+    sortBy as keyof Trader,
+    sortDirection as "asc" | "desc"
+  ) as Trader[];
 
   // Calculate pagination
   const totalItems = traders.length;
