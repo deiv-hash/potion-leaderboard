@@ -89,24 +89,38 @@ export const Header = () => {
           </a>
           {wallet ? (
             <div className="flex items-center space-x-4">
-              <Link href="/profile" className="text-gray-400 hover:text-white">
-                <Image
-                  src="/avatar.jpg"
-                  alt="Profile"
-                  width={32}
-                  height={32}
-                  className="rounded-full"
-                />
-              </Link>
-              <span className="text-gray-400">
-                {shortenWalletAddress(wallet)}
-              </span>
-              <button
-                onClick={disconnectWallet}
-                className="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600"
-              >
-                Disconnect
-              </button>
+              <div className="relative group">
+                <Link
+                  href="/profile"
+                  className="text-gray-400 hover:text-white"
+                >
+                  <Image
+                    src="/avatar.jpg"
+                    alt="Profile"
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                </Link>
+                {/* Dropdown menu */}
+                <div className="absolute z-50 right-0 w-48 py-2 bg-[#1C1C28] rounded-lg shadow-xl hidden group-hover:block">
+                  <div className="px-4 py-2 text-sm text-gray-400 border-b border-gray-800">
+                    {shortenWalletAddress(wallet)}
+                  </div>
+                  <Link
+                    href="/profile"
+                    className="block px-4 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-800"
+                  >
+                    Profile Settings
+                  </Link>
+                  <button
+                    onClick={disconnectWallet}
+                    className="w-full text-left px-4 py-2 text-sm text-red-500 hover:text-red-400 hover:bg-gray-800"
+                  >
+                    Disconnect
+                  </button>
+                </div>
+              </div>
             </div>
           ) : (
             <button
@@ -191,25 +205,36 @@ export const Header = () => {
               </a>
             </div>
             {wallet ? (
-              <div className="flex flex-col space-y-2">
+              <div className="flex flex-col space-y-2 pt-4 border-t border-gray-800">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Link href="/profile">
+                      <Image
+                        src="/avatar.jpg"
+                        alt="Profile"
+                        width={32}
+                        height={32}
+                        className="rounded-full"
+                      />
+                    </Link>
+                    <span className="text-gray-400">
+                      {shortenWalletAddress(wallet)}
+                    </span>
+                  </div>
+                </div>
                 <Link
                   href="/profile"
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-white py-2"
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  <Image
-                    src="/avatar.jpg"
-                    alt="Profile"
-                    width={32}
-                    height={32}
-                    className="rounded-full"
-                  />
+                  Profile Settings
                 </Link>
-                <span className="text-gray-400">
-                  {shortenWalletAddress(wallet)}
-                </span>
                 <button
-                  onClick={disconnectWallet}
-                  className="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 text-white"
+                  onClick={() => {
+                    disconnectWallet();
+                    setIsMenuOpen(false);
+                  }}
+                  className="text-red-500 hover:text-red-400 text-left py-2"
                 >
                   Disconnect
                 </button>
