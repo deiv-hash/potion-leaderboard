@@ -7,10 +7,6 @@ function isTrader(item: SortableItem): item is Trader {
   return "winRate" in item && !("roi" in item);
 }
 
-function isTokenTrade(item: SortableItem): item is TokenTrade {
-  return "roi" in item;
-}
-
 export function sortItems(
   items: SortableItem[],
   sortBy: SortableKey,
