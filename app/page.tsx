@@ -65,54 +65,56 @@ export default function Home() {
 
   return (
     <div className="min-h-screen mt-12">
-      <main>
-        <div className="flex gap-24">
-          <TabSelector
-            activeTab={activeTab}
-            onTabChange={(tab) => setActiveTab(tab as MainTab)}
-            variant="main"
-          />
-          {activeTab === "traders" && (
-            <div className="w-full flex justify-between">
-              <TimeFrameSelector
-                selectedTimeFrame={filter.timeFrame}
-                onTimeFrameChange={setSelectedTimeFrame}
-              />
-              <div className="flex gap-4">
-                <Searchbar onSearch={handleSearch} />
-                <Filter
-                  filters={filter}
-                  onFilterChange={handleFilterChange}
-                  viewType="traders"
+      <main className="px-4 sm:px-6">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+            <TabSelector
+              activeTab={activeTab}
+              onTabChange={(tab) => setActiveTab(tab as MainTab)}
+              variant="main"
+            />
+            {activeTab === "traders" && (
+              <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between w-full">
+                <TimeFrameSelector
+                  selectedTimeFrame={filter.timeFrame}
+                  onTimeFrameChange={setSelectedTimeFrame}
                 />
+                <div className="flex items-center gap-4">
+                  <Searchbar onSearch={handleSearch} />
+                  <Filter
+                    filters={filter}
+                    onFilterChange={handleFilterChange}
+                    viewType="traders"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+          {activeTab === "traders" ? (
+            <Leaderboard
+              traders={traders}
+              loading={loading}
+              onSort={handleSort}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              totalPages={pagination?.totalPages || 1}
+              viewType="traders"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-96">
+              <div className="text-center">
+                <h2 className="text-2xl text-purple-500 font-bold mb-2">
+                  Coming Soon
+                </h2>
+                <p className="text-gray-400">
+                  {activeTab === "groups"
+                    ? "Group leaderboards are under development"
+                    : "Token leaderboards are under development"}
+                </p>
               </div>
             </div>
           )}
         </div>
-        {activeTab === "traders" ? (
-          <Leaderboard
-            traders={traders}
-            loading={loading}
-            onSort={handleSort}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-            totalPages={pagination?.totalPages || 1}
-            viewType="traders"
-          />
-        ) : (
-          <div className="flex items-center justify-center h-96">
-            <div className="text-center">
-              <h2 className="text-2xl text-purple-500 font-bold mb-2">
-                Coming Soon
-              </h2>
-              <p className="text-gray-400">
-                {activeTab === "groups"
-                  ? "Group leaderboards are under development"
-                  : "Token leaderboards are under development"}
-              </p>
-            </div>
-          </div>
-        )}
       </main>
     </div>
   );
