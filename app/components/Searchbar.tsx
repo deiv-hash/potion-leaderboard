@@ -15,23 +15,10 @@ export const Searchbar = ({ onSearch }: SearchbarProps) => {
 
   return (
     <RequireWallet onAction={handleSubmit}>
-      <div className="relative w-full sm:w-64">
-        <input
-          type="text"
-          placeholder="Search..."
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              handleSubmit();
-            }
-          }}
-          className="bg-[#25223D] text-white px-4 py-2 rounded-lg pr-10 w-full focus:outline-none focus:ring-2 focus:ring-purple-600"
-        />
+      <div className="flex items-center w-48 sm:w-64 bg-[#25223D] rounded-full">
         <button
           onClick={handleSubmit}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+          className=" text-gray-400 hover:text-white px-2 py-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -46,6 +33,19 @@ export const Searchbar = ({ onSearch }: SearchbarProps) => {
             />
           </svg>
         </button>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
+          className="bg-[#25223D] text-white px-4 py-2 rounded-r-full pr-4 w-full focus:outline-none "
+        />
       </div>
     </RequireWallet>
   );
