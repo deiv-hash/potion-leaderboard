@@ -147,7 +147,7 @@ export default function TraderPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Trader Info Section */}
           <div className="w-full lg:w-4/12">
-            <div className="flex flex-col sm:flex-row lg:flex-col gap-6">
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-11">
               <div className="flex items-center gap-6">
                 <Image
                   src={trader.image}
