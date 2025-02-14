@@ -12,7 +12,7 @@ export function TimeFrameSelector({
   onTimeFrameChange,
 }: TimeFrameSelectorProps) {
   return (
-    <div className="flex justify-center items-center gap-6">
+    <div className="flex my-2 md:my-0 md:justify-center items-center gap-6">
       {timeFrames.map((timeFrame) => (
         <button
           key={timeFrame}
