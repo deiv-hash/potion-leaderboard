@@ -67,7 +67,7 @@ export default function Home() {
     <div className="min-h-screen mt-12">
       <main className="px-4 sm:px-6">
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+          <div className="flex flex-col sm:flex-row gap-12 sm:items-center">
             <TabSelector
               activeTab={activeTab}
               onTabChange={(tab) => setActiveTab(tab as MainTab)}

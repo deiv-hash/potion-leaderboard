@@ -109,11 +109,11 @@ export function Leaderboard({
         };
 
   return (
-    <div className="w-full mt-8 bg-[#11121B] overflow-hidden">
+    <div className="w-full mt-8 bg-[#11121B]">
       {sharingTrader && (
         <ShareModal trader={sharingTrader} onClose={handleCloseShare} />
       )}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto md:overflow-x-hidden">
         <table className="w-full whitespace-nowrap">
           <thead className="bg-[#25223D] text-white">
             <tr>
