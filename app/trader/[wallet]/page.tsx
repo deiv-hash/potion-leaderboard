@@ -47,6 +47,15 @@ export default function TraderPage() {
     useState<TimeFrame>("daily");
   const [activeTab, setActiveTab] = useState<TraderTab>("trades");
   const [refreshing, setRefreshing] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(text);
+    setTimeout(() => {
+      setCopied(null);
+    }, 2000);
+  };
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -160,8 +169,13 @@ export default function TraderPage() {
                   <h3 className="text-white capitalize text-3xl font-bold">
                     {trader.name}
                   </h3>
-                  <p className="text-gray-400">
-                    {shortenWalletAddress(trader.wallet)}
+                  <p
+                    className="text-gray-400 cursor-pointer"
+                    onClick={() => copyToClipboard(trader.wallet)}
+                  >
+                    {copied === trader.wallet
+                      ? "Copied"
+                      : shortenWalletAddress(trader.wallet)}
                   </p>
                 </div>
               </div>
