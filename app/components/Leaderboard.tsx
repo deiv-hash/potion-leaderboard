@@ -194,16 +194,28 @@ export function Leaderboard({
                       <div className="ml-2 min-w-0">
                         <div className="text-white truncate">{trader.name}</div>
                         <div className="text-gray-400 text-sm flex items-center gap-1">
-                          <div
-                            className="cursor-pointer font-light hover:text-purple-300 truncate"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              copyToClipboard(trader.wallet);
-                            }}
-                          >
-                            {copied === trader.wallet
-                              ? "Copied"
-                              : shortenWalletAddress(trader.wallet)}
+                          <div className=" flex gap-2 items-center">
+                            <p
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                copyToClipboard(trader.wallet);
+                              }}
+                              className="cursor-pointer font-light hover:text-purple-300 truncate"
+                            >
+                              {copied === trader.wallet
+                                ? "Copied"
+                                : shortenWalletAddress(trader.wallet)}
+                            </p>
+
+                            {/*
+                            feature coming soon
+                            <a
+                              href={`${trader.wallet}`}
+                              target="_blank"
+                              className="border px-2 py-1 rounded-full"
+                            >
+                              Track
+                            </a>*/}
                           </div>
                           {viewType === "tokens" && (
                             <div className="flex items-center gap-2">
