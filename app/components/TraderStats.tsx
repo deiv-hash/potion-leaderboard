@@ -13,7 +13,7 @@ interface TraderStatsProps {
 
 export function TraderStats({ trader }: TraderStatsProps) {
   return (
-    <div className="grid grid-cols-3 mt-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-4 sm:mt-8">
       {/* Column 1 */}
       <div className="stats-container">
         <h3>Tokens</h3>
@@ -21,7 +21,7 @@ export function TraderStats({ trader }: TraderStatsProps) {
           <p>{trader.tokensTraded}</p>
         </div>
       </div>
-      <div className="stats-container border-l border-r border-gray-700">
+      <div className="stats-container sm:border-l lg:border-r border-gray-700">
         <h3>Avg Buy</h3>
         <div className="text-right">
           <div className="flex items-center gap-1 justify-end">
@@ -33,7 +33,7 @@ export function TraderStats({ trader }: TraderStatsProps) {
           </div>
         </div>
       </div>
-      <div className="stats-container">
+      <div className="stats-container lg:border-none sm:col-span-2 lg:col-span-1">
         <h3>Total Invested</h3>
         <div className="text-right">
           <div className="flex items-center gap-1 justify-end">
@@ -54,7 +54,7 @@ export function TraderStats({ trader }: TraderStatsProps) {
       </div>
 
       {/* Column 2 */}
-      <div className="stats-container border-t border-b border-gray-700">
+      <div className="stats-container">
         <h3>Win Rate</h3>
         <div className="text-right">
           <p
@@ -64,13 +64,13 @@ export function TraderStats({ trader }: TraderStatsProps) {
           </p>
         </div>
       </div>
-      <div className="stats-container border-t border-b border-l border-r border-gray-700">
+      <div className="stats-container sm:border-l lg:border-r border-gray-700">
         <h3>Avg Entry</h3>
         <div className="text-right">
           <p>{formatAvgEntry(trader.avgEntry)}</p>
         </div>
       </div>
-      <div className="stats-container border-t border-b border-gray-700">
+      <div className="stats-container lg:border-none sm:col-span-2 lg:col-span-1">
         <h3>ROI</h3>
         <div className="text-right">
           <p
@@ -92,13 +92,13 @@ export function TraderStats({ trader }: TraderStatsProps) {
           </p>
         </div>
       </div>
-      <div className="stats-container border-l border-r border-gray-700">
+      <div className="stats-container sm:border-l lg:border-r border-gray-700">
         <h3>Avg Hold</h3>
         <div className="text-right">
           <p>{formatHoldTime(trader.avgHold)}</p>
         </div>
       </div>
-      <div className="stats-container">
+      <div className="stats-container lg:border-none sm:col-span-2 lg:col-span-1">
         <h3>Realized PNL</h3>
         <div className="text-right">
           <div className="flex items-center gap-1 justify-end">
