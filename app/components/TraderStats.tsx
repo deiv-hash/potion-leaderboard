@@ -86,14 +86,8 @@ export function TraderStats({ trader }: TraderStatsProps) {
       <div className="stats-container">
         <h3>Trades</h3>
         <div className="text-right">
-          <p
-            className={
-              trader.tradesCount.buy > trader.tradesCount.sell
-                ? "text-green-600"
-                : "text-red-600"
-            }
-          >
-            <span className="text-green-600">{trader.tradesCount.buy}</span>/
+          <p>
+            <span className="text-green-600">{trader.tradesCount.buy}</span> /{" "}
             <span className="text-red-600">{trader.tradesCount.sell}</span>
           </p>
         </div>
