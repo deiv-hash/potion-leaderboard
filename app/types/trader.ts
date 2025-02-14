@@ -7,6 +7,7 @@ export interface TokenTrade {
   tokenName: string;
   tokenAddress: string;
   marketCap: number;
+  image: string;
   invested: {
     solAmount: number;
     usdAmount: number;

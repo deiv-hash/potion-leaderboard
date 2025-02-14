@@ -266,7 +266,7 @@ export default function TraderPage() {
                   id: token.tokenName,
                   name: token.tokenName,
                   wallet: token.tokenAddress,
-                  image: `/tokens/${token.tokenName.toLowerCase()}.png`,
+                  image: `${token.image}`,
                   rank: index + 1,
                   xFollowers: 0,
                   xTag: "",

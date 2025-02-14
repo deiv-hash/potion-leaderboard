@@ -7,26 +7,31 @@ const generateTokenHistory = (traderSkill: number): TokenTrade[] => {
       name: "BONK",
       baseMarketCap: 500000000,
       address: "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      image: "/avatar.jpg",
     },
     {
       name: "SAMO",
       baseMarketCap: 120000000,
       address: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
+      image: "/avatar.jpg",
     },
     {
       name: "MEME",
       baseMarketCap: 300000000,
       address: "MEMEXRxygDCxRtNRn5ZGGxqHkaBK89VHxwPWNgWdBT9",
+      image: "/avatar.jpg",
     },
     {
       name: "PYTH",
       baseMarketCap: 800000000,
       address: "HZ1JovNiVvGrGNiiYvEozEVgZ58xaU3RKwX8eACQBCt3",
+      image: "/avatar.jpg",
     },
     {
       name: "ORCA",
       baseMarketCap: 450000000,
       address: "orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE",
+      image: "/avatar.jpg",
     },
   ];
 
@@ -43,6 +48,7 @@ const generateTokenHistory = (traderSkill: number): TokenTrade[] => {
     return {
       tokenName: token.name,
       tokenAddress: token.address,
+      image: token.image,
       marketCap: token.baseMarketCap * (1 + Math.random() * 0.5), // +0-50% variation
       invested: {
         solAmount: invested.solAmount,
