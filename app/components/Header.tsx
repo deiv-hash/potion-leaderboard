@@ -88,7 +88,16 @@ export const Header = () => {
             <DiscordIcon />
           </a>
           {wallet ? (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-4">
+              <Link href="/profile" className="text-gray-400 hover:text-white">
+                <Image
+                  src="/avatar.jpg"
+                  alt="Profile"
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
+              </Link>
               <span className="text-gray-400">
                 {shortenWalletAddress(wallet)}
               </span>
@@ -183,6 +192,18 @@ export const Header = () => {
             </div>
             {wallet ? (
               <div className="flex flex-col space-y-2">
+                <Link
+                  href="/profile"
+                  className="text-gray-400 hover:text-white"
+                >
+                  <Image
+                    src="/avatar.jpg"
+                    alt="Profile"
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                </Link>
                 <span className="text-gray-400">
                   {shortenWalletAddress(wallet)}
                 </span>
