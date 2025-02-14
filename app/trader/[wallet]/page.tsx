@@ -154,7 +154,7 @@ export default function TraderPage() {
               </p>
             </div>
           </div>
-          <div className="stats-container mt-8 border-0 border-b-[0.5px] border-gray-400">
+          <div className="stats-container mt-8 border-b border-gray-400">
             <h3>X Account</h3>
             <div className="text-right text-sm">
               <a
