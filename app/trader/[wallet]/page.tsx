@@ -157,7 +157,14 @@ export default function TraderPage() {
           <div className="stats-container mt-8 border-0 border-b-[0.5px] border-gray-400">
             <h3>X Account</h3>
             <div className="text-right text-sm">
-              <p>{trader.xTag}</p>
+              <a
+                href={`https://x.com/${trader.xTag}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                {trader.xTag}
+              </a>
               <p className="text-gray-400">
                 {formatNumber(trader.xFollowers)} Followers
               </p>
