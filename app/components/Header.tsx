@@ -72,7 +72,7 @@ export const Header = () => {
         {/* Desktop Right Section */}
         <div className="hidden md:flex items-center space-x-4 text-white">
           <a
-            href="https://twitter.com/potionleaderboard"
+            href="https://x.com/potionalpha"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-white"
@@ -80,7 +80,7 @@ export const Header = () => {
             <TwitterIcon />
           </a>
           <a
-            href="https://discord.gg/potionleaderboard"
+            href="https://whop.com/potion-alpha/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-white"
@@ -97,8 +97,8 @@ export const Header = () => {
                   <Image
                     src="/avatar.jpg"
                     alt="Profile"
-                    width={32}
-                    height={32}
+                    width={50}
+                    height={50}
                     className="rounded-full"
                   />
                 </Link>
