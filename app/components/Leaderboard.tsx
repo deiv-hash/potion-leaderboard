@@ -114,16 +114,16 @@ export function Leaderboard({
         <ShareModal trader={sharingTrader} onClose={handleCloseShare} />
       )}
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full whitespace-nowrap">
           <thead className="bg-[#25223D] text-white">
             <tr>
               {viewType === "traders" && (
-                <th className="hidden sm:table-cell px-3 py-3 font-bold text-left">
+                <th className="px-3 py-3 font-bold text-left min-w-[80px]">
                   Rank
                 </th>
               )}
               <th
-                className={`px-3 py-3 font-bold text-left ${
+                className={`px-3 py-3 font-bold text-left min-w-[200px] ${
                   viewType === "tokens" ? "pl-6" : ""
                 }`}
               >
@@ -132,7 +132,7 @@ export function Leaderboard({
               {headers.stats.map((stat) => (
                 <th
                   key={stat.label}
-                  className="px-3 py-3 font-bold hidden md:table-cell cursor-pointer"
+                  className="px-3 py-3 font-bold text-right min-w-[120px] cursor-pointer"
                 >
                   <RequireWallet
                     onAction={() => handleSort(stat.key as keyof Trader)}
@@ -147,7 +147,9 @@ export function Leaderboard({
                   </RequireWallet>
                 </th>
               ))}
-              <th className="px-6 py-3 font-bold text-right">Share</th>
+              <th className="px-6 py-3 font-bold text-right min-w-[100px]">
+                Share
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-800">
@@ -160,7 +162,7 @@ export function Leaderboard({
                   }`}
                 >
                   {viewType === "traders" && (
-                    <td className="hidden sm:table-cell px-3 py-4">
+                    <td className="px-3 py-4 min-w-[80px]">
                       <div className="flex items-center gap-2">
                         <div
                           className={`flex items-center text-black justify-center font-bold w-8 h-8 rounded-full ${
@@ -179,7 +181,7 @@ export function Leaderboard({
                     </td>
                   )}
                   <td
-                    className={`px-3 py-4 ${
+                    className={`px-3 py-4 min-w-[200px] ${
                       viewType === "tokens" ? "pl-6" : ""
                     }`}
                   >
@@ -252,7 +254,7 @@ export function Leaderboard({
                   </td>
                   {viewType === "traders" ? (
                     <>
-                      <td className="px-3 py-4 hidden md:table-cell text-right">
+                      <td className="px-3 py-4 min-w-[120px] text-right">
                         <div>
                           {formatNumber(trader.xFollowers)}
                           <div className="text-gray-400 text-sm font-light truncate">
@@ -260,11 +262,11 @@ export function Leaderboard({
                           </div>
                         </div>
                       </td>
-                      <td className="px-3 py-4 hidden md:table-cell text-right">
+                      <td className="px-3 py-4 min-w-[100px] text-right">
                         {trader.tokensTraded}
                       </td>
                       <td
-                        className={`px-3 py-4 text-right ${
+                        className={`px-3 py-4 min-w-[100px] text-right ${
                           trader.winRate >= 50
                             ? "text-green-600"
                             : "text-red-600"
@@ -272,7 +274,7 @@ export function Leaderboard({
                       >
                         {Math.round(trader.winRate)}%
                       </td>
-                      <td className="px-3 py-4 hidden sm:table-cell text-right">
+                      <td className="px-3 py-4 min-w-[120px] text-right">
                         <span className="text-green-600">
                           {trader.tradesCount.buy}
                         </span>{" "}
@@ -281,7 +283,7 @@ export function Leaderboard({
                           {trader.tradesCount.sell}
                         </span>
                       </td>
-                      <td className="px-3 py-4 hidden lg:table-cell text-right">
+                      <td className="px-3 py-4 min-w-[150px] text-right">
                         <div className="flex items-center gap-1 justify-end">
                           {formatSol(trader.avgBuy.solAmount)}
                           <Image
@@ -295,13 +297,13 @@ export function Leaderboard({
                           ${formatUsd(trader.avgBuy.usdAmount)}
                         </div>
                       </td>
-                      <td className="px-3 py-4 hidden lg:table-cell text-right uppercase">
+                      <td className="px-3 py-4 min-w-[120px] text-right uppercase">
                         {formatAvgEntry(trader.avgEntry)}
                       </td>
-                      <td className="px-3 py-4 hidden xl:table-cell text-right">
+                      <td className="px-3 py-4 min-w-[120px] text-right">
                         {formatHoldTime(trader.avgHold)}
                       </td>
-                      <td className="px-3 py-4 text-right">
+                      <td className="px-3 py-4 min-w-[150px] text-right">
                         <div className="flex items-center gap-1 justify-end">
                           <span
                             className={
@@ -327,13 +329,13 @@ export function Leaderboard({
                     </>
                   ) : (
                     <>
-                      <td className="px-3 py-4 hidden md:table-cell text-right">
+                      <td className="px-3 py-4 min-w-[120px] text-right">
                         {formatHoldTime(trader.lastTrade)}
                       </td>
-                      <td className="px-3 py-4 hidden md:table-cell text-right">
+                      <td className="px-3 py-4 min-w-[100px] text-right">
                         {formatAvgEntry(trader.avgEntry)}
                       </td>
-                      <td className="px-3 py-4 text-right">
+                      <td className="px-3 py-4 min-w-[150px] text-right">
                         <div className="flex items-center gap-1 justify-end">
                           {formatSol(trader.avgBuy.solAmount)}
                           <Image
@@ -347,7 +349,7 @@ export function Leaderboard({
                           ${formatUsd(trader.avgBuy.usdAmount)}
                         </div>
                       </td>
-                      <td className="px-3 py-4 text-right">
+                      <td className="px-3 py-4 min-w-[150px] text-right">
                         <div className="flex items-center gap-1 justify-end">
                           <span
                             className={
@@ -371,7 +373,7 @@ export function Leaderboard({
                         </div>
                       </td>
                       <td
-                        className={`px-3 py-4 hidden lg:table-cell text-right ${
+                        className={`px-3 py-4 min-w-[100px] text-right ${
                           trader.winRate >= 50
                             ? "text-green-600"
                             : "text-red-600"
@@ -379,7 +381,7 @@ export function Leaderboard({
                       >
                         {Math.round(trader.winRate)}%
                       </td>
-                      <td className="px-3 py-4 hidden lg:table-cell text-right">
+                      <td className="px-3 py-4 min-w-[120px] text-right">
                         <span className="text-green-600">
                           {trader.tradesCount.buy}
                         </span>{" "}
@@ -388,7 +390,7 @@ export function Leaderboard({
                           {trader.tradesCount.sell}
                         </span>
                       </td>
-                      <td className="px-3 py-4 hidden lg:table-cell text-right">
+                      <td className="px-3 py-4 min-w-[150px] text-right">
                         <div className="flex items-center gap-1 justify-end">
                           {formatSol(trader.avgBuy.solAmount)}
                           <Image
@@ -402,13 +404,13 @@ export function Leaderboard({
                           ${formatUsd(trader.avgBuy.usdAmount)}
                         </div>
                       </td>
-                      <td className="px-3 py-4 hidden xl:table-cell text-right">
+                      <td className="px-3 py-4 min-w-[120px] text-right uppercase">
                         {formatAvgEntry(trader.avgBuyMarketCap || 0)}
                       </td>
-                      <td className="px-3 py-4 hidden xl:table-cell text-right">
+                      <td className="px-3 py-4 min-w-[120px] text-right">
                         {formatAvgEntry(trader.avgSellMarketCap || 0)}
                       </td>
-                      <td className="px-3 py-4 hidden xl:table-cell text-right">
+                      <td className="px-3 py-4 min-w-[120px] text-right">
                         {formatHoldTime(trader.avgHold)}
                       </td>
                     </>
