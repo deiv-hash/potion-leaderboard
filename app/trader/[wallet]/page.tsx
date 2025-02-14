@@ -1,7 +1,13 @@
 "use client";
 import Loading from "@/app/components/Loading";
 import { TimeFrameSelector } from "@/app/components/TimeFrameSelector";
-import { TimeFrame, Trader, TraderTab, Filters } from "@/app/types/trader";
+import {
+  TimeFrame,
+  Trader,
+  TraderTab,
+  Filters,
+  TokenTrade,
+} from "@/app/types/trader";
 import {
   formatNumber,
   formatHoldTime,
@@ -18,6 +24,7 @@ import { TabSelector } from "@/app/components/TabSelector";
 import { Searchbar } from "@/app/components/Searchbar";
 import { Filter } from "@/app/components/Filter";
 import { Leaderboard } from "@/app/components/Leaderboard";
+import { sortItems } from "@/app/utils/sort";
 
 const getTrader = async (
   wallet: string,
@@ -159,57 +166,11 @@ export default function TraderPage() {
 
   const handleSort = (sortBy: keyof Trader) => {
     setSortedTokens((currentTokens) => {
-      const newTokens = [...currentTokens];
-      newTokens.sort((a, b) => {
-        const multiplier = filter.sortDirection === "asc" ? 1 : -1;
-
-        // Handle special cases
-        if (sortBy === "tradesCount") {
-          const aTotal = a.tradesCount.buy + a.tradesCount.sell;
-          const bTotal = b.tradesCount.buy + b.tradesCount.sell;
-          return (aTotal - bTotal) * multiplier;
-        }
-
-        if (sortBy === "avgBuy") {
-          return (a.invested.solAmount - b.invested.solAmount) * multiplier;
-        }
-
-        if (sortBy === "realizedPnl") {
-          return (
-            (a.realizedPnl.solAmount - b.realizedPnl.solAmount) * multiplier
-          );
-        }
-
-        if (sortBy === "winRate") {
-          return (a.roi - b.roi) * multiplier;
-        }
-
-        if (sortBy === "avgEntry") {
-          return (a.marketCap - b.marketCap) * multiplier;
-        }
-
-        if (sortBy === "avgBuyMarketCap") {
-          return (
-            ((a.avgBuyMarketCap || 0) - (b.avgBuyMarketCap || 0)) * multiplier
-          );
-        }
-
-        if (sortBy === "avgSellMarketCap") {
-          return (
-            ((a.avgSellMarketCap || 0) - (b.avgSellMarketCap || 0)) * multiplier
-          );
-        }
-
-        if (sortBy === "avgHold") {
-          return (a.timeHeld - b.timeHeld) * multiplier;
-        }
-
-        if (sortBy === "lastTrade") {
-          return (a.lastTrade - b.lastTrade) * multiplier;
-        }
-
-        return 0;
-      });
+      const newTokens = sortItems(
+        currentTokens,
+        sortBy,
+        filter.sortDirection
+      ) as TokenTrade[];
       return newTokens;
     });
 
