@@ -260,7 +260,7 @@ export function Leaderboard({
                           <a
                             href={`https://x.com/${trader.xTag}`}
                             target="_blank"
-                            className="text-gray-400 text-sm font-light truncate"
+                            className="text-gray-400 text-sm font-light truncate hover:underline"
                           >
                             {trader.xTag}
                           </a>
