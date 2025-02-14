@@ -160,7 +160,7 @@ export const Header = () => {
       {isMenuOpen && (
         <div
           ref={menuRef}
-          className="absolute top-full left-0 right-0 bg-black/95 border-t border-gray-800 p-4 md:hidden"
+          className="absolute z-50 top-full left-0 right-0 bg-black/95 border-t border-gray-800 p-4 md:hidden"
         >
           <nav className="flex flex-col space-y-4">
             <Link
