@@ -80,7 +80,11 @@ export default function Home() {
               />
               <div className="flex gap-4">
                 <Searchbar onSearch={handleSearch} />
-                <Filter filters={filter} onFilterChange={handleFilterChange} />
+                <Filter
+                  filters={filter}
+                  onFilterChange={handleFilterChange}
+                  viewType="traders"
+                />
               </div>
             </div>
           )}

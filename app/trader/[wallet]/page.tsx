@@ -24,7 +24,7 @@ import { TabSelector } from "@/app/components/TabSelector";
 import { Searchbar } from "@/app/components/Searchbar";
 import { Filter } from "@/app/components/Filter";
 import { Leaderboard } from "@/app/components/Leaderboard";
-import { sortItems } from "@/app/utils/sort";
+import { sortItems, filterTokenTrades } from "@/app/utils/sort";
 
 const getTrader = async (
   wallet: string,
@@ -77,56 +77,11 @@ export default function TraderPage() {
   }, [wallet, selectedTimeFrame]);
 
   useEffect(() => {
-    // Apply search filter and range filters
-    const searchTerm = (filter.search || "").toLowerCase();
-    let filtered = sortedTokens.filter(
-      (token) =>
-        token.tokenName.toLowerCase().includes(searchTerm) ||
-        token.tokenAddress.toLowerCase().includes(searchTerm)
-    ) as TokenTrade[];
-
-    // Apply range filters
-    const applyRangeFilter = (
-      value: number,
-      range?: { min?: number; max?: number }
-    ) => {
-      if (!range) return true;
-      if (range.min !== undefined && value < range.min) return false;
-      if (range.max !== undefined && value > range.max) return false;
-      return true;
-    };
-
-    // Filter by ROI
-    if (filter.winRateRange) {
-      filtered = filtered.filter((token) =>
-        applyRangeFilter(token.roi, filter.winRateRange)
-      ) as TokenTrade[];
-    }
-
-    // Filter by trades count
-    if (filter.tradesCountRange) {
-      filtered = filtered.filter((token) =>
-        applyRangeFilter(
-          token.tradesCount.buy + token.tradesCount.sell,
-          filter.tradesCountRange
-        )
-      ) as TokenTrade[];
-    }
-
-    // Filter by invested amount
-    if (filter.avgBuyRange) {
-      filtered = filtered.filter((token) =>
-        applyRangeFilter(token.invested.solAmount, filter.avgBuyRange)
-      ) as TokenTrade[];
-    }
-
-    // Filter by realized PnL
-    if (filter.realizedPnlRange) {
-      filtered = filtered.filter((token) =>
-        applyRangeFilter(token.realizedPnl.solAmount, filter.realizedPnlRange)
-      ) as TokenTrade[];
-    }
-
+    const filtered = filterTokenTrades(
+      sortedTokens,
+      filter.search || "",
+      filter
+    );
     setFilteredTokens(filtered);
   }, [filter, sortedTokens]);
 
@@ -251,7 +206,11 @@ export default function TraderPage() {
           />
           <div className="flex gap-4">
             <Searchbar onSearch={handleSearch} />
-            <Filter filters={filter} onFilterChange={handleFilterChange} />
+            <Filter
+              filters={filter}
+              onFilterChange={handleFilterChange}
+              viewType="tokens"
+            />
           </div>
         </div>
         {activeTab !== "trades" && (

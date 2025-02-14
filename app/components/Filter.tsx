@@ -7,6 +7,7 @@ import { RequireWallet } from "./RequireWallet";
 interface FilterProps {
   filters: Filters;
   onFilterChange: (filters: Filters) => void;
+  viewType: "traders" | "tokens";
 }
 
 interface RangeFilterProps {
@@ -23,7 +24,7 @@ function RangeFilter({ label, range, onChange }: RangeFilterProps) {
         <input
           type="number"
           placeholder="Min"
-          value={range?.min || ""}
+          value={range?.min ?? ""}
           onChange={(e) =>
             onChange({
               ...range,
@@ -35,7 +36,7 @@ function RangeFilter({ label, range, onChange }: RangeFilterProps) {
         <input
           type="number"
           placeholder="Max"
-          value={range?.max || ""}
+          value={range?.max ?? ""}
           onChange={(e) =>
             onChange({
               ...range,
@@ -49,7 +50,7 @@ function RangeFilter({ label, range, onChange }: RangeFilterProps) {
   );
 }
 
-export function Filter({ filters, onFilterChange }: FilterProps) {
+export function Filter({ filters, onFilterChange, viewType }: FilterProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const updateFilter = (key: keyof Filters, value: FilterRange) => {
@@ -59,17 +60,28 @@ export function Filter({ filters, onFilterChange }: FilterProps) {
     });
   };
 
+  // Get active filters based on view type
+  const activeFilters =
+    viewType === "traders"
+      ? [
+          filters.xFollowersRange,
+          filters.tokensRange,
+          filters.winRateRange,
+          filters.tradesCountRange,
+          filters.avgBuyRange,
+          filters.avgEntryRange,
+          filters.avgHoldRange,
+          filters.realizedPnlRange,
+        ]
+      : [
+          filters.winRateRange, // ROI for tokens
+          filters.tradesCountRange,
+          filters.avgBuyRange, // Invested for tokens
+          filters.realizedPnlRange,
+        ];
+
   // Count active filters
-  const activeFiltersCount = [
-    filters.xFollowersRange,
-    filters.tokensRange,
-    filters.winRateRange,
-    filters.tradesCountRange,
-    filters.avgBuyRange,
-    filters.avgEntryRange,
-    filters.avgHoldRange,
-    filters.realizedPnlRange,
-  ].filter(
+  const activeFilterCount = activeFilters.filter(
     (range) => range && (range.min !== undefined || range.max !== undefined)
   ).length;
 
@@ -78,9 +90,9 @@ export function Filter({ filters, onFilterChange }: FilterProps) {
       <RequireWallet onAction={() => setIsOpen(true)}>
         <button className="btn-tab flex items-center gap-2 relative">
           <FilterIcon className="h-5 w-5" />
-          {activeFiltersCount > 0 && (
+          {activeFilterCount > 0 && (
             <div className="absolute -bottom-2 -right-[-5px] bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              {activeFiltersCount}
+              {activeFilterCount}
             </div>
           )}
         </button>
@@ -112,35 +124,88 @@ export function Filter({ filters, onFilterChange }: FilterProps) {
           </div>
 
           <div className="overflow-y-auto h-[calc(100vh-100px)]">
-            <RangeFilter
-              label="ROI (%)"
-              range={filters.winRateRange}
-              onChange={(range) => updateFilter("winRateRange", range)}
-            />
-            <RangeFilter
-              label="Total Trades"
-              range={filters.tradesCountRange}
-              onChange={(range) => updateFilter("tradesCountRange", range)}
-            />
-            <RangeFilter
-              label="Invested (SOL)"
-              range={filters.avgBuyRange}
-              onChange={(range) => updateFilter("avgBuyRange", range)}
-            />
-            <RangeFilter
-              label="Realized PnL (SOL)"
-              range={filters.realizedPnlRange}
-              onChange={(range) => updateFilter("realizedPnlRange", range)}
-            />
+            {viewType === "traders" ? (
+              // Trader filters
+              <>
+                <RangeFilter
+                  label="Followers"
+                  range={filters.xFollowersRange}
+                  onChange={(range) => updateFilter("xFollowersRange", range)}
+                />
+                <RangeFilter
+                  label="Tokens Traded"
+                  range={filters.tokensRange}
+                  onChange={(range) => updateFilter("tokensRange", range)}
+                />
+                <RangeFilter
+                  label="Win Rate (%)"
+                  range={filters.winRateRange}
+                  onChange={(range) => updateFilter("winRateRange", range)}
+                />
+                <RangeFilter
+                  label="Total Trades"
+                  range={filters.tradesCountRange}
+                  onChange={(range) => updateFilter("tradesCountRange", range)}
+                />
+                <RangeFilter
+                  label="Average Buy (SOL)"
+                  range={filters.avgBuyRange}
+                  onChange={(range) => updateFilter("avgBuyRange", range)}
+                />
+                <RangeFilter
+                  label="Average Entry ($)"
+                  range={filters.avgEntryRange}
+                  onChange={(range) => updateFilter("avgEntryRange", range)}
+                />
+                <RangeFilter
+                  label="Average Hold (minutes)"
+                  range={filters.avgHoldRange}
+                  onChange={(range) => updateFilter("avgHoldRange", range)}
+                />
+                <RangeFilter
+                  label="Realized PnL (SOL)"
+                  range={filters.realizedPnlRange}
+                  onChange={(range) => updateFilter("realizedPnlRange", range)}
+                />
+              </>
+            ) : (
+              // Token filters
+              <>
+                <RangeFilter
+                  label="ROI (%)"
+                  range={filters.winRateRange}
+                  onChange={(range) => updateFilter("winRateRange", range)}
+                />
+                <RangeFilter
+                  label="Total Trades"
+                  range={filters.tradesCountRange}
+                  onChange={(range) => updateFilter("tradesCountRange", range)}
+                />
+                <RangeFilter
+                  label="Invested (SOL)"
+                  range={filters.avgBuyRange}
+                  onChange={(range) => updateFilter("avgBuyRange", range)}
+                />
+                <RangeFilter
+                  label="Realized PnL (SOL)"
+                  range={filters.realizedPnlRange}
+                  onChange={(range) => updateFilter("realizedPnlRange", range)}
+                />
+              </>
+            )}
 
             <div className="mt-6 flex gap-4">
               <RequireWallet
                 onAction={() => {
                   onFilterChange({
                     ...filters,
+                    xFollowersRange: undefined,
+                    tokensRange: undefined,
                     winRateRange: undefined,
                     tradesCountRange: undefined,
                     avgBuyRange: undefined,
+                    avgEntryRange: undefined,
+                    avgHoldRange: undefined,
                     realizedPnlRange: undefined,
                   });
                 }}
