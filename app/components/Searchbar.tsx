@@ -15,7 +15,7 @@ export const Searchbar = ({ onSearch }: SearchbarProps) => {
 
   return (
     <RequireWallet onAction={handleSubmit}>
-      <div className="relative">
+      <div className="relative w-full sm:w-64">
         <input
           type="text"
           placeholder="Search..."
@@ -27,9 +27,12 @@ export const Searchbar = ({ onSearch }: SearchbarProps) => {
               handleSubmit();
             }
           }}
-          className="bg-[#25223D] text-white px-4 py-2 rounded-lg pr-10 w-64 focus:outline-none focus:ring-2 focus:ring-purple-600"
+          className="bg-[#25223D] text-white px-4 py-2 rounded-lg pr-10 w-full focus:outline-none focus:ring-2 focus:ring-purple-600"
         />
-        <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
+        <button
+          onClick={handleSubmit}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
