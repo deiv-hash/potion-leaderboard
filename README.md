@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Potion Leaderboard
 
-## Getting Started
+## Design Decisions
 
-First, run the development server:
+### 1. Responsive Layout
+
+- Mobile-first approach with breakpoints at:
+  - `sm`: 640px (tablet)
+  - `lg`: 1024px (desktop)
+- Components stack vertically on mobile for better readability
+- Borders only visible on larger screens to maintain clean mobile interface
+- Overall design is inspired by the Figma design
+
+### 2. Component Structure
+
+- **TraderStats**: Grid-based layout showing key metrics
+
+  - Responsive grid layout
+
+- **Leaderboard**: Scrollable table with sortable columns
+
+  - Horizontal scroll on mobile for data-heavy tables
+  - Fixed header for better navigation
+  - Interactive sorting with visual indicators
+
+- **Filter**: Slide-out drawer design
+
+  - Full-screen overlay on mobile
+  - Range-based filtering options
+  - Persistent filter count indicator
+
+- **Search**: Responsive search bar
+  - Full-width on mobile
+  - Compact width on desktop
+  - Immediate feedback on input
+
+### 3. State Management
+
+- React's useState for local component state
+- Custom hooks for data fetching (useTraders)
+- Centralized filter state in main component
+- Pagination state management
+
+## Assumptions
+
+1. **Data Structure**
+
+   - Trader data includes wallet address, name, and performance metrics
+   - All numerical values are provided in correct format
+   - Images are available at specified URLs
+
+2. **User Behavior**
+
+   - Primary access through mobile devices
+   - Need for quick access to key metrics
+   - Regular data updates required
+
+3. **Authentication**
+   - Wallet connection required for certain actions
+   - Public read access to basic data
+
+## Testing Instructions
+
+### Prerequisites
+
+```bash
+# Install dependencies
+npm install
+```
+
+### Running Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit http://localhost:3000 to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Testing Scenarios
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Responsive Layout**
 
-## Learn More
+   - Test on different devices/screen sizes
 
-To learn more about Next.js, take a look at the following resources:
+2. **Filtering System**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```
+   a. Open filter drawer
+   b. Set range values
+   c. Apply filters
+   d. Verify filtered results
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Search Functionality**
 
-## Deploy on Vercel
+   ```
+   a. Enter wallet address or trader name
+   b. Verify real-time search results
+   c. Test edge cases (empty string, special characters)
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Sorting**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```
+   a. Click column headers
+   b. Verify sort direction changes
+   c. Check sort indicator visibility
+   ```
+
+5. **Wallet Integration**
+
+   ```
+   a. Test protected actions
+   b. Verify wallet connection prompt
+   c. Check authenticated state persistence
+   ```
+
+6. **Performance Testing**
+   ```
+   a. Load large datasets
+   b. Test filter response time
+   c. Verify scroll performance
+   ```
+
+### Mobile Testing
+
+1. Test touch interactions
+2. Verify drawer behavior
+3. Check text readability
