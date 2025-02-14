@@ -41,6 +41,14 @@ export function ShareCard({ trader, onGenerated }: ShareCardProps) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Load logo image
+    const logoImage = new Image();
+    logoImage.src = "/logo.png";
+
+    await new Promise((resolve) => {
+      logoImage.onload = resolve;
+    });
+
     // Set canvas size
     canvas.width = 1200;
     canvas.height = 630;
@@ -57,69 +65,114 @@ export function ShareCard({ trader, onGenerated }: ShareCardProps) {
     ctx.lineWidth = 8;
     ctx.strokeRect(4, 4, canvas.width - 8, canvas.height - 8);
 
+    // Draw logo
+    const logoWidth = 200;
+    const logoHeight = (logoWidth * logoImage.height) / logoImage.width;
+    ctx.drawImage(
+      logoImage,
+      canvas.width - logoWidth - 40,
+      40,
+      logoWidth,
+      logoHeight
+    );
+
     // Set text styles
-    ctx.textAlign = "center";
+    ctx.textAlign = "left";
     ctx.fillStyle = "#FFFFFF";
 
     // Draw trader name and rank
     ctx.font = "bold 48px Inter";
-    ctx.fillText(`${trader.name} (#${trader.rank})`, canvas.width / 2, 80);
+    ctx.fillText(`${trader.name} (#${trader.rank})`, 40, 80);
 
     // Draw X info
     ctx.font = "24px Inter";
     ctx.fillStyle = "#9CA3AF";
     ctx.fillText(
       `${formatNumber(trader.xFollowers)} followers • ${trader.xTag}`,
-      canvas.width / 2,
+      40,
       120
     );
 
-    // Draw stats in two columns
-    ctx.font = "28px Inter";
-    const leftStats = [
-      ["Win Rate", `${Math.round(trader.winRate)}%`],
-      ["Trades", `${trader.tradesCount.buy}/${trader.tradesCount.sell}`],
-      ["Tokens", trader.tokensTraded.toString()],
-      ["Avg Hold", formatHoldTime(trader.avgHold)],
-    ];
-
-    const rightStats = [
-      ["Avg Buy", `${formatSol(trader.avgBuy.solAmount)} SOL`],
-      ["Avg Entry", formatAvgEntry(trader.avgEntry)],
-      [
-        "PNL",
-        `${trader.realizedPnl.solAmount > 0 ? "+" : ""}${formatSol(
+    // Draw stats grid
+    const stats = [
+      {
+        label: "Win Rate",
+        value: `${Math.round(trader.winRate)}%`,
+        color: trader.winRate >= 50 ? "#22C55E" : "#EF4444",
+      },
+      {
+        label: "Trades",
+        value: `${trader.tradesCount.buy}/${trader.tradesCount.sell}`,
+        color: "#FFFFFF",
+      },
+      {
+        label: "Tokens",
+        value: trader.tokensTraded.toString(),
+        color: "#FFFFFF",
+      },
+      {
+        label: "Avg Hold",
+        value: formatHoldTime(trader.avgHold),
+        color: "#FFFFFF",
+      },
+      {
+        label: "Avg Buy",
+        value: `${formatSol(trader.avgBuy.solAmount)} SOL`,
+        color: "#FFFFFF",
+      },
+      {
+        label: "Avg Entry",
+        value: formatAvgEntry(trader.avgEntry),
+        color: "#FFFFFF",
+      },
+      {
+        label: "PNL",
+        value: `${trader.realizedPnl.solAmount > 0 ? "+" : ""}${formatSol(
           trader.realizedPnl.solAmount
         )} SOL`,
-      ],
-      ["PNL (USD)", `$${trader.realizedPnl.usdAmount.toLocaleString()}`],
+        color: trader.realizedPnl.solAmount > 0 ? "#22C55E" : "#EF4444",
+      },
+      {
+        label: "PNL (USD)",
+        value: `$${trader.realizedPnl.usdAmount.toLocaleString()}`,
+        color: trader.realizedPnl.usdAmount > 0 ? "#22C55E" : "#EF4444",
+      },
     ];
 
-    // Draw left column
-    ctx.textAlign = "right";
-    leftStats.forEach((stat, index) => {
-      const y = 200 + index * 60;
+    // Draw stats in a grid (4x2)
+    const startY = 200;
+    const startX = 40;
+    const colWidth = (canvas.width - 80) / 4;
+    const rowHeight = 100;
+
+    stats.forEach((stat, index) => {
+      const col = index % 4;
+      const row = Math.floor(index / 4);
+      const x = startX + col * colWidth;
+      const y = startY + row * rowHeight;
+
+      // Draw stat label
+      ctx.font = "24px Inter";
       ctx.fillStyle = "#9CA3AF";
-      ctx.fillText(stat[0], canvas.width / 2 - 20, y);
-      ctx.fillStyle = "#FFFFFF";
-      ctx.fillText(stat[1], canvas.width / 2 - 100, y);
+      ctx.fillText(stat.label, x, y);
+
+      // Draw stat value
+      ctx.font = "bold 36px Inter";
+      ctx.fillStyle = stat.color;
+      ctx.fillText(stat.value, x, y + 40);
     });
 
-    // Draw right column
+    // Add time frame indicator
     ctx.textAlign = "left";
-    rightStats.forEach((stat, index) => {
-      const y = 200 + index * 60;
-      ctx.fillStyle = "#9CA3AF";
-      ctx.fillText(stat[0], canvas.width / 2 + 20, y);
-      ctx.fillStyle = "#FFFFFF";
-      ctx.fillText(stat[1], canvas.width / 2 + 100, y);
-    });
+    ctx.font = "bold 24px Inter";
+    ctx.fillStyle = "#AA00FF";
+    ctx.fillText("24H Performance", 40, canvas.height - 40);
 
     // Add watermark
-    ctx.textAlign = "center";
+    ctx.textAlign = "right";
     ctx.font = "24px Inter";
     ctx.fillStyle = "#6B7280";
-    ctx.fillText("potion.trade", canvas.width / 2, canvas.height - 40);
+    ctx.fillText("potion.trade", canvas.width - 40, canvas.height - 40);
 
     // Return the generated image URL
     onGenerated(canvas.toDataURL("image/png"));
