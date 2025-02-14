@@ -113,7 +113,7 @@ export function Leaderboard({
       {sharingTrader && (
         <ShareModal trader={sharingTrader} onClose={handleCloseShare} />
       )}
-      <div className="overflow-x-auto md:overflow-x-hidden">
+      <div className="overflow-x-auto lg:overflow-x-hidden">
         <table className="w-full whitespace-nowrap">
           <thead className="bg-[#25223D] text-white">
             <tr>
@@ -189,8 +189,8 @@ export function Leaderboard({
                       <Image
                         alt={`${trader.name}'s profile`}
                         src={trader.image}
-                        width={60}
-                        height={60}
+                        width={50}
+                        height={50}
                         className="rounded-full"
                       />
                       <div className="ml-2 min-w-0">
@@ -254,8 +254,8 @@ export function Leaderboard({
                   </td>
                   {viewType === "traders" ? (
                     <>
-                      <td className="px-3 py-4 min-w-[120px] text-right">
-                        <div>
+                      <td className="py-4 min-w-[120px] text-right">
+                        <div className="flex items-end flex-col">
                           {formatNumber(trader.xFollowers)}
                           <a
                             href={`https://x.com/${trader.xTag}`}
