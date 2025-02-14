@@ -1,11 +1,5 @@
-export const SolscanIcon = ({ className = "", ...props }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 12 12"
-    fill="none"
-    className={className}
-    {...props}
-  >
+export const SolscanIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="none">
     <g clipPath="url(#clip0_7285_39158)">
       <path
         d="M6.01636 4.00009C7.13373 4.01022 8.01559 4.91214 7.99979 6.02777C7.98393 7.1438 7.0732 8.02421 5.96028 7.99949C4.85998 7.97516 3.99715 7.0927 4.00001 5.99492C4.00286 4.8797 4.90179 3.98995 6.01636 4.00009Z"

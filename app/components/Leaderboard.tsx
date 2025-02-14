@@ -189,8 +189,8 @@ export function Leaderboard({
                       <Image
                         alt={`${trader.name}'s profile`}
                         src={trader.image}
-                        width={40}
-                        height={40}
+                        width={60}
+                        height={60}
                         className="rounded-full"
                       />
                       <div className="ml-2 min-w-0">
@@ -202,7 +202,7 @@ export function Leaderboard({
                                 e.stopPropagation();
                                 copyToClipboard(trader.wallet);
                               }}
-                              className="cursor-pointer font-light hover:text-purple-300 truncate"
+                              className="cursor-pointer text-md font-light hover:text-purple-300 truncate"
                             >
                               {copied === trader.wallet
                                 ? "Copied"
@@ -220,7 +220,7 @@ export function Leaderboard({
                             </a>*/}
                           </div>
                           {viewType === "tokens" && (
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
                               <a
                                 href={`https://x.com/search?q=($${trader.name}%20OR%20${trader.wallet})&src=typed_query&f=live`}
                                 target="_blank"
@@ -229,7 +229,7 @@ export function Leaderboard({
                                 <TwitterIcon />
                               </a>
                               <a
-                                href={`https://solscan.com/token/${trader.wallet}`}
+                                href={`https://solscan.io/token/${trader.wallet}`}
                                 target="_blank"
                                 className="h-4 w-4 cursor-pointer hover:text-purple-300"
                               >
@@ -257,9 +257,13 @@ export function Leaderboard({
                       <td className="px-3 py-4 min-w-[120px] text-right">
                         <div>
                           {formatNumber(trader.xFollowers)}
-                          <div className="text-gray-400 text-sm font-light truncate">
+                          <a
+                            href={`https://x.com/${trader.xTag}`}
+                            target="_blank"
+                            className="text-gray-400 text-sm font-light truncate"
+                          >
                             {trader.xTag}
-                          </div>
+                          </a>
                         </div>
                       </td>
                       <td className="px-3 py-4 min-w-[100px] text-right">
