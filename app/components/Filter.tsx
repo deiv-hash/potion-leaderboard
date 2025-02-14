@@ -113,17 +113,7 @@ export function Filter({ filters, onFilterChange }: FilterProps) {
 
           <div className="overflow-y-auto h-[calc(100vh-100px)]">
             <RangeFilter
-              label="Followers"
-              range={filters.xFollowersRange}
-              onChange={(range) => updateFilter("xFollowersRange", range)}
-            />
-            <RangeFilter
-              label="Tokens Traded"
-              range={filters.tokensRange}
-              onChange={(range) => updateFilter("tokensRange", range)}
-            />
-            <RangeFilter
-              label="Win Rate (%)"
+              label="ROI (%)"
               range={filters.winRateRange}
               onChange={(range) => updateFilter("winRateRange", range)}
             />
@@ -133,19 +123,9 @@ export function Filter({ filters, onFilterChange }: FilterProps) {
               onChange={(range) => updateFilter("tradesCountRange", range)}
             />
             <RangeFilter
-              label="Average Buy (SOL)"
+              label="Invested (SOL)"
               range={filters.avgBuyRange}
               onChange={(range) => updateFilter("avgBuyRange", range)}
-            />
-            <RangeFilter
-              label="Average Entry ($)"
-              range={filters.avgEntryRange}
-              onChange={(range) => updateFilter("avgEntryRange", range)}
-            />
-            <RangeFilter
-              label="Average Hold (minutes)"
-              range={filters.avgHoldRange}
-              onChange={(range) => updateFilter("avgHoldRange", range)}
             />
             <RangeFilter
               label="Realized PnL (SOL)"
@@ -158,13 +138,9 @@ export function Filter({ filters, onFilterChange }: FilterProps) {
                 onAction={() => {
                   onFilterChange({
                     ...filters,
-                    xFollowersRange: undefined,
-                    tokensRange: undefined,
                     winRateRange: undefined,
                     tradesCountRange: undefined,
                     avgBuyRange: undefined,
-                    avgEntryRange: undefined,
-                    avgHoldRange: undefined,
                     realizedPnlRange: undefined,
                   });
                 }}

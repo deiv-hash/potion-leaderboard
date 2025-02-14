@@ -83,7 +83,7 @@ export default function TraderPage() {
       (token) =>
         token.tokenName.toLowerCase().includes(searchTerm) ||
         token.tokenAddress.toLowerCase().includes(searchTerm)
-    );
+    ) as TokenTrade[];
 
     // Apply range filters
     const applyRangeFilter = (
@@ -96,11 +96,11 @@ export default function TraderPage() {
       return true;
     };
 
-    // Filter by win rate (ROI)
+    // Filter by ROI
     if (filter.winRateRange) {
       filtered = filtered.filter((token) =>
         applyRangeFilter(token.roi, filter.winRateRange)
-      );
+      ) as TokenTrade[];
     }
 
     // Filter by trades count
@@ -110,35 +110,21 @@ export default function TraderPage() {
           token.tradesCount.buy + token.tradesCount.sell,
           filter.tradesCountRange
         )
-      );
+      ) as TokenTrade[];
     }
 
-    // Filter by average buy
+    // Filter by invested amount
     if (filter.avgBuyRange) {
       filtered = filtered.filter((token) =>
         applyRangeFilter(token.invested.solAmount, filter.avgBuyRange)
-      );
-    }
-
-    // Filter by market cap (avgEntry)
-    if (filter.avgEntryRange) {
-      filtered = filtered.filter((token) =>
-        applyRangeFilter(token.marketCap, filter.avgEntryRange)
-      );
-    }
-
-    // Filter by hold time
-    if (filter.avgHoldRange) {
-      filtered = filtered.filter((token) =>
-        applyRangeFilter(token.timeHeld, filter.avgHoldRange)
-      );
+      ) as TokenTrade[];
     }
 
     // Filter by realized PnL
     if (filter.realizedPnlRange) {
       filtered = filtered.filter((token) =>
         applyRangeFilter(token.realizedPnl.solAmount, filter.realizedPnlRange)
-      );
+      ) as TokenTrade[];
     }
 
     setFilteredTokens(filtered);
