@@ -9,16 +9,24 @@ import {
 
 interface WalletContextType {
   wallet: string | null;
+  isXConnected: boolean;
   connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
+  connectX: () => void;
+  disconnectX: () => void;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 export function WalletProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<string | null>(null);
+  const [isXConnected, setIsXConnected] = useState<boolean>(false);
 
   useEffect(() => {
+    // Check if X is connected from localStorage
+    const xConnected = localStorage.getItem("isXConnected") === "true";
+    setIsXConnected(xConnected);
+
     // Check if Phantom is installed
     const checkPhantom = async () => {
       try {
@@ -62,13 +70,35 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     try {
       window?.phantom?.solana?.disconnect();
       setWallet(null);
+      // Also disconnect X when wallet is disconnected
+      disconnectX();
     } catch (err) {
       console.error("Failed to disconnect wallet:", err);
     }
   };
 
+  const connectX = () => {
+    // TODO: Implement actual X OAuth
+    setIsXConnected(true);
+    localStorage.setItem("isXConnected", "true");
+  };
+
+  const disconnectX = () => {
+    setIsXConnected(false);
+    localStorage.setItem("isXConnected", "false");
+  };
+
   return (
-    <WalletContext.Provider value={{ wallet, connectWallet, disconnectWallet }}>
+    <WalletContext.Provider
+      value={{
+        wallet,
+        isXConnected,
+        connectWallet,
+        disconnectWallet,
+        connectX,
+        disconnectX,
+      }}
+    >
       {children}
     </WalletContext.Provider>
   );
