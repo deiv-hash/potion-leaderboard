@@ -21,7 +21,7 @@ export function TraderStats({ trader }: TraderStatsProps) {
           <p>{trader.tokensTraded}</p>
         </div>
       </div>
-      <div className="stats-container">
+      <div className="stats-container border-l border-r border-gray-700">
         <h3>Avg Buy</h3>
         <div className="text-right">
           <div className="flex items-center gap-1 justify-end">
@@ -54,7 +54,7 @@ export function TraderStats({ trader }: TraderStatsProps) {
       </div>
 
       {/* Column 2 */}
-      <div className="stats-container">
+      <div className="stats-container border-t border-b border-gray-700">
         <h3>Win Rate</h3>
         <div className="text-right">
           <p
@@ -64,13 +64,13 @@ export function TraderStats({ trader }: TraderStatsProps) {
           </p>
         </div>
       </div>
-      <div className="stats-container">
+      <div className="stats-container border-t border-b border-l border-r border-gray-700">
         <h3>Avg Entry</h3>
         <div className="text-right">
           <p>{formatAvgEntry(trader.avgEntry)}</p>
         </div>
       </div>
-      <div className="stats-container">
+      <div className="stats-container border-t border-b border-gray-700">
         <h3>ROI</h3>
         <div className="text-right">
           <p
@@ -92,7 +92,7 @@ export function TraderStats({ trader }: TraderStatsProps) {
           </p>
         </div>
       </div>
-      <div className="stats-container">
+      <div className="stats-container border-l border-r border-gray-700">
         <h3>Avg Hold</h3>
         <div className="text-right">
           <p>{formatHoldTime(trader.avgHold)}</p>
