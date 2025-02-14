@@ -1,23 +1,12 @@
 "use client";
 import { useWallet } from "@/app/contexts/WalletContext";
-import { useState } from "react";
 import { TwitterIcon } from "@/app/components/icons/TwitterIcon";
 import Image from "next/image";
 import { shortenWalletAddress } from "@/app/utils/format";
 
 export default function ProfilePage() {
-  const { wallet, disconnectWallet } = useWallet();
-  const [isXConnected, setIsXConnected] = useState(false);
-
-  const handleConnectX = () => {
-    // TODO: Implement X OAuth
-    setIsXConnected(true);
-  };
-
-  const handleDisconnectX = () => {
-    // TODO: Implement X disconnect
-    setIsXConnected(false);
-  };
+  const { wallet, disconnectWallet, isXConnected, connectX, disconnectX } =
+    useWallet();
 
   if (!wallet) {
     return (
@@ -35,32 +24,32 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen mt-12">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-8">Profile Settings</h1>
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8">Profile Settings</h1>
 
         {/* Wallet Section */}
         <div className="bg-[#1C1C28] rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-bold text-white mb-4">
-            Connected Wallet
-          </h2>
+          <h2 className="text-xl font-semibold mb-4">Connected Wallet</h2>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center space-x-3">
               <Image
                 src="/avatar.jpg"
-                alt="Wallet Avatar"
-                width={48}
-                height={48}
+                alt="Profile"
+                width={40}
+                height={40}
                 className="rounded-full"
               />
               <div>
-                <p className="text-white">{shortenWalletAddress(wallet)}</p>
+                <span className="text-gray-300">
+                  {shortenWalletAddress(wallet)}
+                </span>
                 <p className="text-gray-400 text-sm">Phantom Wallet</p>
               </div>
             </div>
             <button
               onClick={disconnectWallet}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
             >
               Disconnect
             </button>
@@ -69,36 +58,24 @@ export default function ProfilePage() {
 
         {/* X Connection Section */}
         <div className="bg-[#1C1C28] rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-bold text-white mb-4">X Account</h2>
+          <h2 className="text-xl font-semibold mb-4">X (Twitter) Connection</h2>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <TwitterIcon className="w-8 h-8 text-gray-400" />
-              <div>
-                {isXConnected ? (
-                  <>
-                    <p className="text-white">@username</p>
-                    <p className="text-gray-400 text-sm">Connected</p>
-                  </>
-                ) : (
-                  <p className="text-gray-400">Not connected</p>
-                )}
-              </div>
+            <div className="flex items-center space-x-3">
+              <TwitterIcon />
+              <span className="text-gray-300">
+                {isXConnected ? "Connected to X" : "Not connected to X"}
+              </span>
             </div>
-            {isXConnected ? (
-              <button
-                onClick={handleDisconnectX}
-                className="border border-gray-600 text-gray-400 px-4 py-2 rounded-lg hover:border-gray-400 hover:text-white transition-colors"
-              >
-                Disconnect X
-              </button>
-            ) : (
-              <button
-                onClick={handleConnectX}
-                className="bg-[#AA00FF] text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors"
-              >
-                Connect X
-              </button>
-            )}
+            <button
+              onClick={isXConnected ? disconnectX : connectX}
+              className={`px-4 py-2 rounded-lg ${
+                isXConnected
+                  ? "bg-red-500 hover:bg-red-600"
+                  : "bg-[#AA00FF] hover:bg-purple-600"
+              } text-white transition-colors`}
+            >
+              {isXConnected ? "Disconnect" : "Connect X"}
+            </button>
           </div>
         </div>
 
