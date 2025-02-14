@@ -33,19 +33,10 @@ export default function ProfilePage() {
           <h2 className="text-xl font-semibold mb-4">Connected Wallet</h2>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Image
-                src="/avatar.jpg"
-                alt="Profile"
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-              <div>
-                <span className="text-gray-300">
-                  {shortenWalletAddress(wallet)}
-                </span>
-                <p className="text-gray-400 text-sm">Phantom Wallet</p>
-              </div>
+              <span className="text-gray-300">
+                {shortenWalletAddress(wallet)}
+              </span>
+              <p className="text-gray-400 text-sm">Phantom Wallet</p>
             </div>
             <button
               onClick={disconnectWallet}
@@ -60,11 +51,20 @@ export default function ProfilePage() {
         <div className="bg-[#1C1C28] rounded-lg p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4">X (Twitter) Connection</h2>
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <TwitterIcon />
-              <span className="text-gray-300">
-                {isXConnected ? "Connected to X" : "Not connected to X"}
-              </span>
+            <div className="flex items-center space-x-4">
+              <Image
+                src="/avatar.jpg"
+                alt="Profile"
+                width={48}
+                height={48}
+                className="rounded-full"
+              />
+              <div className="flex items-center space-x-3">
+                <TwitterIcon />
+                <span className="text-gray-300">
+                  {isXConnected ? "Connected to X" : "Not connected to X"}
+                </span>
+              </div>
             </div>
             <button
               onClick={isXConnected ? disconnectX : connectX}
