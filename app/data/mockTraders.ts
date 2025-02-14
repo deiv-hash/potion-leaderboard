@@ -1,41 +1,43 @@
 import { TokenTrade } from "@/app/types/trader";
 
-// Sample token history data
-const generateTokenHistory = (traderSkill: number): TokenTrade[] => {
-  const tokens = [
-    {
-      name: "PNUT",
-      baseMarketCap: 500000000,
-      address: "2qEHjDLDLbuBgRYvsxhc5D6uDWAivNFZGan56P1tpump",
-      image: "/avatar.jpg",
-    },
-    {
-      name: "WIF",
-      baseMarketCap: 120000000,
-      address: "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
-      image: "/avatar.jpg",
-    },
-    {
-      name: "MOODENG",
-      baseMarketCap: 300000000,
-      address: "ED5nyyWEzpPPiWimP8vYm7sD7TD3LAt3Q3gRTWHzPJBY",
-      image: "/avatar.jpg",
-    },
-    {
-      name: "POPCAT",
-      baseMarketCap: 800000000,
-      address: "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
-      image: "/avatar.jpg",
-    },
-    {
-      name: "CHILLGUY",
-      baseMarketCap: 450000000,
-      address: "Df6yfrKC8kZE3KNkrHERKzAetSxbrWeniQfyJY4Jpump",
-      image: "/avatar.jpg",
-    },
-  ];
+// Sample token data for generating mock trades
+const tokens = [
+  {
+    name: "PNUT",
+    baseMarketCap: 500000000,
+    address: "2qEHjDLDLbuBgRYvsxhc5D6uDWAivNFZGan56P1tpump",
+    image: "/avatar.jpg",
+  },
+  {
+    name: "WIF",
+    baseMarketCap: 120000000,
+    address: "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+    image: "/avatar.jpg",
+  },
+  {
+    name: "MOODENG",
+    baseMarketCap: 300000000,
+    address: "ED5nyyWEzpPPiWimP8vYm7sD7TD3LAt3Q3gRTWHzPJBY",
+    image: "/avatar.jpg",
+  },
+  {
+    name: "POPCAT",
+    baseMarketCap: 800000000,
+    address: "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+    image: "/avatar.jpg",
+  },
+  {
+    name: "CHILLGUY",
+    baseMarketCap: 450000000,
+    address: "Df6yfrKC8kZE3KNkrHERKzAetSxbrWeniQfyJY4Jpump",
+    image: "/avatar.jpg",
+  },
+];
 
+// Generate mock token trading history based on trader skill level
+const generateTokenHistory = (traderSkill: number): TokenTrade[] => {
   return tokens.map((token) => {
+    // Calculate investment amount based on skill
     const invested = {
       solAmount: 10 + Math.random() * 40 * traderSkill,
       get usdAmount() {
@@ -43,36 +45,35 @@ const generateTokenHistory = (traderSkill: number): TokenTrade[] => {
       },
     };
 
-    const roi = (Math.random() * 2 - 0.5) * traderSkill; // -50% to +150% based on skill
+    // Generate ROI between -50% to +150% based on skill
+    const roi = (Math.random() * 2 - 0.5) * traderSkill;
 
+    // Return mock token trade data
     return {
       tokenName: token.name,
       tokenAddress: token.address,
       image: token.image,
-      marketCap: token.baseMarketCap * (1 + Math.random() * 0.5), // +0-50% variation
-      invested: {
-        solAmount: invested.solAmount,
-        usdAmount: invested.usdAmount,
-      },
+      marketCap: token.baseMarketCap * (1 + Math.random() * 0.5),
+      invested,
       realizedPnl: {
         solAmount: invested.solAmount * roi,
         usdAmount: invested.usdAmount * roi,
       },
-      roi: roi * 100, // Convert to percentage
+      roi: roi * 100,
       tradesCount: {
         buy: Math.floor(5 + Math.random() * 15 * traderSkill),
         sell: Math.floor(3 + Math.random() * 12 * traderSkill),
       },
       holding: {
-        solAmount: invested.solAmount * (Math.random() * 0.5), // Holding 0-50% of invested
+        solAmount: invested.solAmount * (Math.random() * 0.5),
         get usdAmount() {
           return this.solAmount * 100;
         },
       },
-      avgBuyMarketCap: token.baseMarketCap * (0.8 + Math.random() * 0.4), // ±20% of current
-      avgSellMarketCap: token.baseMarketCap * (0.9 + Math.random() * 0.6), // -10% to +50% of current
-      timeHeld: Math.floor(60 + Math.random() * 1440 * traderSkill), // 1h to 24h * skill
-      lastTrade: Math.floor(Math.random() * 180), // 0 to 180 minutes ago
+      avgBuyMarketCap: token.baseMarketCap * (0.8 + Math.random() * 0.4),
+      avgSellMarketCap: token.baseMarketCap * (0.9 + Math.random() * 0.6),
+      timeHeld: Math.floor(60 + Math.random() * 1440 * traderSkill),
+      lastTrade: Math.floor(Math.random() * 180),
     };
   });
 };

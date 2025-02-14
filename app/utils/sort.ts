@@ -101,56 +101,56 @@ export function sortItems(
   return [...items].sort((a, b) => {
     const multiplier = sortDirection === "asc" ? 1 : -1;
 
-    // Handle special cases for nested properties
+    // Handle nested properties like tradesCount
     if (sortBy === "tradesCount") {
       const aTotal = a.tradesCount.buy + a.tradesCount.sell;
       const bTotal = b.tradesCount.buy + b.tradesCount.sell;
       return (aTotal - bTotal) * multiplier;
     }
 
+    // Handle properties with different names between Trader/TokenTrade
     if (sortBy === "avgBuy" || sortBy === "invested") {
       const aValue = isTrader(a) ? a.avgBuy.solAmount : a.invested.solAmount;
       const bValue = isTrader(b) ? b.avgBuy.solAmount : b.invested.solAmount;
       return (aValue - bValue) * multiplier;
     }
 
+    // Handle numeric properties with nested structure
     if (sortBy === "realizedPnl") {
       const aValue = a.realizedPnl.solAmount;
       const bValue = b.realizedPnl.solAmount;
       return (aValue - bValue) * multiplier;
     }
 
+    // Handle properties that map between winRate and ROI
     if (sortBy === "winRate") {
       const aValue = isTrader(a) ? a.winRate : a.roi;
       const bValue = isTrader(b) ? b.winRate : b.roi;
       return (aValue - bValue) * multiplier;
     }
 
+    // Handle properties that map between avgEntry and marketCap
     if (sortBy === "avgEntry") {
       const aValue = isTrader(a) ? a.avgEntry : a.marketCap;
       const bValue = isTrader(b) ? b.avgEntry : b.marketCap;
       return (aValue - bValue) * multiplier;
     }
 
+    // Handle optional market cap properties
     if (sortBy === "avgBuyMarketCap" || sortBy === "avgSellMarketCap") {
       const aValue = (a[sortBy as keyof typeof a] as number) || 0;
       const bValue = (b[sortBy as keyof typeof b] as number) || 0;
       return (aValue - bValue) * multiplier;
     }
 
+    // Handle properties that map between avgHold and timeHeld
     if (sortBy === "avgHold") {
       const aValue = isTrader(a) ? a.avgHold : a.timeHeld;
       const bValue = isTrader(b) ? b.avgHold : b.timeHeld;
       return (aValue - bValue) * multiplier;
     }
 
-    if (sortBy === "lastTrade") {
-      const aValue = a[sortBy] as number;
-      const bValue = b[sortBy] as number;
-      return (aValue - bValue) * multiplier;
-    }
-
-    // For simple numeric properties
+    // Handle simple numeric properties
     const aValue = (a[sortBy as keyof typeof a] as number) || 0;
     const bValue = (b[sortBy as keyof typeof b] as number) || 0;
     return (aValue - bValue) * multiplier;

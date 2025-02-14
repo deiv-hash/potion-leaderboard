@@ -1,12 +1,14 @@
+// API route for fetching trader data with filtering, sorting, and pagination
 import { NextResponse } from "next/server";
 import { Trader } from "@/app/types/trader";
 import { sortItems } from "@/app/utils/sort";
 import { tradersData } from "@/app/data/mockTraders";
 
 export async function GET(request: Request) {
+  // Extract query parameters
   const { searchParams } = new URL(request.url);
 
-  // Get time frame from query params, default to daily
+  // Get base parameters with defaults
   const timeFrame = (searchParams.get("timeFrame") ||
     "daily") as keyof typeof tradersData;
   const sortBy = searchParams.get("sortBy") || "rank";
@@ -14,9 +16,10 @@ export async function GET(request: Request) {
   const page = Number(searchParams.get("page")) || 1;
   const pageSize = 5;
 
+  // Clone traders data for the selected time frame
   let traders = [...tradersData[timeFrame]];
 
-  //apply search filter
+  // Apply text search filter
   const search = searchParams.get("search")?.toLocaleLowerCase();
   if (search) {
     traders = traders.filter(
@@ -26,7 +29,7 @@ export async function GET(request: Request) {
     );
   }
 
-  // Apply range filters
+  // Helper function for range filtering
   const applyRangeFilter = (value: number, min?: string, max?: string) => {
     if (min && value < Number(min)) return false;
     if (max && value > Number(max)) return false;
@@ -113,20 +116,21 @@ export async function GET(request: Request) {
     );
   }
 
-  // Apply sort
+  // Sort filtered results
   traders = sortItems(
     traders,
     sortBy as keyof Trader,
     sortDirection as "asc" | "desc"
   ) as Trader[];
 
-  // Calculate pagination
+  // Apply pagination
   const totalItems = traders.length;
   const totalPages = Math.ceil(totalItems / pageSize);
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
   const paginatedTraders = traders.slice(start, end);
 
+  // Return paginated results with metadata
   return NextResponse.json({
     traders: paginatedTraders,
     pagination: {
