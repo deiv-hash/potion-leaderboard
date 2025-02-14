@@ -46,6 +46,14 @@ export default function TraderPage() {
   const [selectedTimeFrame, setSelectedTimeFrame] =
     useState<TimeFrame>("daily");
   const [activeTab, setActiveTab] = useState<TraderTab>("trades");
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
 
   const [filter, setFilter] = useState<Filters>({
     timeFrame: "daily",
@@ -184,7 +192,10 @@ export default function TraderPage() {
               onTimeFrameChange={handleTimeFrameChange}
             />
             <div className="flex gap-6">
-              <button className="flex items-center gap-2">
+              <button
+                className="flex items-center gap-2"
+                onClick={handleRefresh}
+              >
                 <span className="text-gray-400">
                   last refreshed few seconds ago
                 </span>
@@ -200,7 +211,7 @@ export default function TraderPage() {
               </button>
             </div>
           </div>
-          <TraderStats trader={trader} />
+          {refreshing ? <Loading /> : <TraderStats trader={trader} />}
         </div>
       </div>
 
