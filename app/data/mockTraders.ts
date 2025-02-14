@@ -4,33 +4,33 @@ import { TokenTrade } from "@/app/types/trader";
 const generateTokenHistory = (traderSkill: number): TokenTrade[] => {
   const tokens = [
     {
-      name: "BONK",
+      name: "PNUT",
       baseMarketCap: 500000000,
-      address: "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      address: "2qEHjDLDLbuBgRYvsxhc5D6uDWAivNFZGan56P1tpump",
       image: "/avatar.jpg",
     },
     {
-      name: "SAMO",
+      name: "WIF",
       baseMarketCap: 120000000,
-      address: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
+      address: "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
       image: "/avatar.jpg",
     },
     {
-      name: "MEME",
+      name: "MOODENG",
       baseMarketCap: 300000000,
-      address: "MEMEXRxygDCxRtNRn5ZGGxqHkaBK89VHxwPWNgWdBT9",
+      address: "ED5nyyWEzpPPiWimP8vYm7sD7TD3LAt3Q3gRTWHzPJBY",
       image: "/avatar.jpg",
     },
     {
-      name: "PYTH",
+      name: "POPCAT",
       baseMarketCap: 800000000,
-      address: "HZ1JovNiVvGrGNiiYvEozEVgZ58xaU3RKwX8eACQBCt3",
+      address: "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
       image: "/avatar.jpg",
     },
     {
-      name: "ORCA",
+      name: "CHILLGUY",
       baseMarketCap: 450000000,
-      address: "orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE",
+      address: "Df6yfrKC8kZE3KNkrHERKzAetSxbrWeniQfyJY4Jpump",
       image: "/avatar.jpg",
     },
   ];
