@@ -56,7 +56,9 @@
    - Regular data updates required
 
 3. **Authentication**
-   - Wallet connection required for certain actions
+   - Wallet connection required for accessing the application
+   - Protected pages and features require an active wallet connection
+   - Users will be redirected to home page if wallet is disconnected
    - Public read access to basic data
 
 ## Testing Instructions
