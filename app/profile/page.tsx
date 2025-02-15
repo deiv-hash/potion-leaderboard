@@ -3,24 +3,22 @@ import { useWallet } from "@/app/contexts/WalletContext";
 import { TwitterIcon } from "@/app/icons/TwitterIcon";
 import Image from "next/image";
 import { shortenWalletAddress } from "@/app/utils/format";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function ProfilePage() {
   const { wallet, disconnectWallet, isXConnected, connectX, disconnectX } =
     useWallet();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!wallet) {
+      router.push("/");
+    }
+  }, [wallet, router]);
 
   if (!wallet) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl text-purple-500 font-bold mb-2">
-            Connect Wallet
-          </h2>
-          <p className="text-gray-400">
-            Please connect your wallet to access your profile
-          </p>
-        </div>
-      </div>
-    );
+    return null; // Return null instead of the connect wallet UI since we're redirecting
   }
 
   return (

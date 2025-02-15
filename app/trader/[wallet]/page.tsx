@@ -14,7 +14,7 @@ import {
   shortenWalletAddress,
 } from "@/app/utils/format";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { RefreshIcon } from "@/app/icons/RefreshIcon";
 import { ShareIcon } from "@/app/icons/ShareIcon";
@@ -25,6 +25,7 @@ import { Searchbar } from "@/app/components/Searchbar";
 import { Filter } from "@/app/components/Filter";
 import { Leaderboard } from "@/app/components/Leaderboard";
 import { sortItems, filterTokenTrades } from "@/app/utils/sort";
+import { useWallet } from "@/app/contexts/WalletContext";
 
 const getTrader = async (
   wallet: string,
@@ -39,6 +40,8 @@ const getTrader = async (
 };
 
 export default function TraderPage() {
+  const { wallet: currentWallet } = useWallet();
+  const router = useRouter();
   const { wallet } = useParams();
   const [trader, setTrader] = useState<Trader | null>(null);
   const [loading, setLoading] = useState(true);
@@ -48,6 +51,12 @@ export default function TraderPage() {
   const [activeTab, setActiveTab] = useState<TraderTab>("trades");
   const [refreshing, setRefreshing] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!currentWallet) {
+      router.push("/");
+    }
+  }, [currentWallet, router]);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -86,12 +95,13 @@ export default function TraderPage() {
         }
       } catch (error) {
         console.error("Error fetching trader:", error);
+        router.push("/");
       } finally {
         setLoading(false);
       }
     };
     fetchTrader();
-  }, [wallet, selectedTimeFrame]);
+  }, [wallet, selectedTimeFrame, router]);
 
   useEffect(() => {
     const filtered = filterTokenTrades(
@@ -144,7 +154,7 @@ export default function TraderPage() {
   }
 
   if (!trader) {
-    return <div>Trader not found</div>;
+    return null;
   }
 
   return (
