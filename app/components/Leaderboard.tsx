@@ -104,7 +104,7 @@ export function Leaderboard({
             { label: "Holding", key: "avgBuy", icon: "purple" },
             { label: "Avg Buy", key: "avgBuyMarketCap", icon: "purple" },
             { label: "Avg Sell", key: "avgSellMarketCap", icon: "purple" },
-            { label: "Time Held", key: "avgHold", icon: "purple" },
+            { label: "Held", key: "avgHold", icon: "purple" },
           ],
         };
 
@@ -189,8 +189,8 @@ export function Leaderboard({
                       <Image
                         alt={`${trader.name}'s profile`}
                         src={trader.image}
-                        width={50}
-                        height={50}
+                        width={60}
+                        height={60}
                         className="rounded-full"
                       />
                       <div className="ml-2 min-w-0">
