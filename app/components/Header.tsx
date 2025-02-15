@@ -58,7 +58,7 @@ export const Header = () => {
               Leaderboard
             </Link>
             <a
-              href="docs.potionleaderboard.fun"
+              href="https://docs.potionleaderboard.fun"
               className="text-gray-400 hover:text-white"
             >
               Learn
