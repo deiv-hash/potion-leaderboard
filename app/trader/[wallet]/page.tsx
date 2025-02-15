@@ -16,8 +16,8 @@ import {
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { RefreshIcon } from "@/app/components/icons/RefreshIcon";
-import { ShareIcon } from "@/app/components/icons/ShareIcon";
+import { RefreshIcon } from "@/app/icons/RefreshIcon";
+import { ShareIcon } from "@/app/icons/ShareIcon";
 import { ShareModal } from "@/app/components/ShareModal";
 import { TraderStats } from "@/app/components/TraderStats";
 import { TabSelector } from "@/app/components/TabSelector";

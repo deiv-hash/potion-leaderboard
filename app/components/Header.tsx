@@ -2,8 +2,8 @@
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { TwitterIcon } from "./icons/TwitterIcon";
-import { DiscordIcon } from "./icons/DiscordIcon";
+import { TwitterIcon } from "../icons/TwitterIcon";
+import { DiscordIcon } from "../icons/DiscordIcon";
 import { useState, useEffect, useRef } from "react";
 import { useWallet } from "../contexts/WalletContext";
 import { shortenWalletAddress } from "../utils/format";

@@ -2,10 +2,10 @@ import { Trader } from "@/app/types/trader";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ShareIcon } from "./icons/ShareIcon";
-import { ChevronDownIcon } from "./icons/ChevronDownIcon";
-import { ChevronLeftIcon } from "./icons/ChevronLeftIcon";
-import { ChevronRightIcon } from "./icons/ChevronRightIcon";
+import { ShareIcon } from "../icons/ShareIcon";
+import { ChevronDownIcon } from "../icons/ChevronDownIcon";
+import { ChevronLeftIcon } from "../icons/ChevronLeftIcon";
+import { ChevronRightIcon } from "../icons/ChevronRightIcon";
 import { ShareModal } from "./ShareModal";
 import {
   formatAvgEntry,
@@ -16,8 +16,8 @@ import {
   shortenWalletAddress,
 } from "@/app/utils/format";
 import Loading from "./Loading";
-import { TwitterIcon } from "./icons/TwitterIcon";
-import { SolscanIcon } from "./icons/SolscanIcon";
+import { TwitterIcon } from "../icons/TwitterIcon";
+import { SolscanIcon } from "../icons/SolscanIcon";
 import { RequireWallet } from "./RequireWallet";
 
 type ViewType = "traders" | "tokens";

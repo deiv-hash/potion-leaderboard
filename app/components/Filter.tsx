@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { FilterIcon } from "./icons/FilterIcon";
+import { FilterIcon } from "../icons/FilterIcon";
 import { FilterRange, Filters } from "../types/trader";
 import { RequireWallet } from "./RequireWallet";
 

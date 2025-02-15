@@ -1,6 +1,6 @@
 "use client";
 import { useWallet } from "@/app/contexts/WalletContext";
-import { TwitterIcon } from "@/app/components/icons/TwitterIcon";
+import { TwitterIcon } from "@/app/icons/TwitterIcon";
 import Image from "next/image";
 import { shortenWalletAddress } from "@/app/utils/format";
 
