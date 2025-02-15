@@ -28,6 +28,7 @@ export const ConnectWalletPopup = ({
     }
   }, [isOpen]);
 
+  // we check if the wallet is connected and the popup is open, and if so, we close the popup
   useEffect(() => {
     if (wallet && isOpen) {
       handleClose();

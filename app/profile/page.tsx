@@ -11,6 +11,7 @@ export default function ProfilePage() {
     useWallet();
   const router = useRouter();
 
+  // route protection
   useEffect(() => {
     if (!wallet) {
       router.push("/");
