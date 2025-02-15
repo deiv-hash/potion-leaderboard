@@ -24,7 +24,7 @@ export async function GET(request: Request) {
   if (search) {
     traders = traders.filter(
       (trader) =>
-        trader.name.toLocaleLowerCase().includes(search) ||
+        trader.xTag.toLocaleLowerCase().includes(search) ||
         trader.wallet.toLocaleLowerCase().includes(search)
     );
   }
