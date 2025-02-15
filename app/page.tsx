@@ -40,12 +40,12 @@ export default function Home() {
 
   const handleSearch = (search: string) => {
     setFilter((prev) => ({ ...prev, search }));
-    setCurrentPage(1); // Reset to first page when searching
+    setCurrentPage(1);
   };
 
   const handleFilterChange = (newFilters: Filters) => {
     setFilter(newFilters);
-    setCurrentPage(1); // Reset to first page when filtering
+    setCurrentPage(1);
   };
 
   const handlePageChange = (page: number) => {

@@ -13,18 +13,21 @@ export const ConnectWalletPopup = ({
 }: ConnectWalletPopupProps) => {
   const { connectWallet, wallet } = useWallet();
   const [isExiting, setIsExiting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleClose = useCallback(() => {
     setIsExiting(true);
     setTimeout(() => {
       onClose();
       setIsExiting(false);
+      setError(null);
     }, 300);
   }, [onClose]);
 
   useEffect(() => {
     if (isOpen) {
       setIsExiting(false);
+      setError(null);
     }
   }, [isOpen]);
 
@@ -34,6 +37,15 @@ export const ConnectWalletPopup = ({
       handleClose();
     }
   }, [wallet, isOpen, handleClose]);
+
+  const handleConnect = async () => {
+    try {
+      setError(null);
+      await connectWallet();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to connect wallet");
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -55,9 +67,10 @@ export const ConnectWalletPopup = ({
           <p className="text-gray-400 mb-6">
             You need to connect your wallet to access this feature.
           </p>
+          {error && <p className="text-red-500 mb-4 text-sm">{error}</p>}
           <div className="flex flex-col space-y-4">
             <button
-              onClick={connectWallet}
+              onClick={handleConnect}
               className="bg-[#AA00FF] text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2"
             >
               <span>Connect with Phantom</span>

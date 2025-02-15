@@ -31,12 +31,20 @@ const getTrader = async (
   wallet: string,
   timeFrame: TimeFrame
 ): Promise<Trader> => {
-  const response = await fetch(
-    `/api/traders?search=${encodeURIComponent(wallet)}&timeFrame=${timeFrame}`
-  );
-  const data = await response.json();
-  if (data.traders.length === 0) throw new Error("Trader not found");
-  return data.traders[0];
+  try {
+    const response = await fetch(
+      `/api/traders?search=${encodeURIComponent(wallet)}&timeFrame=${timeFrame}`
+    );
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    const data = await response.json();
+    if (data.traders.length === 0) throw new Error("Trader not found");
+    return data.traders[0];
+  } catch (error) {
+    console.error("Failed to fetch trader:", error);
+    throw error;
+  }
 };
 
 export default function TraderPage() {
@@ -45,6 +53,7 @@ export default function TraderPage() {
   const { wallet } = useParams();
   const [trader, setTrader] = useState<Trader | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [sharingTrader, setSharingTrader] = useState<Trader | null>(null);
   const [selectedTimeFrame, setSelectedTimeFrame] =
     useState<TimeFrame>("daily");
@@ -86,6 +95,7 @@ export default function TraderPage() {
   useEffect(() => {
     const fetchTrader = async () => {
       setLoading(true);
+      setError(null);
       try {
         const trader = await getTrader(wallet as string, selectedTimeFrame);
         setTrader(trader);
@@ -95,6 +105,9 @@ export default function TraderPage() {
         }
       } catch (error) {
         console.error("Error fetching trader:", error);
+        setError(
+          error instanceof Error ? error.message : "Failed to load trader data"
+        );
         router.push("/");
       } finally {
         setLoading(false);
@@ -151,6 +164,17 @@ export default function TraderPage() {
 
   if (loading) {
     return <Loading />;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl text-red-500 font-bold mb-2">Error</h2>
+          <p className="text-gray-400">{error}</p>
+        </div>
+      </div>
+    );
   }
 
   if (!trader) {
