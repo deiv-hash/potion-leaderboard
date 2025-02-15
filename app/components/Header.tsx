@@ -43,7 +43,7 @@ export const Header = () => {
               alt="Potion Leaderboard"
               width={300}
               height={300}
-              className="w-20 h-10 md:w-56 md:h-16"
+              className="w-44 h-12 md:w-56 md:h-16"
             />
           </Link>
 
