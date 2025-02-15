@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Filters, Trader } from "../types/trader";
 
 interface UseTradersProps {
@@ -11,107 +11,106 @@ interface UseTradersProps {
     totalItems: number;
     pageSize: number;
   } | null;
+  retry: () => void;
 }
 
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 1000; // 1 second
+
+/**
+ * Hook to fetch and manage traders data with filtering and pagination
+ */
 export function useTraders(filters: Filters, page: number): UseTradersProps {
   const [traders, setTraders] = useState<Trader[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [pagination, setPagination] =
     useState<UseTradersProps["pagination"]>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
-  useEffect(() => {
-    const fetchTraders = async () => {
-      try {
-        setLoading(true);
-        const queryParams = new URLSearchParams({
-          timeFrame: filters.timeFrame,
-          sortBy: filters.sortBy,
-          sortDirection: filters.sortDirection,
-          page: page.toString(),
-        });
+  /**
+   * Fetches traders data with retry mechanism
+   */
+  const fetchTraders = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-        if (filters.search) {
-          queryParams.append("search", filters.search);
-        }
+      const queryParams = new URLSearchParams({
+        timeFrame: filters.timeFrame,
+        sortBy: filters.sortBy,
+        sortDirection: filters.sortDirection,
+        page: page.toString(),
+      });
 
-        // Add range filters
-        if (filters.xFollowersRange?.min)
-          queryParams.append(
-            "xFollowersMin",
-            filters.xFollowersRange.min.toString()
-          );
-        if (filters.xFollowersRange?.max)
-          queryParams.append(
-            "xFollowersMax",
-            filters.xFollowersRange.max.toString()
-          );
-
-        if (filters.tokensRange?.min)
-          queryParams.append("tokensMin", filters.tokensRange.min.toString());
-        if (filters.tokensRange?.max)
-          queryParams.append("tokensMax", filters.tokensRange.max.toString());
-
-        if (filters.winRateRange?.min)
-          queryParams.append("winRateMin", filters.winRateRange.min.toString());
-        if (filters.winRateRange?.max)
-          queryParams.append("winRateMax", filters.winRateRange.max.toString());
-
-        if (filters.tradesCountRange?.min)
-          queryParams.append(
-            "tradesMin",
-            filters.tradesCountRange.min.toString()
-          );
-        if (filters.tradesCountRange?.max)
-          queryParams.append(
-            "tradesMax",
-            filters.tradesCountRange.max.toString()
-          );
-
-        if (filters.avgBuyRange?.min)
-          queryParams.append("avgBuyMin", filters.avgBuyRange.min.toString());
-        if (filters.avgBuyRange?.max)
-          queryParams.append("avgBuyMax", filters.avgBuyRange.max.toString());
-
-        if (filters.avgEntryRange?.min)
-          queryParams.append(
-            "avgEntryMin",
-            filters.avgEntryRange.min.toString()
-          );
-        if (filters.avgEntryRange?.max)
-          queryParams.append(
-            "avgEntryMax",
-            filters.avgEntryRange.max.toString()
-          );
-
-        if (filters.avgHoldRange?.min)
-          queryParams.append("avgHoldMin", filters.avgHoldRange.min.toString());
-        if (filters.avgHoldRange?.max)
-          queryParams.append("avgHoldMax", filters.avgHoldRange.max.toString());
-
-        if (filters.realizedPnlRange?.min)
-          queryParams.append(
-            "realizedPnlMin",
-            filters.realizedPnlRange.min.toString()
-          );
-        if (filters.realizedPnlRange?.max)
-          queryParams.append(
-            "realizedPnlMax",
-            filters.realizedPnlRange.max.toString()
-          );
-
-        const response = await fetch(`/api/traders?${queryParams}`);
-        const data = await response.json();
-        setTraders(data.traders);
-        setPagination(data.pagination);
-      } catch (error) {
-        setError(error as Error);
-      } finally {
-        setLoading(false);
+      // Add search parameter if present
+      if (filters.search) {
+        queryParams.append("search", filters.search);
       }
-    };
-    fetchTraders();
-  }, [filters, page]);
 
-  return { traders, loading, error, pagination };
+      // Add range filters with validation
+      const addRangeFilter = (
+        key: string,
+        range?: { min?: number; max?: number }
+      ) => {
+        if (range?.min !== undefined)
+          queryParams.append(`${key}Min`, range.min.toString());
+        if (range?.max !== undefined)
+          queryParams.append(`${key}Max`, range.max.toString());
+      };
+
+      addRangeFilter("xFollowers", filters.xFollowersRange);
+      addRangeFilter("tokens", filters.tokensRange);
+      addRangeFilter("winRate", filters.winRateRange);
+      addRangeFilter("trades", filters.tradesCountRange);
+      addRangeFilter("avgBuy", filters.avgBuyRange);
+      addRangeFilter("avgEntry", filters.avgEntryRange);
+      addRangeFilter("avgHold", filters.avgHoldRange);
+      addRangeFilter("realizedPnl", filters.realizedPnlRange);
+
+      const response = await fetch(`/api/traders?${queryParams}`);
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setTraders(data.traders);
+      setPagination(data.pagination);
+      setRetryCount(0); // Reset retry count on success
+    } catch (error) {
+      console.error("Error fetching traders:", error);
+      setError(
+        error instanceof Error
+          ? error
+          : new Error("Failed to load traders data")
+      );
+
+      // Implement retry logic
+      if (retryCount < MAX_RETRIES) {
+        setTimeout(() => {
+          setRetryCount((prev) => prev + 1);
+          fetchTraders();
+        }, RETRY_DELAY * (retryCount + 1));
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [filters, page, retryCount]);
+
+  // Effect to fetch data when filters or page changes
+  useEffect(() => {
+    fetchTraders();
+  }, [fetchTraders]);
+
+  return {
+    traders,
+    loading,
+    error,
+    pagination,
+    retry: () => {
+      setRetryCount(0);
+      fetchTraders();
+    },
+  };
 }

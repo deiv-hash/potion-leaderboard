@@ -19,7 +19,7 @@ export default function Home() {
   });
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { traders, loading, error, pagination } = useTraders(
+  const { traders, loading, error, pagination, retry } = useTraders(
     filter,
     currentPage
   );
@@ -40,12 +40,12 @@ export default function Home() {
 
   const handleSearch = (search: string) => {
     setFilter((prev) => ({ ...prev, search }));
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   const handleFilterChange = (newFilters: Filters) => {
     setFilter(newFilters);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to first page when filtering
   };
 
   const handlePageChange = (page: number) => {
@@ -56,8 +56,16 @@ export default function Home() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl text-red-500 font-bold">Error</h2>
-          <p className="text-gray-400">{error.message}</p>
+          <h2 className="text-2xl text-red-500 font-bold mb-2">
+            Error Loading Data
+          </h2>
+          <p className="text-gray-400 mb-4">{error.message}</p>
+          <button
+            onClick={retry}
+            className="bg-[#AA00FF] text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition-colors"
+          >
+            Try Again
+          </button>
         </div>
       </div>
     );
