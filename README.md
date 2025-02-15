@@ -1,7 +1,5 @@
 # Potion Leaderboard
 
-A gamified platform for Solana memecoin traders to compete, showcase performance, and win rewards.
-
 ## Features
 
 - **Leaderboard Views**: Daily, Weekly, Monthly, and All-Time rankings
