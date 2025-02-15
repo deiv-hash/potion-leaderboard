@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useWallet } from "../contexts/WalletContext";
 
 interface ConnectWalletPopupProps {
@@ -11,8 +11,16 @@ export const ConnectWalletPopup = ({
   isOpen,
   onClose,
 }: ConnectWalletPopupProps) => {
-  const { connectWallet } = useWallet();
+  const { connectWallet, wallet } = useWallet();
   const [isExiting, setIsExiting] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setIsExiting(true);
+    setTimeout(() => {
+      onClose();
+      setIsExiting(false);
+    }, 300);
+  }, [onClose]);
 
   useEffect(() => {
     if (isOpen) {
@@ -20,13 +28,11 @@ export const ConnectWalletPopup = ({
     }
   }, [isOpen]);
 
-  const handleClose = () => {
-    setIsExiting(true);
-    setTimeout(() => {
-      onClose();
-      setIsExiting(false);
-    }, 300);
-  };
+  useEffect(() => {
+    if (wallet && isOpen) {
+      handleClose();
+    }
+  }, [wallet, isOpen, handleClose]);
 
   if (!isOpen) return null;
 
