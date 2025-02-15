@@ -114,7 +114,7 @@ export function Leaderboard({
         <ShareModal trader={sharingTrader} onClose={handleCloseShare} />
       )}
       <div className="max-w-[100vw] lg:max-w-none">
-        <div className="overflow-x-auto lg:overflow-x-visible">
+        <div className="overflow-x-auto">
           <div className="w-fit lg:w-full">
             <table className="w-full divide-y divide-gray-800">
               <thead className="bg-[#25223D] text-white">
