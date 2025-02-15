@@ -5,9 +5,14 @@ import Image from "next/image";
 interface ShareModalProps {
   trader: Trader;
   onClose: () => void;
+  viewType?: "traders" | "tokens";
 }
 
-export function ShareModal({ trader, onClose }: ShareModalProps) {
+export function ShareModal({
+  trader,
+  onClose,
+  viewType = "traders",
+}: ShareModalProps) {
   const handleImageGenerated = async (imageUrl: string) => {
     // Update preview image
     const previewImg = document.getElementById(
@@ -69,7 +74,7 @@ export function ShareModal({ trader, onClose }: ShareModalProps) {
 
         {/* Title */}
         <h2 className="text-xl font-bold text-white mb-4">
-          Share Trader Stats
+          Share {viewType === "traders" ? "Trader" : "Token"} Stats
         </h2>
 
         {/* Preview */}
@@ -83,7 +88,11 @@ export function ShareModal({ trader, onClose }: ShareModalProps) {
               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
             />
           </div>
-          <ShareCard trader={trader} onGenerated={handleImageGenerated} />
+          <ShareCard
+            trader={trader}
+            onGenerated={handleImageGenerated}
+            viewType={viewType}
+          />
         </div>
 
         {/* Actions */}

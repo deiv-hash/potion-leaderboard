@@ -111,7 +111,11 @@ export function Leaderboard({
   return (
     <div className="w-full mt-8 bg-[#11121B]">
       {sharingTrader && (
-        <ShareModal trader={sharingTrader} onClose={handleCloseShare} />
+        <ShareModal
+          trader={sharingTrader}
+          onClose={handleCloseShare}
+          viewType={viewType}
+        />
       )}
       <div className="max-w-[100vw] lg:max-w-none">
         <div className="overflow-x-auto">

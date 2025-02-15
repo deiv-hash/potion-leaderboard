@@ -1,9 +1,11 @@
 import { Trader } from "@/app/types/trader";
 import { useRef, useEffect, useCallback } from "react";
+import { shortenWalletAddress } from "@/app/utils/format";
 
 interface ShareCardProps {
   trader: Trader;
   onGenerated: (imageUrl: string) => void;
+  viewType?: "traders" | "tokens";
 }
 
 const formatSol = (num: number): string => {
@@ -31,7 +33,11 @@ const formatHoldTime = (minutes: number): string => {
   return `${(minutes / 60).toFixed(1)}h`;
 };
 
-export function ShareCard({ trader, onGenerated }: ShareCardProps) {
+export function ShareCard({
+  trader,
+  onGenerated,
+  viewType = "traders",
+}: ShareCardProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const generateImage = useCallback(async () => {
@@ -80,87 +86,142 @@ export function ShareCard({ trader, onGenerated }: ShareCardProps) {
     ctx.textAlign = "left";
     ctx.fillStyle = "#FFFFFF";
 
-    // Draw trader name and rank
-    ctx.font = "bold 48px Inter";
-    ctx.fillText(`${trader.name} (#${trader.rank})`, 40, 80);
+    if (viewType === "traders") {
+      // Draw trader name and rank
+      ctx.font = "bold 48px Inter";
+      ctx.fillText(`${trader.name} (#${trader.rank})`, 40, 80);
 
-    // Draw X info
-    ctx.font = "24px Inter";
-    ctx.fillStyle = "#9CA3AF";
-    ctx.fillText(
-      `${formatNumber(trader.xFollowers)} followers • ${trader.xTag}`,
-      40,
-      120
-    );
-
-    // Draw stats grid
-    const stats = [
-      {
-        label: "Win Rate",
-        value: `${Math.round(trader.winRate)}%`,
-        color: trader.winRate >= 50 ? "#22C55E" : "#EF4444",
-      },
-      {
-        label: "Trades",
-        value: `${trader.tradesCount.buy}/${trader.tradesCount.sell}`,
-        color: "#FFFFFF",
-      },
-      {
-        label: "Tokens",
-        value: trader.tokensTraded.toString(),
-        color: "#FFFFFF",
-      },
-      {
-        label: "Avg Hold",
-        value: formatHoldTime(trader.avgHold),
-        color: "#FFFFFF",
-      },
-      {
-        label: "Avg Buy",
-        value: `${formatSol(trader.avgBuy.solAmount)} SOL`,
-        color: "#FFFFFF",
-      },
-      {
-        label: "Avg Entry",
-        value: formatAvgEntry(trader.avgEntry),
-        color: "#FFFFFF",
-      },
-      {
-        label: "PNL",
-        value: `${trader.realizedPnl.solAmount > 0 ? "+" : ""}${formatSol(
-          trader.realizedPnl.solAmount
-        )} SOL`,
-        color: trader.realizedPnl.solAmount > 0 ? "#22C55E" : "#EF4444",
-      },
-      {
-        label: "PNL (USD)",
-        value: `$${trader.realizedPnl.usdAmount.toLocaleString()}`,
-        color: trader.realizedPnl.usdAmount > 0 ? "#22C55E" : "#EF4444",
-      },
-    ];
-
-    // Draw stats in a grid (4x2)
-    const startY = 200;
-    const startX = 40;
-    const colWidth = (canvas.width - 80) / 4;
-    const rowHeight = 100;
-
-    stats.forEach((stat, index) => {
-      const col = index % 4;
-      const row = Math.floor(index / 4);
-      const x = startX + col * colWidth;
-      const y = startY + row * rowHeight;
-
-      // Draw stat label
+      // Draw X info
       ctx.font = "24px Inter";
       ctx.fillStyle = "#9CA3AF";
-      ctx.fillText(stat.label, x, y);
+      ctx.fillText(
+        `${formatNumber(trader.xFollowers)} followers • ${trader.xTag}`,
+        40,
+        120
+      );
 
-      // Draw stat value
-      ctx.font = "bold 36px Inter";
-      ctx.fillStyle = stat.color;
-      ctx.fillText(stat.value, x, y + 40);
-    });
+      // Draw stats grid
+      const stats = [
+        {
+          label: "Win Rate",
+          value: `${Math.round(trader.winRate)}%`,
+          color: trader.winRate >= 50 ? "#22C55E" : "#EF4444",
+        },
+        {
+          label: "Trades",
+          value: `${trader.tradesCount.buy}/${trader.tradesCount.sell}`,
+          color: "#FFFFFF",
+        },
+        {
+          label: "Tokens",
+          value: trader.tokensTraded.toString(),
+          color: "#FFFFFF",
+        },
+        {
+          label: "Avg Hold",
+          value: formatHoldTime(trader.avgHold),
+          color: "#FFFFFF",
+        },
+        {
+          label: "Avg Buy",
+          value: `${formatSol(trader.avgBuy.solAmount)} SOL`,
+          color: "#FFFFFF",
+        },
+        {
+          label: "Avg Entry",
+          value: formatAvgEntry(trader.avgEntry),
+          color: "#FFFFFF",
+        },
+        {
+          label: "PNL",
+          value: `${trader.realizedPnl.solAmount > 0 ? "+" : ""}${formatSol(
+            trader.realizedPnl.solAmount
+          )} SOL`,
+          color: trader.realizedPnl.solAmount > 0 ? "#22C55E" : "#EF4444",
+        },
+        {
+          label: "PNL (USD)",
+          value: `$${trader.realizedPnl.usdAmount.toLocaleString()}`,
+          color: trader.realizedPnl.usdAmount > 0 ? "#22C55E" : "#EF4444",
+        },
+      ];
+
+      // Draw stats in a grid (4x2)
+      const startY = 200;
+      const startX = 40;
+      const colWidth = (canvas.width - 80) / 4;
+      const rowHeight = 100;
+
+      stats.forEach((stat, index) => {
+        const col = index % 4;
+        const row = Math.floor(index / 4);
+        const x = startX + col * colWidth;
+        const y = startY + row * rowHeight;
+
+        // Draw stat label
+        ctx.font = "24px Inter";
+        ctx.fillStyle = "#9CA3AF";
+        ctx.fillText(stat.label, x, y);
+
+        // Draw stat value
+        ctx.font = "bold 36px Inter";
+        ctx.fillStyle = stat.color;
+        ctx.fillText(stat.value, x, y + 40);
+      });
+    } else {
+      // Token view
+      // Draw trader name
+      ctx.font = "bold 48px Inter";
+      ctx.fillText(trader.name, 40, 80);
+
+      // Draw token name
+      ctx.font = "36px Inter";
+      ctx.fillStyle = "#9CA3AF";
+      ctx.fillText(shortenWalletAddress(trader.wallet), 40, 140);
+
+      // Draw simplified stats
+      const stats = [
+        {
+          label: "Invested",
+          value: `${formatSol(trader.avgBuy.solAmount)} SOL`,
+          subValue: `$${trader.avgBuy.usdAmount.toLocaleString()}`,
+          color: "#FFFFFF",
+        },
+        {
+          label: "PNL",
+          value: `${trader.realizedPnl.solAmount > 0 ? "+" : ""}${formatSol(
+            trader.realizedPnl.solAmount
+          )} SOL`,
+          subValue: `$${trader.realizedPnl.usdAmount.toLocaleString()}`,
+          color: trader.realizedPnl.solAmount > 0 ? "#22C55E" : "#EF4444",
+        },
+      ];
+
+      // Draw stats in a horizontal layout
+      const startY = 250;
+      const startX = 40;
+      const spacing = 400;
+
+      stats.forEach((stat, index) => {
+        const x = startX + index * spacing;
+        const y = startY;
+
+        // Draw stat label
+        ctx.font = "24px Inter";
+        ctx.fillStyle = "#9CA3AF";
+        ctx.fillText(stat.label, x, y);
+
+        // Draw main value
+        ctx.font = "bold 48px Inter";
+        ctx.fillStyle = stat.color;
+        ctx.fillText(stat.value, x, y + 60);
+
+        // Draw sub value
+        ctx.font = "24px Inter";
+        ctx.fillStyle = "#9CA3AF";
+        ctx.fillText(stat.subValue, x, y + 100);
+      });
+    }
 
     // Add time frame indicator
     ctx.textAlign = "left";
@@ -176,7 +237,7 @@ export function ShareCard({ trader, onGenerated }: ShareCardProps) {
 
     // Return the generated image URL
     onGenerated(canvas.toDataURL("image/png"));
-  }, [trader, onGenerated]);
+  }, [trader, onGenerated, viewType]);
 
   useEffect(() => {
     generateImage();
