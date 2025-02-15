@@ -52,13 +52,15 @@ export default function ProfilePage() {
           <h2 className="text-xl font-semibold mb-4">X (Twitter) Connection</h2>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Image
-                src="/avatar.jpg"
-                alt="Profile"
-                width={48}
-                height={48}
-                className="rounded-full"
-              />
+              {isXConnected && (
+                <Image
+                  src="/avatar.jpg" //show x profile image
+                  alt="Profile"
+                  width={48}
+                  height={48}
+                  className="rounded-full"
+                />
+              )}
               <div className="flex items-center space-x-3">
                 <TwitterIcon />
                 <span className="text-gray-300">

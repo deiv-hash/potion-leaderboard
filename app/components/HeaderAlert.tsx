@@ -27,7 +27,7 @@ export const HeaderAlert = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <span className="text-gray-300">
-              Connect your X account to track your performance
+              Connect your X account for better experience
             </span>
             <Link
               href="/profile"

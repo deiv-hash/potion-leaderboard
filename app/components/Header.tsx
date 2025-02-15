@@ -13,7 +13,7 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const { wallet, connectWallet, disconnectWallet } = useWallet();
+  const { wallet, connectWallet, disconnectWallet, isXConnected } = useWallet();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -92,15 +92,34 @@ export const Header = () => {
               <div className="relative group">
                 <Link
                   href="/profile"
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-white flex items-center justify-center w-[50px] h-[50px]"
                 >
-                  <Image
-                    src="/avatar.jpg"
-                    alt="Profile"
-                    width={50}
-                    height={50}
-                    className="rounded-full"
-                  />
+                  {isXConnected ? (
+                    <Image
+                      src="/avatar.jpg"
+                      alt="Profile"
+                      width={50}
+                      height={50}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <div className="w-[50px] h-[50px] rounded-full bg-[#1C1C28] border-2 border-[#AA00FF] flex items-center justify-center">
+                      <svg
+                        className="w-6 h-6 text-[#AA00FF]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
+                  )}
                 </Link>
                 {/* Dropdown menu */}
                 <div className="absolute z-50 right-0 w-48 py-2 bg-[#1C1C28] rounded-lg shadow-xl hidden group-hover:block">
@@ -209,13 +228,32 @@ export const Header = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <Link href="/profile">
-                      <Image
-                        src="/avatar.jpg"
-                        alt="Profile"
-                        width={32}
-                        height={32}
-                        className="rounded-full"
-                      />
+                      {isXConnected ? (
+                        <Image
+                          src="/avatar.jpg"
+                          alt="Profile"
+                          width={32}
+                          height={32}
+                          className="rounded-full"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-[#1C1C28] border-2 border-[#AA00FF] flex items-center justify-center">
+                          <svg
+                            className="w-4 h-4 text-[#AA00FF]"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            />
+                          </svg>
+                        </div>
+                      )}
                     </Link>
                     <span className="text-gray-400">
                       {shortenWalletAddress(wallet)}
