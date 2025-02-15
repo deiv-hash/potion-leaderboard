@@ -234,7 +234,13 @@ export default function TraderPage() {
                   </button>
                 </div>
               </div>
-              {refreshing ? <Loading /> : <TraderStats trader={trader} />}
+              {refreshing ? (
+                <div className="flex justify-center items-center h-40">
+                  <Loading />
+                </div>
+              ) : (
+                <TraderStats trader={trader} />
+              )}
             </div>
           </div>
         </div>
