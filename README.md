@@ -19,7 +19,6 @@ A gamified platform for Solana memecoin traders to compete, showcase performance
   - `sm`: 640px (tablet)
   - `lg`: 1024px (desktop)
 - Components stack vertically on mobile for better readability
-- Borders only visible on larger screens to maintain clean mobile interface
 
 ### 2. Component Structure
 
