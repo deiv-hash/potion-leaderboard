@@ -224,7 +224,7 @@ export function Leaderboard({
                                 </a>*/}
                               </div>
                               {viewType === "tokens" && (
-                                <div className="flex items-center gap-1">
+                                <div className="flex items-center gap-1.5">
                                   <a
                                     href={`https://x.com/search?q=($${trader.name}%20OR%20${trader.wallet})&src=typed_query&f=live`}
                                     target="_blank"
@@ -235,7 +235,7 @@ export function Leaderboard({
                                   <a
                                     href={`https://solscan.io/token/${trader.wallet}`}
                                     target="_blank"
-                                    className="h-4 w-4 cursor-pointer hover:text-purple-300"
+                                    className="h-4 w-4 pt-0.5 cursor-pointer hover:text-purple-300"
                                   >
                                     <SolscanIcon />
                                   </a>
@@ -243,7 +243,7 @@ export function Leaderboard({
                               )}
                             </div>
                             {viewType === "tokens" && (
-                              <button className="flex items-center justify-center gap-1 border border-purple-200 rounded-full px-2 py-1 hover:text-white hover:bg-purple-200 transition-colors mt-2">
+                              <button className="flex  justify-center gap-1 border border-purple-200 rounded-full px-2 py-1 hover:text-white hover:bg-purple-200 transition-colors mt-2">
                                 <Image
                                   src="/nova.png"
                                   width={20}
@@ -466,7 +466,7 @@ export function Leaderboard({
               className={`relative inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 ${
                 currentPage === 1
                   ? "cursor-not-allowed text-gray-400"
-                  : "text-gray-900 hover:bg-gray-50"
+                  : " hover:bg-gray-50"
               }`}
             >
               Previous
@@ -478,7 +478,7 @@ export function Leaderboard({
               className={`relative ml-3 inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 ${
                 currentPage === totalPages
                   ? "cursor-not-allowed text-gray-400"
-                  : "text-gray-900 hover:bg-gray-50"
+                  : " hover:bg-gray-50"
               }`}
             >
               Next
